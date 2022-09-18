@@ -1,0 +1,60 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "standard"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "no-return-assign": "off",
+    "promise/param-names": "off",
+    "spaced-comment": "off",
+    "key-spacing": [
+      "error",
+      {
+        "afterColon": true
+      }
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "quote-props": "off",
+    "camelcase": "off",
+    "no-undef": "off",
+    "no-unused-vars": "off",
+    "no-unused-expressions": "off",
+    "@typescript-eslint/type-annotation-spacing": [
+      "error",
+      {
+        "after": false
+      }
+    ],
+    "space-before-function-paren": [
+      "error",
+      "never"
+    ],
+    "eqeqeq": "off",
+    "no-empty": "off",
+    "no-useless-return": "off",
+    "no-unreachable": "off",
+    "prefer-const": "off",
+    "space-in-parens": [
+      "error",
+      "never"
+    ]
+  },
+  "ignorePatterns": [
+    "./dist/**/*",
+    "./external/**/*"
+  ]
+}

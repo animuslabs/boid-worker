@@ -1,0 +1,45 @@
+{
+  "name": "boid-worker",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && tsc-alias -f",
+    "dev": "nodemon -w ./src -e .ts --exec \"yarn build\" ",
+    "db:migrate": "edgedb migration create && edgedb migrate && edgeql-js",
+    "db:reset": "edgedb instance destroy -I boid_worker --force && edgedb project init --non-interactive && edgeql-js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./src/**/* --fix"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@digitak/tsc-esm": "^3.1.4",
+    "@types/axios": "^0.14.0",
+    "@types/fs-extra": "^9.0.13",
+    "@types/ms": "^0.7.31",
+    "@types/node": "^18.7.14",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.36.1",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^22.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "nodemon": "^2.0.19",
+    "tsc-alias": "^1.7.0",
+    "typescript": "*"
+  },
+  "dependencies": {
+    "@greymass/eosio": "^0.6.3",
+    "@types/cache-manager": "^4.0.2",
+    "axios": "^0.27.2",
+    "cache-manager": "^4.1.0",
+    "chalk": "^5.0.1",
+    "dotenv": "^16.0.2",
+    "edgedb": "^0.22.7",
+    "fs-extra": "^10.1.0",
+    "loglevel": "^1.8.0",
+    "loglevel-plugin-prefix": "^0.8.4",
+    "ms": "^2.1.3",
+    "node-fetch": "^3.2.10"
+  }
+}

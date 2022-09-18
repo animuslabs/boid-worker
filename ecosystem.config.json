@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+  "apps": [
+    {
+      "name": "boid-worker-fah-saveTeamMembers",
+      "cwd": "./dist",
+      "script": "./jobs/fah/saveTeamMembers.js",
+      "autorestart": false,
+      "cron_restart": "10,30,55 * * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boid-worker-fah-doReport",
+      "cwd": "./dist",
+      "script": "./jobs/fah/doReports.js",
+      "autorestart": false,
+      "cron_restart": "10,20,30,40,50 * * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    }
+  ]
+}
