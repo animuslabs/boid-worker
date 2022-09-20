@@ -32,6 +32,22 @@
       "args": [
         "--color"
       ]
+    },
+    {
+      "name": "boid-worker-sys-saveBoidIds",
+      "cwd": "./dist",
+      "script": "./jobs/sys/saveBoidIds.js",
+      "autorestart": false,
+      "cron_restart": "10,40 * * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
     }
   ]
 }
