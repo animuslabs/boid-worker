@@ -20,15 +20,16 @@ async function init() {
   let dbTimer:Timer = new Timer()
   if (log.getLevel() < 2) dbTimer.start()
   for (const score of scores) {
-    const cmd = e.insert(e.fahRecord, {
-      fahid: score.id,
-      name: score.name,
-      score: score.score,
-      time: e.datetime_current(),
-      wus: score.wus
+    const result = await db.fahData.create({
+      data: {
+        fahid: score.id,
+        name: score.name,
+        score: score.score,
+        time: new Date(),
+        wus: score.wus
+      }
     })
-    log.debug("writing user to DB:\n", cmd.toEdgeQL())
-    await db.execute(cmd.toEdgeQL())
+    log.debug("wrote FaH data to DB:", result)
   }
   log.info("finished writing fah members to DB")
   if (log.getLevel() < 2) log.debug("DB write time ms:", dbTimer.stop().elapsed)

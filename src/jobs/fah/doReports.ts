@@ -34,17 +34,20 @@ async function init() {
     const previousRound = await getRoundData((await currentRound()) - 2)
     log.info("generating reports for round: ", reportingRound)
     const allBoidUsers = await db.getAllBoidUsers()
-    const boidIds = allBoidUsers.map(el => el.boid_id.toString())
+    const boidIds = allBoidUsers.map(el => el.boidId.toString())
+    log.info(boidIds)
     let queryTimer
     const pusher = new ActionPusher(5000)
     const round = await currentRound()
 
     for (const boidId of boidIds) {
+      log.debug("checking for fah data for", boidId)
       queryTimer = new Timer().start()
       const lastRecord = await db.getLastFahRecordofRound(boidId, reportingRound)
       if (!lastRecord) continue
       const previousRecord = await db.getLastFahRecordofRound(boidId, previousRound)
       if (!previousRecord) continue
+      log.debug("found fah data for ", boidId)
       const units = lastRecord.score - previousRecord.score
       if (units < 1) continue
 
@@ -64,6 +67,7 @@ async function init() {
         // make sure we already reported and check if weight threshold has been reached
         const approved = existing.approvals.includes(Name.from(env.worker.account))
         if (approved && shouldFinish) {
+          log.info("sending finish action for report:", reportId)
           const finishAct = createFinishAction(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }))
           pusher.add(finishAct)
           // continue to next itteration of loop

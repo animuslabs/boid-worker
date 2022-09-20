@@ -1,3 +1,3 @@
-import * as edgedb from "edgedb"
-const db = edgedb.createClient()
+import * as prisma from "@prisma/client"
+const db = new prisma.PrismaClient({ errorFormat: "pretty" })
 export default db

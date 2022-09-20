@@ -5,7 +5,7 @@ import env from "./env"
 import cacheManager from "cache-manager"
 import ax from "axios"
 import e from "lib/edgeql"
-import edgedb from "lib/db"
+import prisma from "lib/db"
 import { roundData } from "lib/utils"
 import log from "lib/logger"
 import { UInt64 } from "@greymass/eosio"
@@ -60,21 +60,12 @@ export const tables = {
 
 export const db = {
   getAllBoidUsers() {
-    return e.select(e.boidAccount, account => ({
-      boid_id: true
-    })).run(edgedb)
+    return prisma.boidAccount.findMany()
   },
   getLastFahRecordofRound(boidId:string, roundData:roundData) {
-    const query = e.select(e.fahRecord, record => ({
-      ...e.fahRecord["*"],
-      filter: e.op(e.op(e.op(record.time, "<", e.datetime(roundData.end)), "and", e.op(record.name, "=", boidId)), "and", e.op(record.time, ">", e.datetime(roundData.start))),
-      order_by: {
-        expression: record.time,
-        direction: e.DESC
-      },
-      limit: 1
-    })).assert_single()
-    // log.debug(query.toEdgeQL())
-    return query.run(edgedb)
+    return prisma.fahData.findFirst({
+      orderBy: { time: "desc" },
+      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId }
+    })
   }
 }
