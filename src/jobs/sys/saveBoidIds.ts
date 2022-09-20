@@ -3,7 +3,6 @@ import { getFullTable } from "../../lib/eosio"
 import db from "lib/db"
 import log from "lib/logger"
 import env from "lib/env"
-import e from "lib/edgeql"
 
 async function init() {
   try {

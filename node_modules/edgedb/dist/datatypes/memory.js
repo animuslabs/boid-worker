@@ -1,0 +1,106 @@
+"use strict";
+/*!
+ * This source file is part of the EdgeDB open source project.
+ *
+ * Copyright 2019-present MagicStack Inc. and the EdgeDB authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConfigMemory = void 0;
+const bi = __importStar(require("../primitives/bigint"));
+const KiB = 1024;
+const MiB = 1024 * KiB;
+const GiB = 1024 * MiB;
+const TiB = 1024 * GiB;
+const PiB = 1024 * TiB;
+class ConfigMemory {
+    constructor(bytes) {
+        Object.defineProperty(this, "_bytes", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        this._bytes = bytes;
+    }
+    get bytes() {
+        return Number(this._bytes);
+    }
+    get bytesBigInt() {
+        return this._bytes;
+    }
+    get kibibytes() {
+        return Number(this._bytes) / KiB;
+    }
+    get mebibytes() {
+        return Number(this._bytes) / MiB;
+    }
+    get gibibytes() {
+        return Number(this._bytes) / GiB;
+    }
+    get tebibytes() {
+        return Number(this._bytes) / TiB;
+    }
+    get pebibytes() {
+        return Number(this._bytes) / PiB;
+    }
+    toString() {
+        const bytes = this._bytes;
+        const bigPiB = bi.make(PiB);
+        if (bi.gte(bytes, bigPiB) && Number(bi.remainder(bytes, bigPiB)) === 0) {
+            return `${bi.div(bytes, bigPiB)}PiB`;
+        }
+        const bigTiB = bi.make(TiB);
+        if (bi.gte(bytes, bigTiB) && Number(bi.remainder(bytes, bigTiB)) === 0) {
+            return `${bi.div(bytes, bigTiB)}TiB`;
+        }
+        const bigGiB = bi.make(GiB);
+        if (bi.gte(bytes, bigGiB) && Number(bi.remainder(bytes, bigGiB)) === 0) {
+            return `${bi.div(bytes, bigGiB)}GiB`;
+        }
+        const bigMiB = bi.make(MiB);
+        if (bi.gte(bytes, bigMiB) && Number(bi.remainder(bytes, bigMiB)) === 0) {
+            return `${bi.div(bytes, bigMiB)}MiB`;
+        }
+        const bigKiB = bi.make(KiB);
+        if (bi.gte(bytes, bigKiB) && Number(bi.remainder(bytes, bigKiB)) === 0) {
+            return `${bi.div(bytes, bigKiB)}KiB`;
+        }
+        return `${bytes}B`;
+    }
+}
+exports.ConfigMemory = ConfigMemory;

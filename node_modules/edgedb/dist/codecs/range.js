@@ -1,0 +1,94 @@
+"use strict";
+/*!
+ * This source file is part of the EdgeDB open source project.
+ *
+ * Copyright 2019-present MagicStack Inc. and the EdgeDB authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RangeCodec = void 0;
+const ifaces_1 = require("./ifaces");
+const buffer_1 = require("../primitives/buffer");
+const range_1 = require("../datatypes/range");
+const errors_1 = require("../errors");
+var RangeFlags;
+(function (RangeFlags) {
+    RangeFlags[RangeFlags["EMPTY"] = 1] = "EMPTY";
+    RangeFlags[RangeFlags["INC_LOWER"] = 2] = "INC_LOWER";
+    RangeFlags[RangeFlags["INC_UPPER"] = 4] = "INC_UPPER";
+    RangeFlags[RangeFlags["EMPTY_LOWER"] = 8] = "EMPTY_LOWER";
+    RangeFlags[RangeFlags["EMPTY_UPPER"] = 16] = "EMPTY_UPPER";
+})(RangeFlags || (RangeFlags = {}));
+class RangeCodec extends ifaces_1.Codec {
+    constructor(tid, subCodec) {
+        super(tid);
+        Object.defineProperty(this, "subCodec", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        this.subCodec = subCodec;
+    }
+    encode(buf, obj) {
+        if (!(obj instanceof range_1.Range)) {
+            throw new errors_1.InvalidArgumentError("a Range was expected");
+        }
+        const subCodec = this.subCodec;
+        const elemData = new buffer_1.WriteBuffer();
+        if (obj.lower !== null) {
+            subCodec.encode(elemData, obj.lower);
+        }
+        if (obj.upper !== null) {
+            subCodec.encode(elemData, obj.upper);
+        }
+        const elemBuf = elemData.unwrap();
+        buf.writeInt32(1 + elemBuf.length);
+        buf.writeUInt8(obj.isEmpty
+            ? RangeFlags.EMPTY
+            : (obj.incLower ? RangeFlags.INC_LOWER : 0) |
+                (obj.incUpper ? RangeFlags.INC_UPPER : 0) |
+                (obj.lower === null ? RangeFlags.EMPTY_LOWER : 0) |
+                (obj.upper === null ? RangeFlags.EMPTY_UPPER : 0));
+        buf.writeBuffer(elemBuf);
+    }
+    decode(buf) {
+        const flags = buf.readUInt8();
+        if (flags & RangeFlags.EMPTY) {
+            return range_1.Range.empty();
+        }
+        const elemBuf = buffer_1.ReadBuffer.alloc();
+        const subCodec = this.subCodec;
+        let lower = null;
+        let upper = null;
+        if (!(flags & RangeFlags.EMPTY_LOWER)) {
+            buf.sliceInto(elemBuf, buf.readInt32());
+            lower = subCodec.decode(elemBuf);
+            elemBuf.finish();
+        }
+        if (!(flags & RangeFlags.EMPTY_UPPER)) {
+            buf.sliceInto(elemBuf, buf.readInt32());
+            upper = subCodec.decode(elemBuf);
+            elemBuf.finish();
+        }
+        return new range_1.Range(lower, upper, !!(flags & RangeFlags.INC_LOWER), !!(flags & RangeFlags.INC_UPPER));
+    }
+    getSubcodecs() {
+        return [this.subCodec];
+    }
+    getKind() {
+        return "range";
+    }
+}
+exports.RangeCodec = RangeCodec;

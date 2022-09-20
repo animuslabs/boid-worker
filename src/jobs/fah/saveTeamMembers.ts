@@ -2,7 +2,6 @@
 import db from "lib/db.js"
 // import { fah } from "lib/fah"
 import logger from "lib/logger"
-import e from "lib/edgeql/index"
 import { fah } from "lib/fah"
 import { Timer } from "lib/timer"
 // import { fah } from "../../lib/fah"

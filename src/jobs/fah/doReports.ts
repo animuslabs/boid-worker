@@ -1,7 +1,6 @@
 import { Action, AnyAction, Authority, Name, UInt64 } from "@greymass/eosio"
 import { ActionPusher } from "lib/actionPusher"
 import edgedb from "lib/db"
-import e from "lib/edgeql"
 import log from "lib/logger"
 import { tables, db, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
