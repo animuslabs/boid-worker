@@ -31,6 +31,6 @@ if (envLogLevel) {
   const valid = levels.includes(envLogLevel.toUpperCase())
   if (!valid) throw new Error("invalid env LOGLEVEL! Valid values are: " + levels + " default is INFO")
   log.setLevel(envLogLevel.toUpperCase() as any)
-}
+} else log.setLevel("INFO")
 log.info("logging level set to:", log.getLevel())
 export default log

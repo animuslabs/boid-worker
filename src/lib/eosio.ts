@@ -3,8 +3,9 @@ import fetch from "node-fetch"
 import ms from "ms"
 import { rand, shuffle, sleep } from "./utils"
 import env from "./env"
-import log from "lib/logger"
+import logger from "lib/logger"
 import cacheManager from "cache-manager"
+const log = logger.getLogger("eosio")
 let client:APIClient
 let provider:APIProvider
 let cache = cacheManager.caching({ store: "memory", max: 100, ttl: 10/*seconds*/ })
@@ -45,14 +46,14 @@ interface GetTableParams {
 }
 
 async function errorCounter(endpoint:string, error:string) {
-  console.log("error:", endpoint, error)
+  log.info("error:", endpoint, error)
 }
 
 export async function safeDo(cb:string, params?:any, retry?:number):Promise<any | null> {
   if (!retry) retry = 0
   const rpc = pickRpc()
   const url = rpc.endpoint.toString()
-  console.log("Try rpc:", url)
+  log.info("Try rpc:", url)
 
   try {
     const doit = async() => {
@@ -61,7 +62,7 @@ export async function safeDo(cb:string, params?:any, retry?:number):Promise<any 
         return result
       } catch (error) {
         const errorMsg = error.toString() as string
-        console.error("safeDo Error:", rpc.endpoint.toString(), errorMsg, error)
+        log.error("safeDo Error:", rpc.endpoint.toString(), errorMsg, error)
         if (cb === "get_account" && (errorMsg.search("unknown key") > -1)) {
           retry = 5
           throw (error)
@@ -77,13 +78,13 @@ export async function safeDo(cb:string, params?:any, retry?:number):Promise<any 
       // doit(),
       new Promise((res, reject) => setTimeout(() => reject(new Error("SafeDo Timeout:")), ms("3s")))
     ])
-    // console.log('Result:', result);
+    // log.info('Result:', result);
 
     return result
   } catch (error) {
-    console.error("DoRequest Error:", url)
+    log.error("DoRequest Error:", url)
     retry++
-    console.error("RETRY", retry)
+    log.error("RETRY", retry)
     if (retry < 5) return safeDo(cb, params, retry)
   }
 }
@@ -96,7 +97,7 @@ export async function getAllScopes(params:API.v1.GetTableByScopeParams) {
   async function loop():Promise<any> {
     const result = await safeDo("get_table_by_scope", { code, table, limit: -1, lower_bound })
     result.rows.forEach((el:any) => rows.push(el))
-    console.log("scopes:", rows.length)
+    log.info("scopes:", rows.length)
 
     if (result.more) lower_bound = result.more
     else return
@@ -148,7 +149,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any }, contrac
       data
     })
   } catch (error) {
-    // console.log(error.toString())
+    // log.info(error.toString())
 
     let abi:ABI.Def|undefined = abiCache[contract.toString()]
     if (!abi) {
@@ -177,7 +178,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any }, contrac
   const errors:any[] = []
   let apis = shuffle(rpcs)
   if (apis.length > 4) apis = apis.splice(0, 4)
-  // console.log(apis)
+  // log.info(apis)
 
   const timeoutTimer = ms("10s")
   await Promise.all(apis.map(({ endpoint, rpc }) => Promise.race([
@@ -185,7 +186,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any }, contrac
       rpc.push_transaction(signedTransaction).then(result => {
         receipts.push({ url: endpoint.origin, receipt: result.processed })
       }).catch(error => {
-        // console.log('Error Type:', typeof error);
+        // log.info('Error Type:', typeof error);
         errors.push({ url: endpoint.origin, error: error?.error?.details[0]?.message || JSON.stringify(error?.error, null, 2) })
       }).finally(() => res(null))
     }),
@@ -194,7 +195,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any }, contrac
       res(null)
     }, timeoutTimer))
   ])))
-  // console.log('doAction finished;', receipts, errors);
+  // log.info('doAction finished;', receipts, errors);
   interface UniqueErrors {
     endpoints:string[]
     error:string
@@ -216,12 +217,12 @@ export async function doAction(name:NameType, data:{ [key:string]:any }, contrac
 
 export function pickRpc():typeof rpcs[0] {
   const pick = rpcs[rand(0, rpcs.length - 1)]
-  // console.log('pickRPC:', pick.endpoint.toString())
+  // log.info('pickRPC:', pick.endpoint.toString())
   return pick
 }
 
 export function pickEndpoint():string {
   const pick = rpcs[rand(0, rpcs.length - 1)]
-  // console.log('pickRPC:', pick.endpoint.toString())
+  // log.info('pickRPC:', pick.endpoint.toString())
   return pick.endpoint.toString()
 }

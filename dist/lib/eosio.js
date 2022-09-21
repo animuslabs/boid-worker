@@ -3,7 +3,9 @@ import fetch from "node-fetch";
 import ms from "ms";
 import { rand, shuffle, sleep } from "./utils.js";
 import env from "./env.js";
+import logger from "./logger.js";
 import cacheManager from "cache-manager";
+const log = logger.getLogger("eosio");
 let client;
 let provider;
 let cache = cacheManager.caching({ store: "memory", max: 100, ttl: 10 /*seconds*/ });
@@ -14,14 +16,14 @@ export const rpcs = env.endpoints.map(el => {
 });
 const abiCache = {};
 async function errorCounter(endpoint, error) {
-    console.log("error:", endpoint, error);
+    log.info("error:", endpoint, error);
 }
 export async function safeDo(cb, params, retry) {
     if (!retry)
         retry = 0;
     const rpc = pickRpc();
     const url = rpc.endpoint.toString();
-    console.log("Try rpc:", url);
+    log.info("Try rpc:", url);
     try {
         const doit = async () => {
             try {
@@ -30,7 +32,7 @@ export async function safeDo(cb, params, retry) {
             }
             catch (error) {
                 const errorMsg = error.toString();
-                console.error("safeDo Error:", rpc.endpoint.toString(), errorMsg, error);
+                log.error("safeDo Error:", rpc.endpoint.toString(), errorMsg, error);
                 if (cb === "get_account" && (errorMsg.search("unknown key") > -1)) {
                     retry = 5;
                     throw (error);
@@ -47,13 +49,13 @@ export async function safeDo(cb, params, retry) {
             // doit(),
             new Promise((res, reject) => setTimeout(() => reject(new Error("SafeDo Timeout:")), ms("3s")))
         ]);
-        // console.log('Result:', result);
+        // log.info('Result:', result);
         return result;
     }
     catch (error) {
-        console.error("DoRequest Error:", url);
+        log.error("DoRequest Error:", url);
         retry++;
-        console.error("RETRY", retry);
+        log.error("RETRY", retry);
         if (retry < 5)
             return safeDo(cb, params, retry);
     }
@@ -67,7 +69,7 @@ export async function getAllScopes(params) {
     async function loop() {
         const result = await safeDo("get_table_by_scope", { code, table, limit: -1, lower_bound });
         result.rows.forEach((el) => rows.push(el));
-        console.log("scopes:", rows.length);
+        log.info("scopes:", rows.length);
         if (result.more)
             lower_bound = result.more;
         else
@@ -121,7 +123,7 @@ export async function doAction(name, data, contract, authorization, keys, retry)
         });
     }
     catch (error) {
-        // console.log(error.toString())
+        // log.info(error.toString())
         let abi = abiCache[contract.toString()];
         if (!abi) {
             abi = (await pickRpc().rpc.get_abi(contract)).abi;
@@ -151,14 +153,14 @@ export async function doAction(name, data, contract, authorization, keys, retry)
     let apis = shuffle(rpcs);
     if (apis.length > 4)
         apis = apis.splice(0, 4);
-    // console.log(apis)
+    // log.info(apis)
     const timeoutTimer = ms("10s");
     await Promise.all(apis.map(({ endpoint, rpc }) => Promise.race([
         new Promise(res => {
             rpc.push_transaction(signedTransaction).then(result => {
                 receipts.push({ url: endpoint.origin, receipt: result.processed });
             }).catch(error => {
-                // console.log('Error Type:', typeof error);
+                // log.info('Error Type:', typeof error);
                 errors.push({ url: endpoint.origin, error: error?.error?.details[0]?.message || JSON.stringify(error?.error, null, 2) });
             }).finally(() => res(null));
         }),
@@ -183,12 +185,12 @@ export async function doAction(name, data, contract, authorization, keys, retry)
 }
 export function pickRpc() {
     const pick = rpcs[rand(0, rpcs.length - 1)];
-    // console.log('pickRPC:', pick.endpoint.toString())
+    // log.info('pickRPC:', pick.endpoint.toString())
     return pick;
 }
 export function pickEndpoint() {
     const pick = rpcs[rand(0, rpcs.length - 1)];
-    // console.log('pickRPC:', pick.endpoint.toString())
+    // log.info('pickRPC:', pick.endpoint.toString())
     return pick.endpoint.toString();
 }
 //# sourceMappingURL=eosio.js.map
