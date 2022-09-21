@@ -50,8 +50,8 @@ async function init() {
                     const finishAct = createFinishAction(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }));
                     pusher.add(finishAct);
                     // continue to next itteration of loop
-                    continue;
                 }
+                continue;
             }
             // report doesn't already exist so push the report
             const action = createReportAction(PwrReportAction.from({
@@ -61,7 +61,7 @@ async function init() {
             }));
             pusher.add(action);
         }
-        pusher.stop();
+        // pusher.stop()
     }
     catch (error) {
         log.error(error.toString());

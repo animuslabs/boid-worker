@@ -1,10 +1,9 @@
-import { ABI, Name, Serializer } from "@greymass/eosio";
+import { Name, Serializer } from "@greymass/eosio";
 import { getAccount } from "./eosio.js";
 import { tables } from "./queries.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import log from "./logger.js";
-import fs from "fs-extra";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 export const sleep = async (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -69,8 +68,7 @@ export async function getRoundData(round) {
     return { round, start, end };
 }
 export function reportIdFromReport(report) {
-    const abi = ABI.from(fs.readJsonSync("../boid.contract.json"));
-    const ser = Serializer.encode({ object: report.toJSON(), abi, type: "PwrReport" });
+    const ser = Serializer.encode({ object: report });
     const int = parseInt("1" + ser.array.reduce((acc, val) => acc + val.toString(), ""));
     log.debug(int);
     return int;

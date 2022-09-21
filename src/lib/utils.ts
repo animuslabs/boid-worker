@@ -82,8 +82,7 @@ export async function getRoundData(round:number) {
 }
 
 export function reportIdFromReport(report:PwrReport):number {
-  const abi = ABI.from(fs.readJsonSync("../boid.contract.json"))
-  const ser = Serializer.encode({ object: report.toJSON(), abi, type: "PwrReport" })
+  const ser = Serializer.encode({ object: report })
   const int = parseInt("1" + ser.array.reduce((acc:string, val:number) => acc + val.toString(), ""))
   log.debug(int)
   return int
@@ -99,7 +98,6 @@ export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
   if (report.report.round.toNumber() == round - 1 && rndProgress < config.reports_accumulate_weight_round_pct.value) return false
   if (report.merged || report.reported) return false
   if (report.approval_weight.value >= minApproval) return true
-
   return false
 }
 

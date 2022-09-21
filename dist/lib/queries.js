@@ -28,7 +28,7 @@ export async function getPwrConf() {
     return config[0];
 }
 export async function getPwrGlobal() {
-    const global = await getFullTable({ tableName: "config", contract: env.contracts.power }, pwr.Global);
+    const global = await getFullTable({ tableName: "global", contract: env.contracts.power }, pwr.Global);
     if (global.length == 0)
         throw (new Error("power contract not initialized "));
     return global[0];

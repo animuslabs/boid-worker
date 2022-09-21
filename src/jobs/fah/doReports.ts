@@ -45,8 +45,10 @@ async function init() {
       const existing = await getPwrReport(boidId, reportId)
       let shouldFinish = false
       log.debug("existing report:", existing)
+
       if (existing) {
         shouldFinish = await shouldFinishReport(existing)
+
         // make sure we already reported and check if weight threshold has been reached
         const approved = existing.approvals.includes(Name.from(env.worker.account))
         if (approved && shouldFinish) {
@@ -54,8 +56,8 @@ async function init() {
           const finishAct = createFinishAction(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }))
           pusher.add(finishAct)
           // continue to next itteration of loop
-          continue
         }
+        continue
       }
       // report doesn't already exist so push the report
       const action = createReportAction(PwrReportAction.from(
@@ -67,7 +69,7 @@ async function init() {
       ))
       pusher.add(action)
     }
-    pusher.stop()
+    // pusher.stop()
   } catch (error:any) {
     log.error(error.toString())
     log.debug(error)

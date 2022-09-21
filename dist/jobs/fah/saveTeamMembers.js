@@ -9,9 +9,7 @@ const log = logger.getLogger(jobName);
 async function init() {
     log.info("starting:", jobName);
     log.info("querying for fah team members");
-    console.time("teamQuery");
     const scores = await fah.getTeamMembers();
-    console.timeEnd("teamQuery");
     log.info("received", scores.length, "fah members");
     log.info("top member:", scores[0]);
     let dbTimer = new Timer();
@@ -32,7 +30,6 @@ async function init() {
     log.info("finished writing fah members to DB");
     if (log.getLevel() < 2)
         log.debug("DB write time ms:", dbTimer.stop().elapsed);
-    console.timeEnd("DBWrite");
 }
 init().catch(err => {
     log.error(err.toString());
