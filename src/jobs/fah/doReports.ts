@@ -9,23 +9,7 @@ import env from "lib/env"
 import { Finishreport, PwrReport, PwrReportAction, PwrReportRow } from "lib/types/power.boid.types"
 import { pickRpc, safeDo } from "lib/eosio"
 import { info } from "console"
-
-function createReportAction(data:Record<string, any>) {
-  return Action.from({
-    account: env.contracts.power,
-    name: "pwrreport",
-    authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-    data
-  })
-}
-function createFinishAction(data:Record<string, any>) {
-  return Action.from({
-    account: env.contracts.power,
-    name: "finishreport",
-    authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-    data
-  })
-}
+import { createFinishAction, createReportAction } from "lib/actions"
 
 async function init() {
   try {

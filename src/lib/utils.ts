@@ -99,5 +99,12 @@ export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
   if (report.report.round.toNumber() == round - 1 && rndProgress < config.reports_accumulate_weight_round_pct.value) return false
   if (report.merged || report.reported) return false
   if (report.approval_weight.value >= minApproval) return true
+
   return false
+}
+
+export async function finalizedRound():Promise<number> {
+  const round = await currentRound()
+  const config = await tables.pwr.config()
+  return round - config.reports_finalized_after_rounds.toNumber()
 }

@@ -1,4 +1,4 @@
-import { getFullTable, pickRpc } from "./eosio"
+import { getAllScopes, getFullTable, pickRpc } from "./eosio"
 import * as sys from "./types/boid.system"
 import * as pwr from "./types/power.boid.types"
 import env from "./env"
@@ -7,7 +7,7 @@ import ax from "axios"
 import prisma from "lib/db"
 import { roundData } from "lib/utils"
 import log from "lib/logger"
-import { UInt64 } from "@greymass/eosio"
+import { NameType, UInt64 } from "@greymass/eosio"
 
 let cache = cacheManager.caching({ store: "memory", max: 100, ttl: 300/*seconds*/ })
 
@@ -38,6 +38,32 @@ export async function getPwrGlobal():Promise<pwr.Global> {
   if (global.length == 0) throw (new Error("power contract not initialized "))
   return global[0]
 }
+export async function getPwrStats():Promise<pwr.Stat[]> {
+  const stats = await getFullTable<pwr.Stat>({ tableName: "stats", contract: env.contracts.power }, pwr.Stat)
+  return stats
+}
+
+export async function getPwrOracles() {
+  const oracles = await getFullTable<pwr.Oracle>({ tableName: "oracles", contract: env.contracts.power }, pwr.Oracle)
+  return oracles
+}
+export async function getPwrReports(scope:NameType) {
+  const pwrReports = await getFullTable<pwr.PwrReportRow>({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow)
+  return pwrReports
+}
+export function getReportScopes() {
+  return getAllScopes({ code: env.contracts.power, table: "pwrreports" })
+}
+export async function getAllReports() {
+  // get all pwrreports from all available scopes (boidId)
+  const reportScopes = await getReportScopes()
+  let allPwrReports:pwr.PwrReportRow[] = []
+  for (const boidId of reportScopes) {
+    const reports = await tables.pwr.pwrReports(boidId)
+    reports.forEach(el => allPwrReports.push(el))
+  }
+  return allPwrReports
+}
 
 export async function getPwrReport(boidId:string, reportId:number):Promise<pwr.PwrReportRow | null> {
   const report_id = UInt64.from(reportId)
@@ -53,7 +79,10 @@ export const tables = {
   },
   pwr: {
     config: () => cache.wrap("pwrconfig", getPwrConf),
-    global: () => cache.wrap("pwrglobal", getPwrGlobal)
+    global: () => cache.wrap("pwrglobal", getPwrGlobal),
+    oracles: () => cache.wrap("pwroracles", getPwrOracles),
+    pwrReports: (scope:NameType) => cache.wrap("pwrReports", () => getPwrReports(scope)),
+    stats: () => cache.wrap("pwrstats", getPwrStats)
   }
 }
 

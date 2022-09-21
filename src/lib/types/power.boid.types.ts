@@ -81,6 +81,7 @@ export class Config extends Struct {
     @Struct.field(Float32) weight_collateral_pwr!:Float32
     @Struct.field(UInt32) oracle_collateral_deposit_increment!:UInt32
     @Struct.field(Float32) reports_accumulate_weight_round_pct!:Float32
+    @Struct.field(Float32) weight_collateral_divisor!:Float32
 }
 
 @Struct.type("ConfigAccount")
@@ -169,9 +170,9 @@ export class GlobalReports extends Struct {
 
 @Struct.type("Global")
 export class Global extends Struct {
-    @Struct.field(Name, { array: true }) active_validators!:Name[]
-    @Struct.field(UInt8) expected_active_validators!:UInt8
-    @Struct.field(UInt8) standby_validators!:UInt8
+    @Struct.field(Name, { array: true }) active_oracles!:Name[]
+    @Struct.field(Name, { array: true }) expected_active_oracles!:Name[]
+    @Struct.field(UInt8) standby_oracles!:UInt8
     @Struct.field(UInt16) expected_active_weight!:UInt16
     @Struct.field(GlobalReports) reports!:GlobalReports
     @Struct.field(UInt64) rewards_paid!:UInt64
@@ -257,6 +258,10 @@ export class Stat extends Struct {
     @Struct.field(UInt32) valid_proposed_since_previous!:UInt32
 }
 
+@Struct.type("configclear")
+export class Configclear extends Struct {
+}
+
 @Struct.type("configset")
 export class Configset extends Struct {
     @Struct.field(Config) config!:Config
@@ -266,6 +271,10 @@ export class Configset extends Struct {
 export class Finishreport extends Struct {
     @Struct.field(Name) boid_id_scope!:Name
     @Struct.field(UInt64) pwrreport_id!:UInt64
+}
+
+@Struct.type("globalclear")
+export class Globalclear extends Struct {
 }
 
 @Struct.type("handleostat")
@@ -284,6 +293,10 @@ export class Mergereports extends Struct {
 export class Oracldeposit extends Struct {
     @Struct.field(Name) oracle!:Name
     @Struct.field(UInt32) depositQuantity!:UInt32
+}
+
+@Struct.type("oraclesclear")
+export class Oraclesclear extends Struct {
 }
 
 @Struct.type("oracleset")
@@ -305,7 +318,7 @@ export class Protoset extends Struct {
     @Struct.field(Protocol) protocol!:Protocol
 }
 
-@Struct.type("PwrReportAction")
+@Struct.type("pwrreportaction")
 export class PwrReportAction extends Struct {
     @Struct.field(Name) oracle!:Name
     @Struct.field(Name) boid_id_scope!:Name

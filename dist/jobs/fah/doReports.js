@@ -1,4 +1,4 @@
-import { Action, Name } from "@greymass/eosio";
+import { Name } from "@greymass/eosio";
 import { ActionPusher } from "../../lib/actionPusher.js";
 import log from "../../lib/logger.js";
 import { db, getPwrReport } from "../../lib/queries.js";
@@ -6,22 +6,7 @@ import { Timer } from "../../lib/timer.js";
 import { currentRound, getRoundData, reportIdFromReport, shouldFinishReport } from "../../lib/utils.js";
 import env from "../../lib/env.js";
 import { Finishreport, PwrReport, PwrReportAction } from "../../lib/types/power.boid.types.js";
-function createReportAction(data) {
-    return Action.from({
-        account: env.contracts.power,
-        name: "pwrreport",
-        authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-        data
-    });
-}
-function createFinishAction(data) {
-    return Action.from({
-        account: env.contracts.power,
-        name: "finishreport",
-        authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-        data
-    });
-}
+import { createFinishAction, createReportAction } from "../../lib/actions.js";
 async function init() {
     try {
         const reportingRound = await getRoundData((await currentRound()) - 1);

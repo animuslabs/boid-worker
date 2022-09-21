@@ -90,4 +90,9 @@ export async function shouldFinishReport(report) {
         return true;
     return false;
 }
+export async function finalizedRound() {
+    const round = await currentRound();
+    const config = await tables.pwr.config();
+    return round - config.reports_finalized_after_rounds.toNumber();
+}
 //# sourceMappingURL=utils.js.map

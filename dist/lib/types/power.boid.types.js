@@ -187,6 +187,10 @@ __decorate([
     Struct.field(Float32),
     __metadata("design:type", Float32)
 ], Config.prototype, "reports_accumulate_weight_round_pct", void 0);
+__decorate([
+    Struct.field(Float32),
+    __metadata("design:type", Float32)
+], Config.prototype, "weight_collateral_divisor", void 0);
 Config = __decorate([
     Struct.type("Config")
 ], Config);
@@ -422,15 +426,15 @@ let Global = class Global extends Struct {
 __decorate([
     Struct.field(Name, { array: true }),
     __metadata("design:type", Array)
-], Global.prototype, "active_validators", void 0);
+], Global.prototype, "active_oracles", void 0);
+__decorate([
+    Struct.field(Name, { array: true }),
+    __metadata("design:type", Array)
+], Global.prototype, "expected_active_oracles", void 0);
 __decorate([
     Struct.field(UInt8),
     __metadata("design:type", UInt8)
-], Global.prototype, "expected_active_validators", void 0);
-__decorate([
-    Struct.field(UInt8),
-    __metadata("design:type", UInt8)
-], Global.prototype, "standby_validators", void 0);
+], Global.prototype, "standby_oracles", void 0);
 __decorate([
     Struct.field(UInt16),
     __metadata("design:type", UInt16)
@@ -677,6 +681,12 @@ Stat = __decorate([
     Struct.type("Stat")
 ], Stat);
 export { Stat };
+let Configclear = class Configclear extends Struct {
+};
+Configclear = __decorate([
+    Struct.type("configclear")
+], Configclear);
+export { Configclear };
 let Configset = class Configset extends Struct {
 };
 __decorate([
@@ -701,6 +711,12 @@ Finishreport = __decorate([
     Struct.type("finishreport")
 ], Finishreport);
 export { Finishreport };
+let Globalclear = class Globalclear extends Struct {
+};
+Globalclear = __decorate([
+    Struct.type("globalclear")
+], Globalclear);
+export { Globalclear };
 let Handleostat = class Handleostat extends Struct {
 };
 __decorate([
@@ -743,6 +759,12 @@ Oracldeposit = __decorate([
     Struct.type("oracldeposit")
 ], Oracldeposit);
 export { Oracldeposit };
+let Oraclesclear = class Oraclesclear extends Struct {
+};
+Oraclesclear = __decorate([
+    Struct.type("oraclesclear")
+], Oraclesclear);
+export { Oraclesclear };
 let Oracleset = class Oracleset extends Struct {
 };
 __decorate([
@@ -804,7 +826,7 @@ __decorate([
     __metadata("design:type", PwrReport)
 ], PwrReportAction.prototype, "report", void 0);
 PwrReportAction = __decorate([
-    Struct.type("PwrReportAction")
+    Struct.type("pwrreportaction")
 ], PwrReportAction);
 export { PwrReportAction };
 let Reportsclean = class Reportsclean extends Struct {

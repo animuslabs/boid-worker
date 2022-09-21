@@ -1,4 +1,4 @@
-import { getFullTable, pickRpc } from "./eosio.js";
+import { getAllScopes, getFullTable, pickRpc } from "./eosio.js";
 import * as sys from "./types/boid.system.js";
 import * as pwr from "./types/power.boid.types.js";
 import env from "./env.js";
@@ -33,6 +33,31 @@ export async function getPwrGlobal() {
         throw (new Error("power contract not initialized "));
     return global[0];
 }
+export async function getPwrStats() {
+    const stats = await getFullTable({ tableName: "stats", contract: env.contracts.power }, pwr.Stat);
+    return stats;
+}
+export async function getPwrOracles() {
+    const oracles = await getFullTable({ tableName: "oracles", contract: env.contracts.power }, pwr.Oracle);
+    return oracles;
+}
+export async function getPwrReports(scope) {
+    const pwrReports = await getFullTable({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow);
+    return pwrReports;
+}
+export function getReportScopes() {
+    return getAllScopes({ code: env.contracts.power, table: "pwrreports" });
+}
+export async function getAllReports() {
+    // get all pwrreports from all available scopes (boidId)
+    const reportScopes = await getReportScopes();
+    let allPwrReports = [];
+    for (const boidId of reportScopes) {
+        const reports = await tables.pwr.pwrReports(boidId);
+        reports.forEach(el => allPwrReports.push(el));
+    }
+    return allPwrReports;
+}
 export async function getPwrReport(boidId, reportId) {
     const report_id = UInt64.from(reportId);
     const existing = await pickRpc().rpc.get_table_rows({ code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: report_id, scope: boidId, type: pwr.PwrReportRow });
@@ -49,7 +74,10 @@ export const tables = {
     },
     pwr: {
         config: () => cache.wrap("pwrconfig", getPwrConf),
-        global: () => cache.wrap("pwrglobal", getPwrGlobal)
+        global: () => cache.wrap("pwrglobal", getPwrGlobal),
+        oracles: () => cache.wrap("pwroracles", getPwrOracles),
+        pwrReports: (scope) => cache.wrap("pwrReports", () => getPwrReports(scope)),
+        stats: () => cache.wrap("pwrstats", getPwrStats)
     }
 };
 export const db = {
