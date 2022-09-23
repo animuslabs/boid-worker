@@ -16,7 +16,7 @@ async function init() {
       if (result) inserted++
     }
     log.info("inserted", inserted, "new users")
-  } catch (error) {
+  } catch (error:any) {
     console.error(error.toString())
   }
 }

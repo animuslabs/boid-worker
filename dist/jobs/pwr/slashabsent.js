@@ -1,5 +1,5 @@
 import { ActionPusher } from "../../lib/actionPusher.js";
-import { createSlashAbsentAction } from "../../lib/actions.js";
+import { pwrActions } from "../../lib/actions.js";
 import logger from "../../lib/logger.js";
 import { tables } from "../../lib/queries.js";
 import { Slashabsent } from "../../lib/types/power.boid.types.js";
@@ -29,7 +29,7 @@ async function init() {
             if (!activeOracles.includes(oracle))
                 break;
             const slashData = Slashabsent.from({ oracle, round: stat.round.toNumber() - 1 });
-            const slashAction = createSlashAbsentAction(slashData);
+            const slashAction = pwrActions.slashAbsent(slashData);
             log.info("created slashabsent action:", JSON.parse(JSON.stringify(slashData.toJSON())));
             pusher.add(slashAction);
         }

@@ -6,7 +6,7 @@ import { Timer } from "../../lib/timer.js";
 import { currentRound, getRoundData, reportIdFromReport, shouldFinishReport } from "../../lib/utils.js";
 import env from "../../lib/env.js";
 import { Finishreport, PwrReport, PwrReportAction } from "../../lib/types/power.boid.types.js";
-import { createFinishAction, createReportAction } from "../../lib/actions.js";
+import { pwrActions } from "../../lib/actions.js";
 async function init() {
     try {
         const reportingRound = await getRoundData((await currentRound()) - 1);
@@ -47,14 +47,14 @@ async function init() {
                 const approved = existing.approvals.includes(Name.from(env.worker.account));
                 if (approved && shouldFinish) {
                     log.info("sending finish action for report:", reportId);
-                    const finishAct = createFinishAction(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }));
+                    const finishAct = pwrActions.finishReport(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }));
                     pusher.add(finishAct);
                     // continue to next itteration of loop
                 }
                 continue;
             }
             // report doesn't already exist so push the report
-            const action = createReportAction(PwrReportAction.from({
+            const action = pwrActions.pwrReport(PwrReportAction.from({
                 oracle: env.worker.account,
                 boid_id_scope: boidId,
                 report

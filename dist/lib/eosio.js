@@ -23,7 +23,7 @@ export async function safeDo(cb, params, retry) {
         retry = 0;
     const rpc = pickRpc();
     const url = rpc.endpoint.toString();
-    log.info("Try rpc:", url);
+    // log.debug("Try rpc:", url)
     try {
         const doit = async () => {
             try {
@@ -106,7 +106,7 @@ export async function getAccount(name) {
     const result = (await safeDo("get_account", name));
     return result;
 }
-export async function doAction(name, data, contract, authorization, keys, retry) {
+export async function doAction(name, data = {}, contract = env.contracts.power, authorization, keys, retry) {
     if (!data)
         data = {};
     if (!authorization)

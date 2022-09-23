@@ -9,7 +9,7 @@ import env from "lib/env"
 import { Finishreport, PwrReport, PwrReportAction, PwrReportRow } from "lib/types/power.boid.types"
 import { pickRpc, safeDo } from "lib/eosio"
 import { info } from "console"
-import { createFinishAction, createReportAction } from "lib/actions"
+import { pwrActions } from "lib/actions"
 
 async function init() {
   try {
@@ -53,14 +53,14 @@ async function init() {
         const approved = existing.approvals.includes(Name.from(env.worker.account))
         if (approved && shouldFinish) {
           log.info("sending finish action for report:", reportId)
-          const finishAct = createFinishAction(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }))
+          const finishAct = pwrActions.finishReport(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }))
           pusher.add(finishAct)
           // continue to next itteration of loop
         }
         continue
       }
       // report doesn't already exist so push the report
-      const action = createReportAction(PwrReportAction.from(
+      const action = pwrActions.pwrReport(PwrReportAction.from(
         {
           oracle: env.worker.account,
           boid_id_scope: boidId,

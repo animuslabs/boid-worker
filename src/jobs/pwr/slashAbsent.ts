@@ -1,6 +1,6 @@
 import { Name } from "@greymass/eosio"
 import { ActionPusher } from "lib/actionPusher"
-import { createSlashAbsentAction } from "lib/actions"
+import { pwrActions } from "lib/actions"
 import db from "lib/db"
 import logger from "lib/logger"
 import { getReportScopes, tables } from "lib/queries"
@@ -30,7 +30,7 @@ async function init() {
     for (const oracle of absent) {
       if (!activeOracles.includes(oracle)) break
       const slashData = Slashabsent.from({ oracle, round: stat.round.toNumber() - 1 })
-      const slashAction = createSlashAbsentAction(slashData)
+      const slashAction = pwrActions.slashAbsent(slashData)
       log.info("created slashabsent action:", JSON.parse(JSON.stringify(slashData.toJSON())))
       pusher.add(slashAction)
     }

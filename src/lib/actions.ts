@@ -1,29 +1,17 @@
-import { Action } from "@greymass/eosio"
+import { Action, AnyAction } from "@greymass/eosio"
 import env from "lib/env"
+import { Finishreport, Mergereports, PwrReportAction, Slashabsent } from "lib/types/power.boid.types"
+const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
+const pwrAcct = env.contracts.power
 
-export function createReportAction(data:Record<string, any>) {
-  return Action.from({
-    account: env.contracts.power,
-    name: "pwrreport",
-    authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-    data
-  })
+function createAct(name:string, data:Record<string, any> = {}, account = pwrAcct) {
+  return Action.from({ account, name, authorization, data })
 }
 
-export function createFinishAction(data:Record<string, any>) {
-  return Action.from({
-    account: env.contracts.power,
-    name: "finishreport",
-    authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-    data
-  })
-}
-
-export function createSlashAbsentAction(data:Record<string, any>) {
-  return Action.from({
-    account: env.contracts.power,
-    name: "slashabsent",
-    authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-    data
-  })
+export const pwrActions = {
+  pwrReport: (data:PwrReportAction) => createAct("pwrreport", data),
+  roundStats: () => createAct("roundstats"),
+  slashAbsent: (data:Slashabsent) => createAct("slashabsent", data),
+  finishReport: (data:Finishreport) => createAct("finishreport", data),
+  mergeReports: (data:Mergereports) => createAct("mergereports", data)
 }

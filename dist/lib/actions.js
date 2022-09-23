@@ -1,27 +1,15 @@
 import { Action } from "@greymass/eosio";
 import env from "./env.js";
-export function createReportAction(data) {
-    return Action.from({
-        account: env.contracts.power,
-        name: "pwrreport",
-        authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-        data
-    });
+const authorization = [{ actor: env.worker.account, permission: env.worker.permission }];
+const pwrAcct = env.contracts.power;
+function createAct(name, data = {}, account = pwrAcct) {
+    return Action.from({ account, name, authorization, data });
 }
-export function createFinishAction(data) {
-    return Action.from({
-        account: env.contracts.power,
-        name: "finishreport",
-        authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-        data
-    });
-}
-export function createSlashAbsentAction(data) {
-    return Action.from({
-        account: env.contracts.power,
-        name: "slashabsent",
-        authorization: [{ actor: env.worker.account, permission: env.worker.permission }],
-        data
-    });
-}
+export const pwrActions = {
+    pwrReport: (data) => createAct("pwrreport", data),
+    roundStats: () => createAct("roundstats"),
+    slashAbsent: (data) => createAct("slashabsent", data),
+    finishReport: (data) => createAct("finishreport", data),
+    mergeReports: (data) => createAct("mergereports", data)
+};
 //# sourceMappingURL=actions.js.map

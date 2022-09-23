@@ -7,7 +7,6 @@ import log from "./logger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 export const sleep = async (ms) => new Promise(resolve => setTimeout(resolve, ms));
-const thisFile = () => import.meta.url.split(".")[0].split("/").reverse()[0];
 export function shuffle(array) {
     let currentIndex = array.length;
     let temporaryValue;
@@ -85,6 +84,24 @@ export async function shouldFinishReport(report) {
     if (report.merged || report.reported)
         return false;
     if (report.approval_weight.value >= minApproval)
+        return true;
+    return false;
+}
+export async function shouldMergeReports(roundNum, reports) {
+    if (reports.length < 2)
+        return false;
+    const config = await tables.pwr.config();
+    const global = await tables.pwr.global();
+    const round = await currentRound();
+    const minApproval = Math.max(config.min_consensus_pct.value * global.expected_active_weight.value, config.min_consensus_weight.value);
+    log.debug("calculated min consensus weight: ", minApproval);
+    const cumulativeWeight = reports.reduce((acc, el) => acc + el.approval_weight.toNumber(), 0);
+    const rndProgress = round % parseInt(`${round}`);
+    if (roundNum == round - 1 && rndProgress < config.reports_accumulate_weight_round_pct.value)
+        return false;
+    if (reports.some(el => (el.merged || el.reported)))
+        return false;
+    if (cumulativeWeight >= minApproval)
         return true;
     return false;
 }

@@ -53,14 +53,14 @@ export async function safeDo(cb:string, params?:any, retry?:number):Promise<any 
   if (!retry) retry = 0
   const rpc = pickRpc()
   const url = rpc.endpoint.toString()
-  log.info("Try rpc:", url)
+  // log.debug("Try rpc:", url)
 
   try {
     const doit = async() => {
       try {
         const result = (await rpc.rpc[cb](params))
         return result
-      } catch (error) {
+      } catch (error:any) {
         const errorMsg = error.toString() as string
         log.error("safeDo Error:", rpc.endpoint.toString(), errorMsg, error)
         if (cb === "get_account" && (errorMsg.search("unknown key") > -1)) {
@@ -135,7 +135,7 @@ export async function getAccount(name:Name):Promise<API.v1.AccountObject> {
   return result
 }
 
-export async function doAction(name:NameType, data:{ [key:string]:any }, contract:NameType, authorization?:PermissionLevel[], keys?:PrivateKey[], retry?:number):Promise<DoActionResponse | null> {
+export async function doAction(name:NameType, data:{ [key:string]:any } = {}, contract:NameType = env.contracts.power, authorization?:PermissionLevel[], keys?:PrivateKey[], retry?:number):Promise<DoActionResponse | null> {
   if (!data) data = {}
   if (!authorization) authorization = [PermissionLevel.from({ actor: env.worker.account, permission: env.worker.permission })]
   const info = await getInfo()

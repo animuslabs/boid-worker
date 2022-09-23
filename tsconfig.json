@@ -1,5 +1,6 @@
 {
   "compileOnSave": true,
+
   "compilerOptions": {
     "target": "ES2020",
     "module": "ES2020",
@@ -11,6 +12,8 @@
     "noUnusedLocals": false,
     "noImplicitReturns": true,
     "allowUnreachableCode": true,
+    "noUncheckedIndexedAccess": false,
+    "strict": false,
     "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
