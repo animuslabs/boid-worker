@@ -6,7 +6,7 @@
       "cwd": "./dist",
       "script": "./jobs/fah/saveTeamMembers.js",
       "autorestart": false,
-      "cron_restart": "10,30,55 * * * *",
+      "cron_restart": "5,10,20,30,40,50,55 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
