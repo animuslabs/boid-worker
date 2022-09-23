@@ -12,8 +12,8 @@ async function init() {
     log.debug("current round:", round);
     const stats = await tables.pwr.stats();
     const finalRound = await finalizedRound();
-    const activeOracles = oracles.filter(el => !el.standby && Math.floor(round) > el.expected_active_after_round.toNumber()).map(el => el.account.toString());
-    log.debug("active oracles:", activeOracles);
+    const activeOracles = oracles.filter(el => !el.standby);
+    log.debug("active oracles:", activeOracles.length);
     const finalizedStats = stats.filter(el => el.round.toNumber() - 1 <= finalRound);
     const pusher = new ActionPusher(5000);
     log.info("checking stats:", finalizedStats.length);
@@ -26,7 +26,15 @@ async function init() {
                 absent.push(el.toString());
         });
         for (const oracle of absent) {
-            if (!activeOracles.includes(oracle))
+            // if (!activeOracles.includes(oracle)) break
+            const matchedOracle = activeOracles.find(el => el.account.toString() == oracle);
+            if (!matchedOracle)
+                break;
+            const expectedActive = matchedOracle.expected_active_after_round.toNumber();
+            log.debug("matched oracle:", matchedOracle.account.toString(), matchedOracle.expected_active_after_round.toNumber());
+            const targetRound = stat.round.toNumber() - 1;
+            log.debug("checking", targetRound);
+            if (expectedActive <= targetRound)
                 break;
             const slashData = Slashabsent.from({ oracle, round: stat.round.toNumber() - 1 });
             const slashAction = pwrActions.slashAbsent(slashData);
