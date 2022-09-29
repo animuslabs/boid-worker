@@ -12,6 +12,7 @@ git clone https://github.com/animuslabs/boid-worker.git
 cd boid-worker
 yarn
 yarn prisma db push
+yarn build
 cp example.env.json .env.json
 cp example.ecosystem.config.json ecosystem.config.json 
 ```
