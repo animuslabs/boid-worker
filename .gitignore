@@ -1,2 +1,4 @@
 .env.json
 prisma/dev.db
+ecosystem.config.json
+node_modules
