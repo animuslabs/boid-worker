@@ -79,6 +79,9 @@ export async function getAllScopes(params) {
     await loop();
     return rows.map(el => el.scope);
 }
+export async function sendAction(act) {
+    await doAction(act.name, act.data, act.account);
+}
 export async function getFullTable(params, type) {
     let code = params.contract;
     const table = params.tableName;

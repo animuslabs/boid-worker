@@ -1,4 +1,4 @@
-import { getAllScopes, getFullTable, pickRpc } from "./eosio"
+import { getAllScopes, getFullTable, pickRpc, safeDo } from "./eosio"
 import * as sys from "./types/boid.system"
 import * as pwr from "./types/power.boid.types"
 import env from "./env"
@@ -7,7 +7,7 @@ import ax from "axios"
 import prisma from "lib/db"
 import { roundData } from "lib/utils"
 import log from "lib/logger"
-import { NameType, UInt64 } from "@greymass/eosio"
+import { API, NameType, UInt64 } from "@greymass/eosio"
 
 let cache = cacheManager.caching({ store: "memory", max: 100, ttl: 300/*seconds*/ })
 
@@ -51,8 +51,21 @@ export async function getPwrReports(scope:NameType) {
   const pwrReports = await getFullTable<pwr.PwrReportRow>({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow)
   return pwrReports
 }
+export async function getOldestReport(scope:NameType):Promise<null|pwr.PwrReportRow> {
+  const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", scope, limit: 1, type: pwr.PwrReportRow, index_position: "secondary", reverse: false }) as API.v1.GetTableRowsResponse
+  if (!result || result.rows.length == 0) return null
+  else return result.rows[0]
+}
+export async function getOldestOracleStat(scope:NameType):Promise<null|pwr.OracleStat> {
+  const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "oraclestats", scope, limit: 1, reverse: false, type: pwr.OracleStat }) as API.v1.GetTableRowsResponse
+  if (!result || result.rows.length == 0) return null
+  else return result.rows[0]
+}
 export function getReportScopes() {
   return getAllScopes({ code: env.contracts.power, table: "pwrreports" })
+}
+export function getOracleStatsScopes() {
+  return getAllScopes({ code: env.contracts.power, table: "oraclestats" })
 }
 export async function getAllReports() {
   // get all pwrreports from all available scopes (boidId)
@@ -67,7 +80,7 @@ export async function getAllReports() {
 
 export async function getPwrReport(boidId:string, reportId:number):Promise<pwr.PwrReportRow | null> {
   const report_id = UInt64.from(reportId)
-  const existing = await pickRpc().rpc.get_table_rows({ code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: report_id, scope: boidId, type: pwr.PwrReportRow })
+  const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: report_id, scope: boidId, type: pwr.PwrReportRow })
   if (!existing.rows[0]) return null
   else if (!existing.rows[0].report_id.equals(report_id)) return null
   else return existing.rows[0]

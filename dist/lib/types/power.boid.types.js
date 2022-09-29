@@ -162,7 +162,7 @@ __decorate([
 __decorate([
     Struct.field(UInt32),
     __metadata("design:type", UInt32)
-], Config.prototype, "keep_stats_rows", void 0);
+], Config.prototype, "keep_finalized_stats_rows", void 0);
 __decorate([
     Struct.field(UInt8),
     __metadata("design:type", UInt8)
@@ -591,6 +591,10 @@ __decorate([
     Struct.field(Float32),
     __metadata("design:type", Float32)
 ], Protocol.prototype, "unitPowerMult", void 0);
+__decorate([
+    Struct.field("bool"),
+    __metadata("design:type", Boolean)
+], Protocol.prototype, "active", void 0);
 Protocol = __decorate([
     Struct.type("Protocol")
 ], Protocol);
@@ -783,6 +787,16 @@ Oracleset = __decorate([
     Struct.type("oracleset")
 ], Oracleset);
 export { Oracleset };
+let Ostatsclean = class Ostatsclean extends Struct {
+};
+__decorate([
+    Struct.field(Name),
+    __metadata("design:type", Name)
+], Ostatsclean.prototype, "scope", void 0);
+Ostatsclean = __decorate([
+    Struct.type("ostatsclean")
+], Ostatsclean);
+export { Ostatsclean };
 let Payoracle = class Payoracle extends Struct {
 };
 __decorate([
@@ -801,6 +815,12 @@ Payoracle = __decorate([
     Struct.type("payoracle")
 ], Payoracle);
 export { Payoracle };
+let Protoclear = class Protoclear extends Struct {
+};
+Protoclear = __decorate([
+    Struct.type("protoclear")
+], Protoclear);
+export { Protoclear };
 let Protoset = class Protoset extends Struct {
 };
 __decorate([

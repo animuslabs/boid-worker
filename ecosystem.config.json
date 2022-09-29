@@ -6,7 +6,7 @@
       "cwd": "./dist",
       "script": "./jobs/fah/saveTeamMembers.js",
       "autorestart": false,
-      "cron_restart": "5,10,20,30,40,50,55 * * * *",
+      "cron_restart": "*/5 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
@@ -22,7 +22,7 @@
       "cwd": "./dist",
       "script": "./jobs/fah/doReports.js",
       "autorestart": false,
-      "cron_restart": "10,20,30,40,50 * * * *",
+      "cron_restart": "*/5 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
@@ -38,7 +38,7 @@
       "cwd": "./dist",
       "script": "./jobs/sys/saveBoidIds.js",
       "autorestart": false,
-      "cron_restart": "10,40 * * * *",
+      "cron_restart": "*/30 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
@@ -54,7 +54,7 @@
       "cwd": "./dist",
       "script": "./jobs/pwr/slashAbsent.js",
       "autorestart": false,
-      "cron_restart": "10 * * * *",
+      "cron_restart": "*/30 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
@@ -70,7 +70,7 @@
       "cwd": "./dist",
       "script": "./jobs/pwr/newRound.js",
       "autorestart": false,
-      "cron_restart": "30 * * * *",
+      "cron_restart": "*/30 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
@@ -86,7 +86,23 @@
       "cwd": "./dist",
       "script": "./jobs/pwr/mergeReports.js",
       "autorestart": false,
-      "cron_restart": "40 * * * *",
+      "cron_restart": "*/20 * * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boid-worker-pwr-cleanTables",
+      "cwd": "./dist",
+      "script": "./jobs/pwr/cleanTables.js",
+      "autorestart": false,
+      "cron_restart": "0 */24 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",

@@ -1,4 +1,4 @@
-import { getAllScopes, getFullTable, pickRpc } from "./eosio.js";
+import { getAllScopes, getFullTable, pickRpc, safeDo } from "./eosio.js";
 import * as sys from "./types/boid.system.js";
 import * as pwr from "./types/power.boid.types.js";
 import env from "./env.js";
@@ -45,8 +45,25 @@ export async function getPwrReports(scope) {
     const pwrReports = await getFullTable({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow);
     return pwrReports;
 }
+export async function getOldestReport(scope) {
+    const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", scope, limit: 1, type: pwr.PwrReportRow, index_position: "secondary", reverse: false });
+    if (!result || result.rows.length == 0)
+        return null;
+    else
+        return result.rows[0];
+}
+export async function getOldestOracleStat(scope) {
+    const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "oraclestats", scope, limit: 1, reverse: false, type: pwr.OracleStat });
+    if (!result || result.rows.length == 0)
+        return null;
+    else
+        return result.rows[0];
+}
 export function getReportScopes() {
     return getAllScopes({ code: env.contracts.power, table: "pwrreports" });
+}
+export function getOracleStatsScopes() {
+    return getAllScopes({ code: env.contracts.power, table: "oraclestats" });
 }
 export async function getAllReports() {
     // get all pwrreports from all available scopes (boidId)
@@ -60,7 +77,7 @@ export async function getAllReports() {
 }
 export async function getPwrReport(boidId, reportId) {
     const report_id = UInt64.from(reportId);
-    const existing = await pickRpc().rpc.get_table_rows({ code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: report_id, scope: boidId, type: pwr.PwrReportRow });
+    const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: report_id, scope: boidId, type: pwr.PwrReportRow });
     if (!existing.rows[0])
         return null;
     else if (!existing.rows[0].report_id.equals(report_id))

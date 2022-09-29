@@ -106,7 +106,9 @@ export async function getAllScopes(params:API.v1.GetTableByScopeParams) {
   await loop()
   return rows.map(el => el.scope) as Name[]
 }
-
+export async function sendAction(act:Action) {
+  await doAction(act.name, act.data, act.account)
+}
 export async function getFullTable<T>(params:GetTableParams, type?:any):Promise<T[]> {
   let code = params.contract
   const table = params.tableName
