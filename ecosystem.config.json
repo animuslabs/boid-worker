@@ -102,7 +102,23 @@
       "cwd": "./dist",
       "script": "./jobs/pwr/cleanTables.js",
       "autorestart": false,
-      "cron_restart": "0 */24 * * *",
+      "cron_restart": "0 */12 * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boid-worker-pwr-handleOracleStats",
+      "cwd": "./dist",
+      "script": "./jobs/pwr/handleOracleStats.js",
+      "autorestart": false,
+      "cron_restart": "0 */1 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",

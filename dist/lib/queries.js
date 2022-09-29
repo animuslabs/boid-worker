@@ -45,6 +45,10 @@ export async function getPwrReports(scope) {
     const pwrReports = await getFullTable({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow);
     return pwrReports;
 }
+export async function getOracleStats(scope) {
+    const oStats = await getFullTable({ tableName: "oraclestats", contract: env.contracts.power, scope }, pwr.OracleStat);
+    return oStats;
+}
 export async function getOldestReport(scope) {
     const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", scope, limit: 1, type: pwr.PwrReportRow, index_position: "secondary", reverse: false });
     if (!result || result.rows.length == 0)

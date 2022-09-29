@@ -56,6 +56,11 @@ export async function currentRound() {
     const config = await tables.sys.config();
     return (Date.now() - config.time.rounds_start.toMilliseconds()) / (config.time.round_length_sec.toNumber() * 1000);
 }
+export async function finalRound() {
+    const config = await tables.pwr.config();
+    const round = await currentRound();
+    return round - (config.reports_finalized_after_rounds.toNumber() + 1);
+}
 export async function getRoundData(round) {
     round = Math.floor(round);
     const config = await tables.sys.config();

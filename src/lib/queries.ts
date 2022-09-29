@@ -5,7 +5,7 @@ import env from "./env"
 import cacheManager from "cache-manager"
 import ax from "axios"
 import prisma from "lib/db"
-import { roundData } from "lib/utils"
+import { finalRound, roundData } from "lib/utils"
 import log from "lib/logger"
 import { API, NameType, UInt64 } from "@greymass/eosio"
 
@@ -50,6 +50,10 @@ export async function getPwrOracles() {
 export async function getPwrReports(scope:NameType) {
   const pwrReports = await getFullTable<pwr.PwrReportRow>({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow)
   return pwrReports
+}
+export async function getOracleStats(scope:NameType) {
+  const oStats = await getFullTable<pwr.OracleStat>({ tableName: "oraclestats", contract: env.contracts.power, scope }, pwr.OracleStat)
+  return oStats
 }
 export async function getOldestReport(scope:NameType):Promise<null|pwr.PwrReportRow> {
   const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", scope, limit: 1, type: pwr.PwrReportRow, index_position: "secondary", reverse: false }) as API.v1.GetTableRowsResponse

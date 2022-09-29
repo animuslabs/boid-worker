@@ -66,7 +66,6 @@ async function cleanOracleStats(config:Config, round:number) {
 }
 
 async function init() {
-  console.log("hi")
   const config = await tables.pwr.config()
   const round = Math.floor(await currentRound())
   log.info("starting cleanTables, current round:", round)
