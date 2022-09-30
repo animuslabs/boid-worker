@@ -72,10 +72,11 @@ export function getOracleStatsScopes() {
 export async function getAllReports() {
     // get all pwrreports from all available scopes (boidId)
     const reportScopes = await getReportScopes();
-    let allPwrReports = [];
+    let allPwrReports = {};
     for (const boidId of reportScopes) {
         const reports = await tables.pwr.pwrReports(boidId);
-        reports.forEach(el => allPwrReports.push(el));
+        allPwrReports[boidId.toString()] = reports;
+        // reports.forEach(el => allPwrReports.push(el))
     }
     return allPwrReports;
 }

@@ -1,4 +1,4 @@
-import { Action, AnyAction, NameType } from "@greymass/eosio"
+import { Action, AnyAction, NameType, UInt64 } from "@greymass/eosio"
 import env from "lib/env"
 import { StatsClean } from "lib/types/boid.system"
 import { Finishreport, Handleostat, Mergereports, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, Slashabsent, Statsclean } from "lib/types/power.boid.types"
@@ -13,7 +13,7 @@ export const pwrActions = {
   pwrReport: (data:PwrReportAction) => createAct("pwrreport", data),
   roundStats: () => createAct("roundstats"),
   slashAbsent: (data:Slashabsent) => createAct("slashabsent", data),
-  finishReport: (data:Finishreport) => createAct("finishreport", data),
+  finishReport: (data:{boid_id_scope:NameType, pwrreport_id:UInt64}) => createAct("finishreport", Finishreport.from(data)),
   mergeReports: (data:Mergereports) => createAct("mergereports", data),
   statsClean: () => createAct("statsclean"),
   reportsClean: (data:{scope:NameType}) => createAct("reportsclean", Reportsclean.from(data)),

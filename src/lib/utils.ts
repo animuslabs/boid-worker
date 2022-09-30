@@ -100,6 +100,10 @@ export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
   const minApproval = Math.max(config.min_consensus_pct.value * global.expected_active_weight.value, config.min_consensus_weight.value)
   log.debug("calculated min consensus weight: ", minApproval)
   const rndProgress = round % parseInt(`${round}`)
+  log.debug("round", round)
+  log.debug("rndProgress", rndProgress)
+  log.debug("report round", report.report.round.toNumber())
+  log.debug(report.report.round.toNumber() == round - 1, rndProgress < config.reports_accumulate_weight_round_pct.value)
   if (report.report.round.toNumber() == round - 1 && rndProgress < config.reports_accumulate_weight_round_pct.value) return false
   if (report.merged || report.reported) return false
   if (report.approval_weight.value >= minApproval) return true

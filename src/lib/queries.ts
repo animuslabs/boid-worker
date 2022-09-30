@@ -71,13 +71,14 @@ export function getReportScopes() {
 export function getOracleStatsScopes() {
   return getAllScopes({ code: env.contracts.power, table: "oraclestats" })
 }
-export async function getAllReports() {
+export async function getAllReports():Promise<Record<string, pwr.PwrReportRow[]>> {
   // get all pwrreports from all available scopes (boidId)
   const reportScopes = await getReportScopes()
-  let allPwrReports:pwr.PwrReportRow[] = []
+  let allPwrReports:Record<string, pwr.PwrReportRow[]> = {}
   for (const boidId of reportScopes) {
     const reports = await tables.pwr.pwrReports(boidId)
-    reports.forEach(el => allPwrReports.push(el))
+    allPwrReports[boidId.toString()] = reports
+    // reports.forEach(el => allPwrReports.push(el))
   }
   return allPwrReports
 }
