@@ -55,6 +55,12 @@ export async function getOracleStats(scope:NameType) {
   const oStats = await getFullTable<pwr.OracleStat>({ tableName: "oraclestats", contract: env.contracts.power, scope }, pwr.OracleStat)
   return oStats
 }
+export async function getOracleStat(scope:NameType, round:number) {
+  // pickRpc().rpc.get_table_rows({lower_bound:})
+  const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "oraclestats", scope, limit: 1, type: pwr.OracleStat, lower_bound: UInt64.from(round) }) as API.v1.GetTableRowsResponse
+  if (result.rows.length == 0 || result.rows[0].round.toNumber() != round) return null
+  return result.rows[0] as pwr.OracleStat
+}
 export async function getOldestReport(scope:NameType):Promise<null|pwr.PwrReportRow> {
   const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", scope, limit: 1, type: pwr.PwrReportRow, index_position: "secondary", reverse: false }) as API.v1.GetTableRowsResponse
   if (!result || result.rows.length == 0) return null

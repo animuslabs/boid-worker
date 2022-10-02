@@ -49,6 +49,13 @@ export async function getOracleStats(scope) {
     const oStats = await getFullTable({ tableName: "oraclestats", contract: env.contracts.power, scope }, pwr.OracleStat);
     return oStats;
 }
+export async function getOracleStat(scope, round) {
+    // pickRpc().rpc.get_table_rows({lower_bound:})
+    const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "oraclestats", scope, limit: 1, type: pwr.OracleStat, lower_bound: UInt64.from(round) });
+    if (result.rows.length == 0 || result.rows[0].round.toNumber() != round)
+        return null;
+    return result.rows[0];
+}
 export async function getOldestReport(scope) {
     const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", scope, limit: 1, type: pwr.PwrReportRow, index_position: "secondary", reverse: false });
     if (!result || result.rows.length == 0)

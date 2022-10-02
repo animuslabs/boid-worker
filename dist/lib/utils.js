@@ -117,6 +117,6 @@ export async function shouldMergeReports(roundNum, reports) {
 export async function finalizedRound() {
     const round = await currentRound();
     const config = await tables.pwr.config();
-    return round - config.reports_finalized_after_rounds.toNumber();
+    return round - (config.reports_finalized_after_rounds.toNumber() + 1);
 }
 //# sourceMappingURL=utils.js.map
