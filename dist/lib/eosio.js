@@ -15,6 +15,18 @@ export const rpcs = env.endpoints.map(el => {
     return { endpoint: el, rpc: client.v1.chain };
 });
 const abiCache = {};
+export async function getAbi(contract) {
+    let abi = abiCache[contract.toString()];
+    if (!abi) {
+        abi = (await pickRpc().rpc.get_abi(contract)).abi;
+        if (abi)
+            abiCache[contract.toString()] = abi;
+    }
+    if (!abi) {
+        throw new Error(`No ABI for ${contract}`);
+    }
+    return abi;
+}
 async function errorCounter(endpoint, error) {
     log.info("error:", endpoint, error);
 }
@@ -80,7 +92,7 @@ export async function getAllScopes(params) {
     return rows.map(el => el.scope);
 }
 export async function sendAction(act) {
-    await doAction(act.name, act.data, act.account);
+    return doAction(act.name, act.data, act.account);
 }
 export async function getFullTable(params, type) {
     let code = params.contract;
@@ -109,6 +121,8 @@ export async function getAccount(name) {
     const result = (await safeDo("get_account", name));
     return result;
 }
+// export function sendAction(action:AnyAction) {
+// }
 export async function doAction(name, data = {}, contract = env.contracts.power, authorization, keys, retry) {
     if (!data)
         data = {};

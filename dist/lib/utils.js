@@ -3,7 +3,8 @@ import { getAccount } from "./eosio.js";
 import { tables } from "./queries.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import log from "./logger.js";
+import logger from "./logger.js";
+let log = logger.getLogger("utils");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 export const sleep = async (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -77,7 +78,14 @@ export function reportIdFromReport(report) {
     log.debug(int);
     return int;
 }
+export function toObject(data) {
+    return JSON.parse(JSON.stringify(data, (key, value) => typeof value === "bigint"
+        ? value.toString()
+        : value // return everything else unchanged
+    ));
+}
 export async function shouldFinishReport(report) {
+    let log = logger.getLogger("shouldFinishReport()");
     const config = await tables.pwr.config();
     const global = await tables.pwr.global();
     const round = await currentRound();

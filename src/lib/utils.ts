@@ -5,10 +5,10 @@ import { tables } from "./queries"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
 
-import log from "lib/logger"
+import logger from "lib/logger"
 import { PwrReport, PwrReportRow } from "lib/types/power.boid.types"
 import fs from "fs-extra"
-
+let log = logger.getLogger("utils")
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -92,8 +92,16 @@ export function reportIdFromReport(report:PwrReport):number {
   log.debug(int)
   return int
 }
+export function toObject(data) {
+  return JSON.parse(JSON.stringify(data, (key, value) =>
+    typeof value === "bigint"
+      ? value.toString()
+      : value // return everything else unchanged
+  ))
+}
 
 export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
+  let log = logger.getLogger("shouldFinishReport()")
   const config = await tables.pwr.config()
   const global = await tables.pwr.global()
   const round = await currentRound()

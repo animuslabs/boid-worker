@@ -1,4 +1,4 @@
-import { doAction } from "./eosio.js";
+import { sendAction } from "./eosio.js";
 import logger from "./logger.js";
 import { sleep } from "./utils.js";
 const log = logger.getLogger("ActionPusher");
@@ -24,7 +24,7 @@ export class ActionPusher {
         const act = this.queue.shift();
         if (!act)
             return;
-        const result = await doAction(act.name, act.data, act.account);
+        const result = await sendAction(act);
         log.debug("pushTrx result:", result);
         if (result?.receipts.length == 0) {
             log.error("Transaction Error:", result.errors);

@@ -14,6 +14,7 @@ async function init() {
     for (const report of reports[boidId]) {
       log.info("checking report", report.report_id.toNumber())
       const ready = await shouldFinishReport(report)
+      // log.debug("should finish report", JSON.stringify(report.report, null, 2))
       if (!ready) continue
       log.info("Finishing report", report.report_id.toNumber())
       pusher.add(pwrActions.finishReport({ boid_id_scope: boidId, pwrreport_id: report.report_id }))

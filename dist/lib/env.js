@@ -21,7 +21,8 @@ const typed = {
         power: Name.from(untyped.contracts.power),
         system: Name.from(untyped.contracts.system),
         token: Name.from(untyped.contracts.token)
-    }
+    },
+    ipfs: untyped.ipfs
 };
 const config = typed;
 export default config;

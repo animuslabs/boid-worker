@@ -11,14 +11,51 @@ datasource db {
 }
 
 model FahData {
-  id String @id @default(uuid())
-  time DateTime
+  id    String   @id @default(uuid())
+  time  DateTime
   fahid BigInt
-  name String
+  name  String
   score BigInt
-  wus BigInt
+  wus   BigInt
 }
 
 model BoidAccount {
-boidId String @unique
+  boidId String @unique
+}
+
+model InviteCodeUsed {
+  id            String     @id @default(uuid())
+  boidIdCreated String     @unique
+  InviteCode    InviteCode @relation(fields: [inviteCodeId], references: [id])
+  inviteCodeId  String
+  emailHash     String     @unique
+  created       DateTime   @default(now())
+  receipt String
+  @@index(inviteCodeId)
+  @@index(boidIdCreated)
+  @@index(emailHash)
+}
+
+model InviteCode {
+  id                String              @id @default(uuid())
+  sponsorBoidId     String
+  usesRemaining     Int
+  name              String              @default(dbgenerated("whatever"))
+  expires           DateTime
+  disabled          Boolean             @default(false)
+  created           DateTime            @default(now())
+  NewAccountPending NewAccountPending[]
+  used              InviteCodeUsed[]
+  @@index(sponsorBoidId)
+}
+
+model NewAccountPending {
+  id            String     @id @default(uuid())
+  created       DateTime   @default(now())
+  createBoidId  String
+  key           String
+  executed      Boolean    @default(false)
+  emailHash     String
+  inviteCodeId  String
+  inviteCode    InviteCode @relation(fields: [inviteCodeId], references: [id])
 }

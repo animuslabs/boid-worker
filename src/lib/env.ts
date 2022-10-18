@@ -1,6 +1,7 @@
 import dotenv from "dotenv"
 import fs from "fs-extra"
 import { Name, NameType, PrivateKey } from "@greymass/eosio"
+import { Options } from "ipfs-http-client"
 dotenv.config()
 
 type chains = "eos" | "kylin" | "jungle" | "wax" | "waxTest" | "telos" | "telosTest"
@@ -17,6 +18,7 @@ interface eosioConfig {
     system:NameType
     token:NameType
   }
+  ipfs?:Options
 }
 type eosioConfigs = { [k in chains]?:eosioConfig }
 interface envType {
@@ -43,7 +45,8 @@ const typed:eosioConfig = {
     power: Name.from(untyped.contracts.power),
     system: Name.from(untyped.contracts.system),
     token: Name.from(untyped.contracts.token)
-  }
+  },
+  ipfs: untyped.ipfs
 }
 const config:eosioConfig = typed
 export default config

@@ -16,6 +16,18 @@ export const rpcs:{ endpoint:URL, rpc:typeof client.v1.chain }[] = env.endpoints
 })
 const abiCache:Record<string, ABI.Def> = {}
 
+export async function getAbi(contract:NameType) {
+  let abi:ABI.Def|undefined = abiCache[contract.toString()]
+  if (!abi) {
+    abi = (await pickRpc().rpc.get_abi(contract)).abi
+    if (abi) abiCache[contract.toString()] = abi
+  }
+  if (!abi) {
+    throw new Error(`No ABI for ${contract}`)
+  }
+  return abi
+}
+
 interface TransactionResponse {
   url:string
   receipt:{
@@ -107,7 +119,7 @@ export async function getAllScopes(params:API.v1.GetTableByScopeParams) {
   return rows.map(el => el.scope) as Name[]
 }
 export async function sendAction(act:Action) {
-  await doAction(act.name, act.data, act.account)
+  return doAction(act.name, act.data, act.account)
 }
 export async function getFullTable<T>(params:GetTableParams, type?:any):Promise<T[]> {
   let code = params.contract
@@ -136,6 +148,10 @@ export async function getAccount(name:Name):Promise<API.v1.AccountObject> {
   const result = (await safeDo("get_account", name)) as API.v1.AccountObject
   return result
 }
+
+// export function sendAction(action:AnyAction) {
+
+// }
 
 export async function doAction(name:NameType, data:{ [key:string]:any } = {}, contract:NameType = env.contracts.power, authorization?:PermissionLevel[], keys?:PrivateKey[], retry?:number):Promise<DoActionResponse | null> {
   if (!data) data = {}

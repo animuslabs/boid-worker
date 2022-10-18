@@ -1,5 +1,5 @@
 import { Action, Transaction } from "@greymass/eosio"
-import { doAction } from "lib/eosio"
+import { doAction, sendAction } from "lib/eosio"
 import env from "lib/env"
 import logger from "lib/logger"
 import { sleep } from "lib/utils"
@@ -31,7 +31,7 @@ export class ActionPusher {
     // log.debug("queue:", this)
     const act = this.queue.shift()
     if (!act) return
-    const result = await doAction(act.name, act.data, act.account)
+    const result = await sendAction(act)
     log.debug("pushTrx result:", result)
     if (result?.receipts.length == 0) {
       log.error("Transaction Error:", result.errors)
