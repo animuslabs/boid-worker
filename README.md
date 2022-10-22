@@ -25,3 +25,8 @@ Modify `ecosystem.config.json` as you see fit, the defaults should be fine but c
 pm2 start ecosystem.config.json
 ```
 To ensure everything is running properly, run `PM2 logs` and watch for any errors.
+
+## NOTE - if you want to add more log time data run oracle like this:
+```sh
+pm2 start ecosystem.config.json --log-date-format "YYYY-D-MM HH:mm:ss"
+```
