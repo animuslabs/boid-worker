@@ -5,7 +5,7 @@ import env from "./env"
 import cacheManager from "cache-manager"
 import ax from "axios"
 import prisma from "lib/db"
-import { finalRound, roundData } from "lib/utils"
+import { finalRound, getReportId, roundData } from "lib/utils"
 import log from "lib/logger"
 import { API, NameType, UInt64 } from "@greymass/eosio"
 
@@ -90,10 +90,9 @@ export async function getAllReports():Promise<Record<string, pwr.PwrReportRow[]>
 }
 
 export async function getPwrReport(boidId:string, reportId:UInt64):Promise<pwr.PwrReportRow | null> {
-  const report_id = UInt64.from(reportId)
-  const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: report_id, scope: boidId, type: pwr.PwrReportRow })
+  const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: reportId, scope: boidId, type: pwr.PwrReportRow })
   if (!existing.rows[0]) return null
-  else if (!existing.rows[0].report_id.equals(report_id)) return null
+  else if (!getReportId(existing.rows[0].report).equals(reportId)) return null
   else return existing.rows[0]
 }
 export async function getStatRow(round:number):Promise<pwr.Stat | null> {
