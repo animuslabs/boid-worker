@@ -253,7 +253,6 @@ export class PwrReport extends Struct {
 
 @Struct.type("PwrReportRow")
 export class PwrReportRow extends Struct {
-    @Struct.field(UInt64) report_id!:UInt64
     @Struct.field(Name) proposer!:Name
     @Struct.field(PwrReport) report!:PwrReport
     @Struct.field(Name, { array: true }) approvals!:Name[]
