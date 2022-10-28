@@ -1,4 +1,4 @@
-import { ABI, Name, Serializer } from "@greymass/eosio"
+import { ABI, Name, Serializer, UInt64 } from "@greymass/eosio"
 import { safeDo, getAccount } from "./eosio"
 import { tables } from "./queries"
 
@@ -27,6 +27,10 @@ export function shuffle<T>(array:T[]) {
   }
 
   return array
+}
+
+export function getReportId(report:PwrReport) {
+  return UInt64.from((report.protocol_id.value << BigInt(48)) + (report.round.value << BigInt(32)) + report.units.value)
 }
 
 export async function accountExists(name:string) {
@@ -87,10 +91,11 @@ export async function getRoundData(round:number) {
 }
 
 export function reportIdFromReport(report:PwrReport):number {
-  const ser = Serializer.encode({ object: report })
-  const int = parseInt("1" + ser.array.reduce((acc:string, val:number) => acc + val.toString(), ""))
-  log.debug(int)
-  return int
+  return getReportId(report).toNumber()
+  // const ser = Serializer.encode({ object: report })
+  // const int = parseInt("1" + ser.array.reduce((acc:string, val:number) => acc + val.toString(), ""))
+  // log.debug(int)
+  // return int
 }
 export function toObject(data) {
   return JSON.parse(JSON.stringify(data, (key, value) =>
