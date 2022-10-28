@@ -2,7 +2,13 @@
 
 import {
   Asset,
+  Bytes,
   Float32,
+  Float64,
+  Int16,
+  Int32,
+  Int64,
+  Int8,
   Name,
   PublicKey,
   Struct,
@@ -10,7 +16,8 @@ import {
   UInt16,
   UInt32,
   UInt64,
-  UInt8
+  UInt8,
+  Variant
 } from "@greymass/eosio"
 
 @Struct.type("AccountAuth")
@@ -55,6 +62,12 @@ export class AccountTeam extends Struct {
     @Struct.field(UInt32) team_cumulative_contribution!:UInt32
 }
 
+@Struct.type("AtomicFormat")
+export class AtomicFormat extends Struct {
+    @Struct.field("string") name!:string
+    @Struct.field("string") type!:string
+}
+
 @Struct.type("Config")
 export class Config extends Struct {
     @Struct.field("bool") paused!:boolean
@@ -70,20 +83,25 @@ export class Config extends Struct {
     @Struct.field(UInt32) keep_finalized_stats_rows!:UInt32
     @Struct.field(UInt8) reports_finalized_after_rounds!:UInt8
     @Struct.field(UInt16) unlock_wait_rounds!:UInt16
+    @Struct.field(UInt16) first_unlock_wait_rounds!:UInt16
     @Struct.field(UInt16) standby_toggle_interval_rounds!:UInt16
     @Struct.field(Float32) weight_collateral_pwr!:Float32
     @Struct.field(UInt32) oracle_collateral_deposit_increment!:UInt32
     @Struct.field(Float32) reports_accumulate_weight_round_pct!:Float32
     @Struct.field(Float32) weight_collateral_divisor!:Float32
+    @Struct.field(Float32) merge_deviation_pct!:Float32
+    @Struct.field(UInt16) oracle_expected_active_after_rounds!:UInt16
 }
 
 @Struct.type("ConfigAccount")
 export class ConfigAccount extends Struct {
     @Struct.field(UInt32) purchase_price!:UInt32
+    @Struct.field(UInt32) premium_purchase_price!:UInt32
+    @Struct.field(UInt8) max_premium_prefix!:UInt8
     @Struct.field(UInt8) max_owners!:UInt8
     @Struct.field(UInt8) max_sponsors!:UInt8
     @Struct.field(UInt8) max_pwrmods!:UInt8
-    @Struct.field("string[]") suffix_whitelist!:string[]
+    @Struct.field(Name, { array: true }) suffix_whitelist!:Name[]
     @Struct.field(UInt32) remove_sponsor_price!:UInt32
 }
 
@@ -102,6 +120,7 @@ export class ConfigAutoAdjust extends Struct {
     @Struct.field(Float32) power_mult_max_adjust!:Float32
     @Struct.field(Float32) powered_stake_mult_max_adjust!:Float32
     @Struct.field(UInt16) adjustment_interval_rounds!:UInt16
+    @Struct.field(UInt16) max_check_rounds!:UInt16
 }
 
 @Struct.type("ConfigMint")
@@ -123,6 +142,8 @@ export class ConfigPower extends Struct {
     @Struct.field(Float32) powered_stake_mult!:Float32
     @Struct.field(Float32) powered_stake_pwr!:Float32
     @Struct.field(UInt16) claim_maximum_elapsed_rounds!:UInt16
+    @Struct.field(UInt16) soft_max_pwr_add!:UInt16
+    @Struct.field(Float32) dev_fund_tax_mult!:Float32
 }
 
 @Struct.type("ConfigStake")
@@ -261,6 +282,10 @@ export class Configset extends Struct {
     @Struct.field(Config) config!:Config
 }
 
+@Struct.type("finalround")
+export class Finalround extends Struct {
+}
+
 @Struct.type("finishreport")
 export class Finishreport extends Struct {
     @Struct.field(Name) boid_id_scope!:Name
@@ -321,7 +346,7 @@ export class Protoset extends Struct {
     @Struct.field(Protocol) protocol!:Protocol
 }
 
-@Struct.type("pwrreportaction")
+@Struct.type("pwrreport")
 export class PwrReportAction extends Struct {
     @Struct.field(Name) oracle!:Name
     @Struct.field(Name) boid_id_scope!:Name
@@ -330,6 +355,11 @@ export class PwrReportAction extends Struct {
 
 @Struct.type("reportsclean")
 export class Reportsclean extends Struct {
+    @Struct.field(Name) scope!:Name
+}
+
+@Struct.type("reportsclear")
+export class Reportsclear extends Struct {
     @Struct.field(Name) scope!:Name
 }
 
@@ -354,8 +384,6 @@ export class Slashmulti extends Struct {
     @Struct.field(Name) oracle!:Name
     @Struct.field(Name) boid_id_scope!:Name
     @Struct.field(UInt64, { array: true }) pwrreport_ids!:UInt64[]
-    @Struct.field(UInt8) protocol_id!:UInt8
-    @Struct.field(UInt16) round!:UInt16
 }
 
 @Struct.type("slashoracle")

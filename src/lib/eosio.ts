@@ -28,7 +28,7 @@ export async function getAbi(contract:NameType) {
   return abi
 }
 
-interface TransactionResponse {
+export interface TransactionResponse {
   url:string
   receipt:{
     id:string;

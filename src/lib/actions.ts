@@ -1,6 +1,6 @@
 import { Action, AnyAction, Name, NameType, Signature, UInt32, UInt64 } from "@greymass/eosio"
 import env from "lib/env"
-import { AccountBuy, AuthAction, PowerClaim, StatsClean } from "lib/types/boid.system"
+import { AccountBuy, Auth, PowerClaim, StatsClean } from "lib/types/boid.system"
 import { Finishreport, Handleostat, Mergereports, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, Slashabsent, Statsclean } from "lib/types/power.boid.types"
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
 const pwrAcct = env.contracts.power
@@ -22,7 +22,7 @@ export const pwrActions = {
 }
 
 export const sysActions = {
-  auth: (data:{ boid_id:NameType, actions:Action[], sig:Signature, keyIndex:number | UInt32 }) => createAct("auth", AuthAction.from(data), "boid"),
+  auth: (data:{ boid_id:NameType, actions:Action[], sig:Signature, keyIndex:number | UInt32 }) => createAct("auth", Auth.from(data), "boid"),
   buyAccount: (data:{ sponsor:NameType, boid_id:NameType, key:string }) => createAct("account.buy", AccountBuy.from(Object.assign(data, { owners: [] })), "boid"),
   claim: (data:{boid_id:NameType}) => createAct("power.claim", PowerClaim.from(data), "boid")
 }

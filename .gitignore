@@ -2,3 +2,4 @@
 prisma/dev.db
 ecosystem.config.json
 node_modules
+dist
