@@ -2,7 +2,7 @@
 import env from "lib/env"
 import { doAction } from "lib/eosio"
 import { tables } from "lib/queries"
-import { currentRound, reportIdFromReport, sleep } from "lib/utils"
+import { currentRound, sleep } from "lib/utils"
 import ax from "axios"
 // import { getCurrentScores } from "./fah-reporter"
 import { PwrReport } from "lib/types/power.boid.types"

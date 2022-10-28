@@ -4,7 +4,7 @@ import edgedb from "lib/db"
 import log from "lib/logger"
 import { tables, db, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
-import { currentRound, getRoundData, reportIdFromReport, shouldFinishReport } from "lib/utils"
+import { currentRound, getReportId, getRoundData, shouldFinishReport } from "lib/utils"
 import env from "lib/env"
 import { Finishreport, PwrReport, PwrReportAction, PwrReportRow } from "lib/types/power.boid.types"
 import { pickRpc, safeDo } from "lib/eosio"
@@ -41,7 +41,7 @@ async function init() {
       log.info(boidId, "earned", units, "FaH credits during round ", reportingRound.round)
 
       const report = PwrReport.from({ protocol_id: 0, round: reportingRound.round, units })
-      const reportId = reportIdFromReport(report)
+      const reportId = getReportId(report)
       const existing = await getPwrReport(boidId, reportId)
       let shouldFinish = false
       log.debug("existing report:", existing)

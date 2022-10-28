@@ -89,7 +89,7 @@ export async function getAllReports():Promise<Record<string, pwr.PwrReportRow[]>
   return allPwrReports
 }
 
-export async function getPwrReport(boidId:string, reportId:number):Promise<pwr.PwrReportRow | null> {
+export async function getPwrReport(boidId:string, reportId:UInt64):Promise<pwr.PwrReportRow | null> {
   const report_id = UInt64.from(reportId)
   const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: report_id, scope: boidId, type: pwr.PwrReportRow })
   if (!existing.rows[0]) return null

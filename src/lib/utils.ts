@@ -30,7 +30,7 @@ export function shuffle<T>(array:T[]) {
 }
 
 export function getReportId(report:PwrReport) {
-  return UInt64.from((report.protocol_id.value << BigInt(48)) + (report.round.value << BigInt(32)) + report.units.value)
+  return UInt64.from((BigInt(report.protocol_id.toNumber()) << BigInt(48)) + (BigInt(report.round.toNumber()) << BigInt(32)) + BigInt(report.units.toNumber()))
 }
 
 export async function accountExists(name:string) {
@@ -90,13 +90,6 @@ export async function getRoundData(round:number) {
   return { round, start, end }
 }
 
-export function reportIdFromReport(report:PwrReport):number {
-  return getReportId(report).toNumber()
-  // const ser = Serializer.encode({ object: report })
-  // const int = parseInt("1" + ser.array.reduce((acc:string, val:number) => acc + val.toString(), ""))
-  // log.debug(int)
-  // return int
-}
 export function toObject(data) {
   return JSON.parse(JSON.stringify(data, (key, value) =>
     typeof value === "bigint"
