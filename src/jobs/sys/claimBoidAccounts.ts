@@ -20,6 +20,8 @@ async function init() {
       if (account.boid_id.toString() == "boid") continue
       const elapsed = round - account.power.last_claimed_round.toNumber()
       if (elapsed < config.power.claim_maximum_elapsed_rounds.toNumber() / 2) continue
+      const hasModPwr = account.power.mods.find(el => el.pwr_add_per_round.toNumber() > 0 && el.aggregate_pwr_remaining.toNumber() > 0 && el.expires_round.toNumber() > round)
+      if (account.power.rating.toNumber() == 0 && !hasModPwr) continue
       claimed++
       pusher.add(sysActions.claim({ boid_id: account.boid_id }))
     }
