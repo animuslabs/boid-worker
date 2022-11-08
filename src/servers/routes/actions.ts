@@ -18,6 +18,7 @@ export const pushActions = route
     boid_id: z.string(),
     keyIndex: z.number(),
     sig: z.string(),
+    expires_utc_sec: z.number(),
     additional: z.object({
       socialJson: z.object({}).passthrough().optional()
     }).passthrough().optional()
@@ -57,7 +58,9 @@ export const pushActions = route
         throw error
       }
     } else {
-      const actResult = await doAction("auth", Auth.from(data.input), "boid")
-      return { success: true, receipt: actResult?.receipts[0] }
+      const result = await doAction("auth", Auth.from(data.input), "boid")
+      console.log(result)
+
+      return { result, receipt: result?.receipts[0] }
     }
   })

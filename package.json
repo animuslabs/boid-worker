@@ -8,7 +8,10 @@
     "db:migrate": "edgedb migration create && edgedb migrate && edgeql-js",
     "db:reset": "edgedb instance destroy -I boid_worker --force && edgedb project init --non-interactive && edgeql-js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./src/**/* --fix"
+    "lint": "eslint ./src/**/* --fix",
+    "relayer": "cd dist && LOGLEVEL=DEBUG node ./servers/relayer.js",
+    "relayer:dev": "cd dist && LOGLEVEL=DEBUG nodemon -d 3 ./servers/relayer.js",
+    "cpRouter": "cp ./dist/servers/relayer.d.ts ../boid-web/src/lib/types "
   },
   "license": "ISC",
   "devDependencies": {
