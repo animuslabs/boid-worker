@@ -2,8 +2,6 @@
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import Express from "express"
 import cors from "cors"
-import { FahData } from "@prisma/client"
-import db from "lib/db"
 import * as invites from "servers/routes/invites"
 import t from "servers/trpc"
 import { pushActions } from "servers/routes/actions"
