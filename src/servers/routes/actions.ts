@@ -27,7 +27,7 @@ export const pushActions = route
     if (data.input.actions[0].name == "account.edit") {
       try {
         const json = data.input.additional?.socialJson
-        if (!json) throw new Error("missing")
+        if (!json) throw new Error("missing social json")
         // console.log(data.input.actions[0])
         const abi = await getAbi(data.input.actions[0].account)
         const action = Action.from(data.input.actions[0] as any, await getAbi(data.input.actions[0].account))

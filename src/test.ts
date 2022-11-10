@@ -23,6 +23,12 @@ export async function signInviteCode(privKey:PrivateKey, inviteCode:number, acco
 }
 
 async function init() {
+  const members = await fah.getTeamMembers()
+  console.log(JSON.stringify(members, null, 2))
+  for (const member of members.reverse()) {
+    const result = await doAction("account.add", AccountAdd.from({ boid_id: member.name, owners: ["boid"], sponsors: ["sponsor"], keys: [] }), "boid", [PermissionLevel.from("boid@active")])
+    console.log(result)
+  }
 
   // // const members = await fah.getTeamMembers()
   // const allAccounts = await getFullTable<Account>({ tableName: "accounts", contract: env.contracts.system }, Account)

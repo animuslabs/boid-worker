@@ -18,7 +18,13 @@ interface eosioConfig {
     system:NameType
     token:NameType
   }
-  ipfs?:Options
+  ipfs?:Options,
+  proxy?:{
+    maintainerEmail:string,
+    proxies:Array<{external:string[], internal:string[]}>
+  }, relayer?:{
+    port:number
+  }
 }
 type eosioConfigs = { [k in chains]?:eosioConfig }
 interface envType {
@@ -46,7 +52,14 @@ const typed:eosioConfig = {
     system: Name.from(untyped.contracts.system),
     token: Name.from(untyped.contracts.token)
   },
-  ipfs: untyped.ipfs
+  ipfs: untyped.ipfs,
+  proxy: {
+    maintainerEmail: untyped.proxy.maintainerEmail,
+    proxies: untyped.proxy.proxies
+  },
+  relayer: {
+    port: untyped.relayer.port
+  }
 }
 const config:eosioConfig = typed
 export default config
