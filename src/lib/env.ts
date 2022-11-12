@@ -53,13 +53,17 @@ const typed:eosioConfig = {
     token: Name.from(untyped.contracts.token)
   },
   ipfs: untyped.ipfs,
-  proxy: {
-    maintainerEmail: untyped.proxy.maintainerEmail,
-    proxies: untyped.proxy.proxies
-  },
-  relayer: {
-    port: untyped.relayer.port
-  }
+  proxy: untyped.proxy
+    ? {
+        maintainerEmail: untyped.proxy.maintainerEmail,
+        proxies: untyped.proxy.proxies
+      }
+    : undefined,
+  relayer: untyped.relayer
+    ? {
+        port: untyped.relayer.port
+      }
+    : undefined
 }
 const config:eosioConfig = typed
 export default config
