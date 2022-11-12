@@ -1,7 +1,7 @@
 import { Action, AnyAction, Name, NameType, Signature, UInt32, UInt64 } from "@greymass/eosio"
 import env from "lib/env"
 import { AccountBuy, Auth, PowerClaim, StatsClean } from "lib/types/boid.system"
-import { Finishreport, Handleostat, Mergereports, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, Slashabsent, Statsclean } from "lib/types/power.boid.types"
+import { Finishreport, Handleostat, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, Slashabsent, Statsclean } from "lib/types/power.boid.types"
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
 const pwrAcct = env.contracts.power
 
@@ -13,8 +13,7 @@ export const pwrActions = {
   pwrReport: (data:PwrReportAction) => createAct("pwrreport", data),
   roundStats: () => createAct("roundstats"),
   slashAbsent: (data:Slashabsent) => createAct("slashabsent", data),
-  finishReport: (data:{boid_id_scope:NameType, pwrreport_id:UInt64}) => createAct("finishreport", Finishreport.from(data)),
-  mergeReports: (data:Mergereports) => createAct("mergereports", data),
+  finishReport: (data:{boid_id_scope:NameType, pwrreport_ids:UInt64[]}) => createAct("finishreport", Finishreport.from(data)),
   statsClean: () => createAct("statsclean"),
   reportsClean: (data:{scope:NameType}) => createAct("reportsclean", Reportsclean.from(data)),
   oracleStatsClean: (data:{ scope:NameType }) => createAct("ostatsclean", Ostatsclean.from(data)),

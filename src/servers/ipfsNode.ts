@@ -1,7 +1,7 @@
 import * as IPFS from "ipfs-core"
-
+import events from "events"
+events.setMaxListeners(1000000)
 async function init() {
-  const ipfs = await IPFS.create()
-  // ipfs.start()
+  IPFS.create()
 }
 init().catch(console.error)

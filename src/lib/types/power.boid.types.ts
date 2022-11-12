@@ -23,7 +23,7 @@ import {
 @Struct.type("AccountAuth")
 export class AccountAuth extends Struct {
     @Struct.field(PublicKey, { array: true }) keys!:PublicKey[]
-    @Struct.field(UInt32) nonce!:UInt32
+    @Struct.field(UInt8) nonce!:UInt8
 }
 
 @Struct.type("AccountPowerMod")
@@ -91,11 +91,12 @@ export class Config extends Struct {
     @Struct.field(Float32) weight_collateral_divisor!:Float32
     @Struct.field(Float32) merge_deviation_pct!:Float32
     @Struct.field(UInt16) oracle_expected_active_after_rounds!:UInt16
+    @Struct.field(Float32) min_pay_report_share_threshold!:Float32
 }
 
 @Struct.type("ConfigAccount")
 export class ConfigAccount extends Struct {
-    @Struct.field(UInt32) purchase_price!:UInt32
+    @Struct.field(UInt32) invite_price!:UInt32
     @Struct.field(UInt32) premium_purchase_price!:UInt32
     @Struct.field(UInt8) max_premium_prefix!:UInt8
     @Struct.field(UInt8) max_owners!:UInt8
@@ -103,6 +104,8 @@ export class ConfigAccount extends Struct {
     @Struct.field(UInt8) max_pwrmods!:UInt8
     @Struct.field(Name, { array: true }) suffix_whitelist!:Name[]
     @Struct.field(UInt32) remove_sponsor_price!:UInt32
+    @Struct.field(UInt8) sponsor_max_invite_codes!:UInt8
+    @Struct.field(UInt16) invite_code_expire_rounds!:UInt16
 }
 
 @Struct.type("ConfigAuth")
@@ -132,6 +135,7 @@ export class ConfigMint extends Struct {
 @Struct.type("ConfigNft")
 export class ConfigNft extends Struct {
     @Struct.field(UInt16) boid_id_maximum_nfts!:UInt16
+    @Struct.field(Name, { array: true }) whitelist_collections!:Name[]
 }
 
 @Struct.type("ConfigPower")
@@ -261,6 +265,14 @@ export class PwrReportRow extends Struct {
     @Struct.field("bool") merged!:boolean
 }
 
+@Struct.type("RoundCommit")
+export class RoundCommit extends Struct {
+    @Struct.field(UInt64) round_commit_id!:UInt64
+    @Struct.field(UInt8) protocol_id!:UInt8
+    @Struct.field(UInt16) round!:UInt16
+    @Struct.field(Name) boid_id!:Name
+}
+
 @Struct.type("Stat")
 export class Stat extends Struct {
     @Struct.field(UInt16) round!:UInt16
@@ -270,6 +282,11 @@ export class Stat extends Struct {
     @Struct.field(UInt32) proposed_since_previous!:UInt32
     @Struct.field(UInt32) rewarded_since_previous!:UInt32
     @Struct.field(UInt32) valid_proposed_since_previous!:UInt32
+}
+
+@Struct.type("commitsclean")
+export class Commitsclean extends Struct {
+    @Struct.field(Name) scope!:Name
 }
 
 @Struct.type("configclear")
@@ -288,7 +305,7 @@ export class Finalround extends Struct {
 @Struct.type("finishreport")
 export class Finishreport extends Struct {
     @Struct.field(Name) boid_id_scope!:Name
-    @Struct.field(UInt64) pwrreport_id!:UInt64
+    @Struct.field(UInt64, { array: true }) pwrreport_ids!:UInt64[]
 }
 
 @Struct.type("globalclear")
@@ -299,12 +316,6 @@ export class Globalclear extends Struct {
 export class Handleostat extends Struct {
     @Struct.field(Name) oracle!:Name
     @Struct.field(UInt16) round!:UInt16
-}
-
-@Struct.type("mergereports")
-export class Mergereports extends Struct {
-    @Struct.field(Name) boid_id_scope!:Name
-    @Struct.field(UInt64, { array: true }) pwrreport_ids!:UInt64[]
 }
 
 @Struct.type("oracldeposit")
@@ -378,13 +389,6 @@ export class Slashabsent extends Struct {
     @Struct.field(UInt16) round!:UInt16
 }
 
-@Struct.type("slashmulti")
-export class Slashmulti extends Struct {
-    @Struct.field(Name) oracle!:Name
-    @Struct.field(Name) boid_id_scope!:Name
-    @Struct.field(UInt64, { array: true }) pwrreport_ids!:UInt64[]
-}
-
 @Struct.type("slashoracle")
 export class Slashoracle extends Struct {
     @Struct.field(Name) oracle!:Name
@@ -393,6 +397,10 @@ export class Slashoracle extends Struct {
 
 @Struct.type("statsclean")
 export class Statsclean extends Struct {
+}
+
+@Struct.type("statsclear")
+export class Statsclear extends Struct {
 }
 
 @Struct.type("thisround")
@@ -418,3 +426,6 @@ export class Withdraw extends Struct {
 export class Withdrawinit extends Struct {
     @Struct.field(Name) oracle!:Name
 }
+
+@Variant.type("AtomicValue", [Int8, Int16, Int32, Int64, UInt8, UInt16, UInt32, UInt64, Float32, Float64, { type: Int8, array: true }, { type: Int16, array: true }, { type: Int32, array: true }, { type: Int64, array: true }, Bytes, { type: UInt16, array: true }, { type: UInt32, array: true }, { type: UInt64, array: true }, { type: Float32, array: true }, { type: Float64, array: true }])
+class AtomicValue extends Variant {}

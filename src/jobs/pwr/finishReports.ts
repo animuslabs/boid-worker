@@ -18,7 +18,7 @@ async function init() {
       // log.debug("should finish report", JSON.stringify(report.report, null, 2))
       if (!ready) continue
       log.info("Finishing report", id.toString())
-      pusher.add(pwrActions.finishReport({ boid_id_scope: boidId, pwrreport_id: id }))
+      pusher.add(pwrActions.finishReport({ boid_id_scope: boidId, pwrreport_ids: [id] }))
     }
   }
   pusher.stop()

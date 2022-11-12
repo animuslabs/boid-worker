@@ -195,10 +195,10 @@ export async function doAction(name:NameType, data:{ [key:string]:any } = {}, co
   const receipts:TransactionResponse[] = []
   const errors:any[] = []
   let apis = shuffle(rpcs)
-  if (apis.length > 4) apis = apis.splice(0, 4)
+  apis = apis.slice(0, 3)
   // log.info(apis)
 
-  const timeoutTimer = ms("10s")
+  const timeoutTimer = ms("15s")
   await Promise.all(apis.map(({ endpoint, rpc }) => Promise.race([
     new Promise(res => {
       rpc.push_transaction(signedTransaction).then(result => {

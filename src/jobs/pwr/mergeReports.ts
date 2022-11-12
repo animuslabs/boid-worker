@@ -3,7 +3,7 @@ import { ActionPusher } from "lib/actionPusher"
 import { pwrActions } from "lib/actions"
 import logger from "lib/logger"
 import { getReportScopes, tables } from "lib/queries"
-import { Mergereports, PwrReportRow } from "lib/types/power.boid.types"
+import { Finishreport, PwrReportRow } from "lib/types/power.boid.types"
 import { finalizedRound, getReportId, shouldMergeReports } from "lib/utils"
 const log = logger.getLogger("mergeReports")
 
@@ -49,7 +49,7 @@ async function init() {
       const roundNum = parseInt(round)
       for (const [proto, reports] of Object.entries(protocols)) {
         // const protoNum = parseInt(proto)
-        if (reports.length < 2) continue
+        // if (reports.length < 2) continue
         log.debug("considering merging reports for", scope.toString(), "and round", round.toString())
 
         if (!(await shouldMergeReports(roundNum, reports))) {
@@ -57,8 +57,8 @@ async function init() {
           log.debug(JSON.parse(JSON.stringify(reports)))
           continue
         }
-        const mergeAction = Mergereports.from({ boid_id_scope: scope, pwrreport_ids: reports.map(el => getReportId(el.report)) })
-        pusher.add(pwrActions.mergeReports(mergeAction))
+        const mergeAction = Finishreport.from({ boid_id_scope: scope, pwrreport_ids: reports.map(el => getReportId(el.report)) })
+        pusher.add(pwrActions.finishReport(mergeAction))
       }
     }
   }
