@@ -106,12 +106,19 @@ export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
   const minApproval = Math.max(config.min_consensus_pct.value * global.expected_active_weight.value, config.min_consensus_weight.value)
   log.debug("calculated min consensus weight: ", minApproval)
   const rndProgress = round % parseInt(`${round}`)
-  log.debug("round", round)
+  log.debug("current round", round)
   log.debug("rndProgress", rndProgress)
   log.debug("report round", report.report.round.toNumber())
-  log.debug(report.report.round.toNumber() == round - 1, rndProgress < config.reports_accumulate_weight_round_pct.value)
-  if (report.report.round.toNumber() == round - 1 && rndProgress < config.reports_accumulate_weight_round_pct.value) return false
+  const reportingRound = parseInt(round.toString()) - 1
+  log.debug("activeReportingRound:", reportingRound)
+  const reportIsActiveReportingRound = report.report.round.toNumber() == reportingRound
+  const leewayPeriod = rndProgress < config.reports_accumulate_weight_round_pct.value
+  log.debug(reportIsActiveReportingRound, leewayPeriod)
+  if (reportIsActiveReportingRound && leewayPeriod) return false
+  log.debug("already merged/reported?", report.merged || report.reported)
   if (report.merged || report.reported) return false
+  log.debug("has sufficient weight?:", report.approval_weight.value >= minApproval)
+  log.debug(report.approval_weight.value, minApproval)
   if (report.approval_weight.value >= minApproval) return true
   return false
 }
