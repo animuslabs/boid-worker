@@ -30,3 +30,11 @@ To ensure everything is running properly, run `PM2 logs` and watch for any error
 ```sh
 pm2 start ecosystem.config.json --log-date-format "YYYY-D-MM HH:mm:ss"
 ```
+
+## Important transactions to start
+When your validator account is registered you need to provide collateral to power.boid smart contract
+### example:
+#### send 10000 BOID(token.boid contract) memo: collateral --> power.boid
+
+####  Smart Contract - power.boid
+#### "setstandby" action --> oracle: "yourvalidacc", standby: "false", actor: "yourvalidacc", permission: "active"
