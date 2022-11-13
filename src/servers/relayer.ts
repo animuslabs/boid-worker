@@ -30,4 +30,4 @@ export type AppRouter = typeof appRouter;
 
 app.use(cors())
 app.use(limiter, createExpressMiddleware({ router: appRouter }))
-app.listen(env.relayer?.port)
+app.listen(env.relayer?.port || 8017)
