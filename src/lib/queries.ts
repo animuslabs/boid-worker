@@ -71,11 +71,19 @@ export async function getOldestOracleStat(scope:NameType):Promise<null|pwr.Oracl
   if (!result || result.rows.length == 0) return null
   else return result.rows[0]
 }
+export async function getOldestRoundCommit(scope:NameType):Promise<null|pwr.RoundCommit> {
+  const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "roundcommit", scope, limit: 1, reverse: false, type: pwr.RoundCommit }) as API.v1.GetTableRowsResponse
+  if (!result || result.rows.length == 0) return null
+  else return result.rows[0]
+}
 export function getReportScopes() {
   return getAllScopes({ code: env.contracts.power, table: "pwrreports" })
 }
 export function getOracleStatsScopes() {
   return getAllScopes({ code: env.contracts.power, table: "oraclestats" })
+}
+export function getRoundCommitScopes() {
+  return getAllScopes({ code: env.contracts.power, table: "roundcommit" })
 }
 export async function getAllReports():Promise<Record<string, pwr.PwrReportRow[]>> {
   // get all pwrreports from all available scopes (boidId)

@@ -1,7 +1,7 @@
 import { Action, AnyAction, Name, NameType, Signature, UInt32, UInt64 } from "@greymass/eosio"
 import env from "lib/env"
 import { AccountBuy, Auth, PowerClaim, StatsClean } from "lib/types/boid.system"
-import { Finishreport, Handleostat, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, Slashabsent, Statsclean } from "lib/types/power.boid.types"
+import { Commitsclean, Finishreport, Handleostat, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, RoundCommit, Slashabsent, Statsclean } from "lib/types/power.boid.types"
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
 const pwrAcct = env.contracts.power
 
@@ -17,6 +17,7 @@ export const pwrActions = {
   statsClean: () => createAct("statsclean"),
   reportsClean: (data:{scope:NameType}) => createAct("reportsclean", Reportsclean.from(data)),
   oracleStatsClean: (data:{ scope:NameType }) => createAct("ostatsclean", Ostatsclean.from(data)),
+  roundCommitClean: (data:{ scope:NameType }) => createAct("commitsclean", Commitsclean.from(data)),
   handleostat: (data:{ oracle:NameType, round:number }) => createAct("handleostat", Handleostat.from(data))
 }
 

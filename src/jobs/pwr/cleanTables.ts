@@ -3,7 +3,7 @@ import { ActionPusher } from "lib/actionPusher"
 import { pwrActions } from "lib/actions"
 import { doAction, sendAction } from "lib/eosio"
 import logger from "lib/logger"
-import { getOldestOracleStat, getOldestReport, getOracleStatsScopes, getReportScopes, getStatRow, tables } from "lib/queries"
+import { getOldestOracleStat, getOldestReport, getOldestRoundCommit, getOracleStatsScopes, getReportScopes, getRoundCommitScopes, getStatRow, tables } from "lib/queries"
 import { Config, Reportsclean } from "lib/types/power.boid.types"
 import { currentRound } from "lib/utils"
 import env from "lib/env"
@@ -64,6 +64,22 @@ async function cleanOracleStats(config:Config, round:number) {
     pusher.add(pwrActions.oracleStatsClean({ scope }))
   }
 }
+async function cleanRoundCommit(config:Config, round:number) {
+  log.info("checking for round commit rows to be cleared")
+  const scopes = await getRoundCommitScopes()
+  const minRetain = Math.max(config.reports_finalized_after_rounds.toNumber(), config.standby_toggle_interval_rounds.toNumber())
+  const cleanupOlder = Math.max(round - minRetain - config.keep_finalized_stats_rows.toNumber(), 0)
+  log.info("will cleanup round commits older than round:", cleanupOlder)
+  for (const scope of scopes) {
+    const oldest = await getOldestRoundCommit(scope).catch(log.error)
+    if (!oldest) continue
+    const oldestRound = oldest.round.toNumber()
+    log.debug(scope.toString(), "oldest round commit round:", oldestRound)
+    if (!(oldestRound < cleanupOlder)) continue
+    log.info("cleaning oracle stats for", scope.toString())
+    pusher.add(pwrActions.roundCommitClean({ scope }))
+  }
+}
 
 async function init() {
   const config = await tables.pwr.config()
@@ -72,6 +88,7 @@ async function init() {
   await cleanStatsRows(config, round).catch(log.error)
   await cleanReports(config, round).catch(log.error)
   await cleanOracleStats(config, round).catch(log.error)
+  await cleanRoundCommit(config, round).catch(log.error)
   pusher.stop()
 }
 init().catch(log.error)
