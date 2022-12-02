@@ -593,7 +593,7 @@ export class PwrmodNew extends Struct {
 @Struct.type("pwrmod.rm")
 export class PwrmodRm extends Struct {
     @Struct.field(Name) boid_id!:Name
-    @Struct.field(Int32) pwrmod_index!:Int32
+    @Struct.field(Int32, { array: true }) pwrmod_index!:Int32[]
 }
 
 @Struct.type("stake")

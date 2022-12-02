@@ -1,6 +1,6 @@
-import { Action, AnyAction, Name, NameType, Signature, UInt32, UInt64 } from "@greymass/eosio"
+import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt32, UInt64 } from "@greymass/eosio"
 import env from "lib/env"
-import { AccountBuy, Auth, PowerClaim, StatsClean } from "lib/types/boid.system"
+import { AccountBuy, Auth, InviteRm, PowerClaim, PwrmodRm, StatsClean } from "lib/types/boid.system"
 import { Commitsclean, Finishreport, Handleostat, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, RoundCommit, Slashabsent, Statsclean } from "lib/types/power.boid.types"
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
 const pwrAcct = env.contracts.power
@@ -22,7 +22,14 @@ export const pwrActions = {
 }
 
 export const sysActions = {
-  auth: (data:{ boid_id:NameType, actions:Action[], sig:Signature, keyIndex:number | UInt32 }) => createAct("auth", Auth.from(data), "boid"),
-  buyAccount: (data:{ sponsor:NameType, boid_id:NameType, key:string }) => createAct("account.buy", AccountBuy.from(Object.assign(data, { owners: [] })), "boid"),
-  claim: (data:{boid_id:NameType}) => createAct("power.claim", PowerClaim.from(data), "boid")
+  auth: (data:{ boid_id:NameType, actions:Action[], sig:Signature, keyIndex:number | UInt32 }) => createAct("auth", Auth.from(data), env.contracts.system),
+  buyAccount: (data:{ sponsor:NameType, boid_id:NameType, key:string }) => createAct("account.buy", AccountBuy.from(Object.assign(data, { owners: [] })), env.contracts.system),
+  claim: (data:{ boid_id:NameType }) => createAct("power.claim", PowerClaim.from(data), env.contracts.system),
+  inviteRm: (data:{ sponsor_boid_id:NameType, invite_code:number | string | UInt64 }) => createAct("invite.rm", InviteRm.from(data), env.contracts.system),
+  pwrModRm: (data:{boid_id:NameType, pwrmod_index:Int32Type[]}) => createAct("pwrmod.rm", PwrmodRm.from(data), env.contracts.system)
+}
+
+export const actions = {
+  sys: sysActions,
+  pwr: pwrActions
 }

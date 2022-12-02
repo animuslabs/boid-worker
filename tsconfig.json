@@ -1,6 +1,5 @@
 {
   "compileOnSave": true,
-
   "compilerOptions": {
     "declaration": true,
     "noImplicitThis": true,
@@ -15,11 +14,14 @@
     "noImplicitReturns": true,
     "allowUnreachableCode": true,
     "noUncheckedIndexedAccess": false,
-    "strict": false,
+    "strictFunctionTypes": true,
+    "strict": true,
     "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
-      "lib/*": ["lib/*"]
+      "lib/*": [
+        "lib/*"
+      ]
     },
     "types": [
       "node"

@@ -15,44 +15,37 @@ function getUser(id:string, cb:() =>{}) {
 
 }
 
-// export tableCache
-
 export async function getSysConf():Promise<sys.Config> {
-  const config = await getFullTable<sys.Config>({ tableName: "config", contract: env.contracts.system }, sys.Config)
-  if (!config[0]) throw (new Error("system contract not initialized "))
-  return config[0]
-}
-export async function getSysConf2():Promise<any> {
-  const config = await getFullTable<any>({ tableName: "config", contract: env.contracts.system })
+  const config = await getFullTable({ tableName: "config", contract: env.contracts.system }, sys.Config)
   if (!config[0]) throw (new Error("system contract not initialized "))
   return config[0]
 }
 
 export async function getPwrConf():Promise<pwr.Config> {
-  const config = await getFullTable<pwr.Config>({ tableName: "config", contract: env.contracts.power }, pwr.Config)
+  const config = await getFullTable({ tableName: "config", contract: env.contracts.power }, pwr.Config)
   if (!config[0]) throw (new Error("power contract not initialized "))
   return config[0]
 }
 export async function getPwrGlobal():Promise<pwr.Global> {
-  const global = await getFullTable<pwr.Global>({ tableName: "global", contract: env.contracts.power }, pwr.Global)
+  const global = await getFullTable({ tableName: "global", contract: env.contracts.power }, pwr.Global)
   if (!global[0]) throw (new Error("power contract not initialized "))
   return global[0]
 }
 export async function getPwrStats():Promise<pwr.Stat[]> {
-  const stats = await getFullTable<pwr.Stat>({ tableName: "stats", contract: env.contracts.power }, pwr.Stat)
+  const stats = await getFullTable({ tableName: "stats", contract: env.contracts.power }, pwr.Stat)
   return stats
 }
 
 export async function getPwrOracles() {
-  const oracles = await getFullTable<pwr.Oracle>({ tableName: "oracles", contract: env.contracts.power }, pwr.Oracle)
+  const oracles = await getFullTable({ tableName: "oracles", contract: env.contracts.power }, pwr.Oracle)
   return oracles
 }
 export async function getPwrReports(scope:NameType) {
-  const pwrReports = await getFullTable<pwr.PwrReportRow>({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow)
+  const pwrReports = await getFullTable({ tableName: "pwrreports", contract: env.contracts.power, scope }, pwr.PwrReportRow)
   return pwrReports
 }
 export async function getOracleStats(scope:NameType) {
-  const oStats = await getFullTable<pwr.OracleStat>({ tableName: "oraclestats", contract: env.contracts.power, scope }, pwr.OracleStat)
+  const oStats = await getFullTable({ tableName: "oraclestats", contract: env.contracts.power, scope }, pwr.OracleStat)
   return oStats
 }
 export async function getOracleStat(scope:NameType, round:number) {
@@ -103,6 +96,7 @@ export async function getPwrReport(boidId:string, reportId:UInt64):Promise<pwr.P
   else if (!getReportId(existing.rows[0].report).equals(reportId)) return null
   else return existing.rows[0]
 }
+
 export async function getStatRow(round:number):Promise<pwr.Stat | null> {
   const round_id = UInt64.from(round)
   const existing = await pickRpc().rpc.get_table_rows({ code: env.contracts.power, table: "stats", limit: 1, lower_bound: round_id, type: pwr.Stat })
@@ -111,9 +105,18 @@ export async function getStatRow(round:number):Promise<pwr.Stat | null> {
   else return existing.rows[0]
 }
 
+export async function getInvites(scope:NameType):Promise<sys.Invite[]> {
+  const existing = await pickRpc().rpc.get_table_rows({ code: env.contracts.system, table: "invites", limit: 100, scope, type: sys.Invite })
+  return existing.rows
+}
+export async function getInviteScopes() {
+  return getAllScopes({ code: env.contracts.system, table: "invites" })
+}
+
 export const tables = {
   sys: {
-    config: () => cache.wrap("sysconf", getSysConf)
+    config: () => cache.wrap("sysconf", getSysConf),
+    invites: (scope:NameType) => cache.wrap("invites:" + scope, () => getInvites(scope))
   },
   pwr: {
     config: () => cache.wrap("pwrconfig", getPwrConf),

@@ -6,7 +6,7 @@ import env from "lib/env"
 
 async function init() {
   try {
-    const allAccounts = await getFullTable<Account>({ tableName: "accounts", contract: env.contracts.system }, Account)
+    const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Account)
     log.info("Got all Boid accounts:", allAccounts.length)
     const accountNames = allAccounts.map(el => el.boid_id.toString())
     let inserted = 0

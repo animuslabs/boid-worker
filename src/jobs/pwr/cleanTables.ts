@@ -6,8 +6,7 @@ import logger from "lib/logger"
 import { getOldestOracleStat, getOldestReport, getOldestRoundCommit, getOracleStatsScopes, getReportScopes, getRoundCommitScopes, getStatRow, tables } from "lib/queries"
 import { Config, Reportsclean } from "lib/types/power.boid.types"
 import { currentRound } from "lib/utils"
-import env from "lib/env"
-const log = logger.getLogger("cleanTables")
+const log = logger.getLogger("pwr-cleanTables")
 
 const pusher = new ActionPusher()
 

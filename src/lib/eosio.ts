@@ -1,4 +1,4 @@
-import { API, APIClient, APIProvider, FetchProvider, Name, Action, Transaction, ActionFields, Authority, PermissionLevel, SignedTransaction, PrivateKey, NameType, AnyAction, ABI } from "@greymass/eosio"
+import { API, APIClient, APIProvider, FetchProvider, Name, Action, Transaction, ActionFields, Authority, PermissionLevel, SignedTransaction, PrivateKey, NameType, AnyAction, ABI, ABISerializableConstructor } from "@greymass/eosio"
 import fetch from "node-fetch"
 import ms from "ms"
 import { rand, shuffle, sleep } from "./utils"
@@ -121,7 +121,7 @@ export async function getAllScopes(params:API.v1.GetTableByScopeParams) {
 export async function sendAction(act:Action) {
   return doAction(act.name, act.data, act.account)
 }
-export async function getFullTable<T>(params:GetTableParams, type?:any):Promise<T[]> {
+export async function getFullTable< T extends ABISerializableConstructor>(params:GetTableParams, type?:T):Promise<InstanceType<T>[]> {
   let code = params.contract
   const table = params.tableName
   let { scope } = params
@@ -137,7 +137,7 @@ export async function getFullTable<T>(params:GetTableParams, type?:any):Promise<
     return loop()
   }
   await loop()
-  return <T[]>rows
+  return rows as InstanceType<T>[]
 }
 
 export function getInfo():Promise<API.v1.GetInfoResponse> {
