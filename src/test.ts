@@ -8,8 +8,8 @@ import ax from "axios"
 import { PwrReport } from "lib/types/power.boid.types"
 import log from "lib/logger"
 import { fah } from "lib/fah"
-import { Account, AccountAdd, AccountCreate, PowerClaim, TeamChange, Thisround } from "lib/types/boid.system"
-import { PermissionLevel, PrivateKey, Serializer, UInt64 } from "@greymass/eosio"
+import { Account, AccountAdd, AccountCreate, PowerAdd, PowerClaim, TeamChange, Thisround } from "lib/types/boid.system"
+import { Asset, Name, PermissionLevel, PrivateKey, Serializer, Struct, UInt64 } from "@greymass/eosio"
 const teamid = "238663"
 const apiRoot = "https://api2.foldingathome.org/uid/612188543"
 // "https://api2.foldingathome.org/uid/612188543"
@@ -21,17 +21,40 @@ export async function signInviteCode(privKey:PrivateKey, inviteCode:number, acco
   const sig = privKey.signMessage(inviteEncoder.array)
   return sig
 }
+@Struct.type("transfer")
+export class Transfer extends Struct {
+  @Struct.field(Name) from!:Name
+  @Struct.field(Name) to!:Name
+  @Struct.field(Asset) quantity!:Asset
+  @Struct.field("string") memo!:string
+}
 
 async function init() {
-  const members = await fah.getTeamMembers()
-  console.log(JSON.stringify(members, null, 2))
-  for (const member of members.reverse()) {
-    const result = await doAction("account.add", AccountAdd.from({ boid_id: member.name, owners: ["boid"], sponsors: ["sponsor"], keys: [] }), "boid", [PermissionLevel.from("boid@active")])
+  const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Account)
+  for (const acct of allAccounts) {
+    await doAction("power.add", PowerAdd.from({ boid_id: acct.boid_id, power: "15" }), env.contracts.system, [PermissionLevel.from("boid@active")])
+
+    const transfer = Transfer.from({
+      from: "token.boid",
+      to: env.contracts.system,
+      quantity: "10.0000 BOID",
+      memo: `deposit boid_id=${acct.boid_id.toString()}`
+    })
+    const result = await doAction("transfer", transfer,
+      "token.boid",
+      [PermissionLevel.from("token.boid@active")]
+    )
     console.log(result)
   }
 
+  // const members = await fah.getTeamMembers()
+  // console.log(JSON.stringify(members, null, 2))
+  // for (const member of members.reverse()) {
+  //   const result = await doAction("account.add", AccountAdd.from({ boid_id: member.name, owners: ["boid"], sponsors: ["sponsor"], keys: [] }), "boid", [PermissionLevel.from("boid@active")])
+  //   console.log(result)
+  // }
+
   // // const members = await fah.getTeamMembers()
-  // const allAccounts = await getFullTable<Account>({ tableName: "accounts", contract: env.contracts.system }, Account)
   // // console.log(JSON.stringify(members, null, 2))
   // const round = await currentRound()
   // for (const acct of allAccounts) {
