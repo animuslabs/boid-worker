@@ -14,7 +14,7 @@ export const pushActions = route
       name: z.string(),
       authorization: z.array(z.any()),
       data: z.any()
-    }).passthrough()).nonempty().length(1),
+    }).passthrough()).nonempty(),
     boid_id: z.string(),
     keyIndex: z.number(),
     sig: z.string(),
