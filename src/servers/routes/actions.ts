@@ -24,43 +24,7 @@ export const pushActions = route
     }).passthrough().optional()
   }))
   .mutation(async(data) => {
-    if (data.input.actions[0].name == "account.edit") {
-      try {
-        const json = data.input.additional?.socialJson
-        if (!json) throw new Error("missing social json")
-        // console.log(data.input.actions[0])
-        const abi = await getAbi(data.input.actions[0].account)
-        const action = Action.from(data.input.actions[0] as any, await getAbi(data.input.actions[0].account))
-        const actData = action.decodeData(AccountEdit)
-        console.log(actData.social_ipfs_json.toString())
-        console.log((await jsonToCID(json)).bytes)
-
-        // if (actData.social_ipfs_json.toString() != (await jsonToCID(json)).bytes.toString()) throw new Error("json ipfs cid mismatch")
-        const result = await ipfsClient.add(await jsonToBytes(json))
-        console.log(result.cid.bytes.toString())
-        const param = data.input
-        const paramrdy = {
-          boid_id: param.boid_id,
-          actions: param.actions,
-          sig: param.sig,
-          keyIndex: param.keyIndex,
-          expires_utc_sec: parseInt(((Date.now() / 1000) + 1000).toString())
-        }
-        console.log(paramrdy)
-
-        const actResult = await doAction("auth", Auth.from(paramrdy), "boid")
-        console.log(actResult)
-
-        return { success: true, receipt: actResult?.receipts[0] }
-      } catch (error) {
-        console.log(error)
-        // return { success: false }
-        throw error
-      }
-    } else {
-      const result = await doAction("auth", Auth.from(data.input), "boid")
-      console.log(result)
-
-      return { result, receipt: result?.receipts[0] }
-    }
+    const result = await doAction("auth", Auth.from(data.input), "boid")
+    console.log(result)
+    return { result, receipt: result?.receipts[0] }
   })

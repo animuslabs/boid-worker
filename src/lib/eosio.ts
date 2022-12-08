@@ -195,7 +195,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any } = {}, co
   const receipts:TransactionResponse[] = []
   const errors:any[] = []
   let apis = shuffle(rpcs)
-  if (apis.length > 3) apis = apis.slice(0, 2)
+  if (apis.length > 3) apis = apis.slice(0, 1)
   // log.info(apis)
 
   const timeoutTimer = ms("15s")
