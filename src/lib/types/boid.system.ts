@@ -403,11 +403,15 @@ export class AccountBuy extends Struct {
     @Struct.field(Name) payer_boid_id!:Name
     @Struct.field(AccountCreate) new_account!:AccountCreate
 }
-
+@Struct.type("AcctMeta")
+export class AcctMeta extends Struct {
+    @Struct.field(Name) boid_id!:Name
+    @Struct.field(Bytes) ipfs_meta!:Bytes
+}
 @Struct.type("account.edit")
 export class AccountEdit extends Struct {
     @Struct.field(Name) boid_id!:Name
-    @Struct.field(Bytes) social_ipfs_json!:Bytes
+    @Struct.field(Bytes) ipfs_meta!:Bytes
 }
 
 @Struct.type("account.free")
