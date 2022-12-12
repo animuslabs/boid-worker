@@ -42,3 +42,31 @@ When your validator account is registered you need to provide collateral to powe
 
 #### Smart Contract - power.boid
 #### "setstandby" action --> oracle: "yourvalidacc", standby: "false", actor: "yourvalidacc", permission: "active"
+
+## Docker Setup
+to build the worker first make your configuration files
+```
+cp example.env.json .env.json
+cp example.ecosystem.config.json ecosystem.config.json
+```
+Modify `.env.json` with your information about your worker node. Make sure the worker name, authority, key are correct. For the rpc nodes you can specify as many as you like and the scripts will automat
+Modify `ecosystem.config.json` as you see fit, the defaults should be fine but can be optimized if you like. The env LOGLEVEL can be adjusted based on your preference between TRACE DEBUG INFO WARN ERROR
+
+to build the container image do
+```
+docker build , -t boidworker
+```
+
+once the image is created you can start it with docker-compose
+```
+docker-compose up
+```
+
+if you want to run it in the background type:
+```
+docker-compose up -d
+```
+
+You can find the latest verison of docker-compose for ubuntu 22.04 here
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04
+
