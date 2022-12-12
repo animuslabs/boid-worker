@@ -1,5 +1,5 @@
 # Stage 1 testing
-FROM node:16.0.0-alpine
+FROM node:18.0.0-alpine
 
 RUN mkdir -p /data
 
