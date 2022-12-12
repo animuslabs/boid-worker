@@ -1,0 +1,17 @@
+version: '3'
+services:
+  boidworker:
+    image: boidworker
+    restart: always
+    volumes:
+     - "./.env.json:/data/.env.json:ro"
+     - "./ecosystem.config.json:/data/ecosystem.config.json:ro"
+    networks:
+      - public
+    logging:
+      options:
+        max-size: 50m
+networks:
+  public:
+    external:
+      name: public
