@@ -1,12 +1,16 @@
 # boid-worker
 
+## Prerequisites
+- You will need a Telos Testnet account with 10 TLOS staked to CPU and 1 to NET. https://app.telos.net/testnet/developers
+- You need tesnet BOID tokens, earn them by running the testnet app or ask for free tokens from boid devs in social channels.
+
 ## Setup
 From a fresh Ubuntu VM
 
 ```sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 source ~/.bashrc
-nvm install 16
+nvm install 18
 npm i -g pm2 yarn
 git clone https://github.com/animuslabs/boid-worker.git
 cd boid-worker
@@ -36,7 +40,7 @@ pm2 start ecosystem.config.json --log-date-format "YYYY-D-MM HH:mm:ss"
 ```
 
 ## Important transactions to start
-When your validator account is registered you need to provide collateral to power.boid smart contract
+To register your oracle node you need to deposit BOID collateral.
 ### example
 #### send 10000 BOID(token.boid contract) memo: collateral --> power.boid
 
