@@ -1,10 +1,8 @@
-import { FahData, InviteCode, InviteCodeUsed } from "@prisma/client"
-import { sysActions } from "lib/actions"
-import db from "lib/db"
+
 import { doAction, sendAction } from "lib/eosio"
-import { tables } from "lib/queries"
+
 import { AccountCreate, InviteClaim } from "lib/types/boid.system"
-import { pushActions } from "servers/routes/actions"
+
 import { z } from "zod"
 import { route } from "../trpc"
 import env from "lib/env"

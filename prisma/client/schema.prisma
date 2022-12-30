@@ -1,0 +1,300 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model FahData {
+  id    String   @id @default(uuid())
+  time  DateTime
+  fahid BigInt
+  name  String
+  score BigInt
+  wus   BigInt
+}
+
+model BoidAccount {
+  boidId String @unique
+}
+
+model AccountAdd {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id String
+  sponsor String?
+  owner   String?
+  key     String?
+
+  @@index([boid_id])
+  @@index([sponsor, timeStamp])
+  @@index([timeStamp])
+}
+
+model AccountBuy {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  payer_boid_id String
+  boid_id       String
+  key           String?
+  owner         String?
+
+  @@index([boid_id])
+  @@index([payer_boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model AccountEdit {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id   String
+  ipfs_meta String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model AccountFree {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model AuthAddKey {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id String
+  key     String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model AuthRmKey {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id  String
+  keyIndex Int
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model InternalXfer {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  from_boid_id String
+  to_boid_id   String
+  quantity     Int
+  memo         String?
+
+  @@index([from_boid_id, timeStamp])
+  @@index([to_boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model InviteAdd {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id     String
+  invite_code String
+  key         String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model InviteClaim {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  sponsor_boid_id String
+  invite_code     String
+  sig             String
+  create_boid_id  String
+  create_key      String?
+  create_owner    String?
+
+  @@index([sponsor_boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model InviteRm {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  sponsor_boid_id String
+  invite_code     String
+
+  @@index([sponsor_boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model LogPwrAdd {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id             String
+  received            Int
+  from_mult_mods      Int
+  diverted_to_sponsor Int
+  power_increased     Int
+  orign               String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model LogPwrClaim {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id         String
+  power_before    Int
+  power_after     Int
+  power_from_mods Int
+  power_decayed   Int
+  power_rounds    Int
+
+  mint_account    Int
+  mint_team       Int
+  mint_team_owner Int
+  mint_overstake  Int
+  mint_fundstake  Int
+  mint_total      Int
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model NftLock {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id            String
+  asset_id           String
+  locked_until_round Int
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model NftWithdraw {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id   String
+  asset_ids String
+  to        String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model NftXfer {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  from_boid_id String
+  to_boid_id   String
+  asset_ids    String
+
+  @@index([from_boid_id, timeStamp])
+  @@index([to_boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model OfferClaim {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id                 String
+  offer_id                String
+  required_nft_action_ids String
+
+  @@index([boid_id, timeStamp])
+  @@index([offer_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model OwnerAdd {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id String
+  owner   String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model OwnerRm {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id String
+  owner   String
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model PwrModAdd {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id String
+  mod_id  Int
+
+  @@index([mod_id])
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model PwrModRm {
+  sequence  BigInt   @unique
+  trxId     String
+  timeStamp DateTime
+
+  boid_id      String
+  pwrmod_index Int
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}

@@ -1,30 +1,30 @@
 Arguments: 
-  /Users/boidcom/.nvm/versions/node/v16.16.0/bin/node /Users/boidcom/.nvm/versions/node/v16.16.0/bin/yarn add @types/greenlock-proxy-handler
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add @types/isomrphic-fetch
 
 PATH: 
-  /Users/boidcom/.nvm/versions/node/v16.16.0/bin:/Users/boidcom/Library/Application Support/edgedb/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/boidcom/miniconda3/bin:/Users/boidcom/miniconda3/condabin:/Users/boidcom/.nvm/versions/node/v16.16.0/bin:/Users/boidcom/Library/Application Support/edgedb/bin:/opt/homebrew/bin:/opt/homebrew/sbin
+  C:\Users\johnd\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\johnd\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Users\johnd\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\dotnet;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\ProgramData\chocolatey\bin;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Program Files (x86)\FAHClient;C:\Program Files\boidcli;C:\Program Files (x86)\Paragon Software\LinuxFS for Windows;C:\Program Files\PowerShell\7;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\johnd\.cargo\bin;C:\Users\johnd\AppData\Local\Microsoft\WindowsApps;C:\Users\johnd\.dotnet\tools;C:\Users\johnd\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\johnd\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\johnd\vcpkg;C:\Program Files\Blender Foundation\Blender 3.0;C:\Users\johnd\.dotnet\tools;C:\Users\johnd\AppData\Local\GitHubDesktop\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  16.16.0
+  18.12.1
 
 Platform: 
-  darwin arm64
+  win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fgreenlock-proxy-handler: Not found
-      at Request.params.callback [as _callback] (/Users/boidcom/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:66145:18)
-      at Request.self.callback (/Users/boidcom/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:140890:22)
-      at Request.emit (node:events:527:28)
-      at Request.<anonymous> (/Users/boidcom/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:141862:10)
-      at Request.emit (node:events:527:28)
-      at IncomingMessage.<anonymous> (/Users/boidcom/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:141784:12)
-      at Object.onceWrapper (node:events:641:28)
-      at IncomingMessage.emit (node:events:539:35)
-      at endReadableNT (node:internal/streams/readable:1345:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+  Error: https://registry.yarnpkg.com/@types%2fisomrphic-fetch: Not found
+      at params.callback [as _callback] (C:\Users\johnd\AppData\Roaming\nvm\v18.12.1\node_modules\yarn\lib\cli.js:66145:18)
+      at self.callback (C:\Users\johnd\AppData\Roaming\nvm\v18.12.1\node_modules\yarn\lib\cli.js:140890:22)
+      at Request.emit (node:events:513:28)
+      at Request.<anonymous> (C:\Users\johnd\AppData\Roaming\nvm\v18.12.1\node_modules\yarn\lib\cli.js:141862:10)
+      at Request.emit (node:events:513:28)
+      at IncomingMessage.<anonymous> (C:\Users\johnd\AppData\Roaming\nvm\v18.12.1\node_modules\yarn\lib\cli.js:141784:12)
+      at Object.onceWrapper (node:events:627:28)
+      at IncomingMessage.emit (node:events:525:35)
+      at endReadableNT (node:internal/streams/readable:1359:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
 
 npm manifest: 
   {
@@ -57,13 +57,14 @@ npm manifest:
       "eslint-plugin-n": "^15.0.0",
       "eslint-plugin-promise": "^6.0.0",
       "nodemon": "^2.0.19",
-      "prisma": "^4.4.0",
+      "prisma": "^4.6.1",
       "tsc-alias": "^1.7.0",
       "typescript": "*"
     },
     "dependencies": {
       "@greymass/eosio": "^0.6.3",
-      "@prisma/client": "^4.4.0",
+      "@prisma/client": "^4.6.1",
+      "@proton/hyperion": "^3.4.0",
       "@trpc/server": "^10.0.0-proxy-beta.15",
       "@types/cache-manager": "^4.0.2",
       "@types/express": "^4.17.14",
@@ -74,11 +75,14 @@ npm manifest:
       "dotenv": "^16.0.2",
       "edgedb": "^0.22.7",
       "express": "^4.18.1",
+      "express-blacklist": "^1.0.3",
+      "express-rate-limit": "^6.6.0",
       "fs-extra": "^10.1.0",
       "greenlock-proxy": "^0.2.0",
       "greenlock-proxy-handler": "^0.0.1",
       "ipfs-core": "^0.16.1",
       "ipfs-http-client": "^58.0.1",
+      "isomorphic-fetch": "^3.0.0",
       "loglevel": "^1.8.0",
       "loglevel-plugin-prefix": "^0.8.4",
       "ms": "^2.1.3",
@@ -88,6 +92,7 @@ npm manifest:
       "prisma-client": "^0.0.0",
       "tozod": "^3.0.0",
       "trpc-openapi": "^1.0.0-alpha.2",
+      "uint8arraylist": "2.3.2",
       "ws": "^8.9.0",
       "zod": "^3.19.1"
     }
@@ -1010,22 +1015,22 @@ Lockfile:
       "@nodelib/fs.scandir" "2.1.5"
       fastq "^1.6.0"
   
-  "@prisma/client@^4.4.0":
-    version "4.4.0"
-    resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.4.0.tgz#45f59c172dd3621ecc92d7cf9bc765d85e6c7d56"
-    integrity sha512-ciKOP246x1xwr04G9ajHlJ4pkmtu9Q6esVyqVBO0QJihaKQIUvbPjClp17IsRJyxqNpFm4ScbOc/s9DUzKHINQ==
+  "@prisma/client@^4.6.1":
+    version "4.6.1"
+    resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.6.1.tgz#e8e1d347ecbff44158d21b6591bb99650c8503a8"
+    integrity sha512-M1+NNrMzqaOIxT7PBGcTs3IZo7d1EW/+gVQd4C4gUgWBDGgD9AcIeZnUSidgWClmpMSgVUdnVORjsWWGUameYA==
     dependencies:
-      "@prisma/engines-version" "4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6"
+      "@prisma/engines-version" "4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32"
   
-  "@prisma/engines-version@4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6":
-    version "4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6"
-    resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.4.0-66.f352a33b70356f46311da8b00d83386dd9f145d6.tgz#00875863bb30b670a586a5b5794a000f7f3ad976"
-    integrity sha512-P5v/PuEIJLYXZUZBvOLPqoyCW+m6StNqHdiR6te++gYVODpPdLakks5HVx3JaZIY+LwR02juJWFlwpc9Eog/ug==
+  "@prisma/engines-version@4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32":
+    version "4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32"
+    resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.6.1-3.694eea289a8462c80264df36757e4fdc129b1b32.tgz#90a71bbdfd5172fc674009346a6ad6b84410cc0a"
+    integrity sha512-HUCmkXAU2jqp2O1RvNtbE+seLGLyJGEABZS/R38rZjSAafAy0WzBuHq+tbZMnD+b5OSCsTVtIPVcuvx1ySxcWQ==
   
-  "@prisma/engines@4.4.0":
-    version "4.4.0"
-    resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.4.0.tgz#6ca7d3ce8eee08dcfa82311b0a02f5ccaac7dc0c"
-    integrity sha512-Fpykccxlt9MHrAs/QpPGpI2nOiRxuLA+LiApgA59ibbf24YICZIMWd3SI2YD+q0IAIso0jCGiHhirAIbxK3RyQ==
+  "@prisma/engines@4.6.1":
+    version "4.6.1"
+    resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.6.1.tgz#ae31309cc0f600f2da22708697b3be4eb1e46f9e"
+    integrity sha512-3u2/XxvxB+Q7cMXHnKU0CpBiUK1QWqpgiBv28YDo1zOIJE3FCF8DI2vrp6vuwjGt5h0JGXDSvmSf4D4maVjJdw==
   
   "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
     version "1.1.2"
@@ -1079,6 +1084,17 @@ Lockfile:
     version "1.1.0"
     resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
     integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
+  
+  "@proton/hyperion@^3.4.0":
+    version "3.4.0"
+    resolved "https://registry.yarnpkg.com/@proton/hyperion/-/hyperion-3.4.0.tgz#46bc091548b54711743aa8f1826503123fbcef76"
+    integrity sha512-3iZo18xZ+vkD4MeoYUWZ0Z8nLqCxRMHuMbZ9LQCIVI9eb6cnhrYkIqjgcpeYUriZIPKfhg7kNT5xK9uK20bFQw==
+    dependencies:
+      "@types/node-fetch" "^2.6.2"
+      abortcontroller-polyfill "^1.7.5"
+      cross-fetch "^3.1.5"
+      isomorphic-fetch "^3.0.0"
+      node-fetch "^3.2.10"
   
   "@root/acme@^3.1.0":
     version "3.1.0"
@@ -1393,6 +1409,14 @@ Lockfile:
       "@types/dns-packet" "*"
       "@types/node" "*"
   
+  "@types/node-fetch@^2.6.2":
+    version "2.6.2"
+    resolved "https://registry.yarnpkg.com/@types/node-fetch/-/node-fetch-2.6.2.tgz#d1a9c5fd049d9415dce61571557104dec3ec81da"
+    integrity sha512-DHqhlq5jeESLy19TYhLakJ07kNumXWjcDdxXsLUMJZ6ue8VZJj4kLPQVE/2mdHh3xZziNF1xppu5lwmS53HR+A==
+    dependencies:
+      "@types/node" "*"
+      form-data "^3.0.0"
+  
   "@types/node@*", "@types/node@^18.7.14":
     version "18.7.14"
     resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.14.tgz#0fe081752a3333392d00586d815485a17c2cf3c9"
@@ -1532,6 +1556,11 @@ Lockfile:
       get-iterator "^2.0.0"
       it-stream-types "^1.0.3"
   
+  abortcontroller-polyfill@^1.7.5:
+    version "1.7.5"
+    resolved "https://registry.yarnpkg.com/abortcontroller-polyfill/-/abortcontroller-polyfill-1.7.5.tgz#6738495f4e901fbb57b6c0611d0c75f76c485bed"
+    integrity sha512-JMJ5soJWP18htbbxJjG7bG6yuI6pRhgJ0scHHTfkUjf6wjP912xZWvM+A4sJK3gqd9E8fcPbDnOefbA9Th/FIQ==
+  
   abstract-level@^1.0.2, abstract-level@^1.0.3:
     version "1.0.3"
     resolved "https://registry.yarnpkg.com/abstract-level/-/abstract-level-1.0.3.tgz#78a67d3d84da55ee15201486ab44c09560070741"
@@ -1578,10 +1607,20 @@ Lockfile:
       json-schema-traverse "^0.4.1"
       uri-js "^4.2.2"
   
+  ansi-regex@^2.0.0:
+    version "2.1.1"
+    resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
+    integrity sha512-TIGnTpdo+E3+pCyAluZvtED5p5wCqLdezCyhPZzKPcxvFplEt4i+W7OONCKgeZFT3+y5NZZfOOS/Bdcanm1MYA==
+  
   ansi-regex@^5.0.1:
     version "5.0.1"
     resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz#082cb2c89c9fe8659a311a53bd6a4dc5301db304"
     integrity sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==
+  
+  ansi-styles@^2.2.1:
+    version "2.2.1"
+    resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-2.2.1.tgz#b432dd3358b634cf75e1e4664368240533c1ddbe"
+    integrity sha512-kmCevFghRiWM7HB5zTPULl4r9bVFSWjz62MhqizDGUrq2NWuNMQyuv4tHHoKJHs69M/MF64lEcHdYIocrdWQYA==
   
   ansi-styles@^3.2.1:
     version "3.2.1"
@@ -1884,6 +1923,17 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/chalk/-/chalk-5.0.1.tgz#ca57d71e82bb534a296df63bbacc4a1c22b2a4b6"
     integrity sha512-Fo07WOYGqMfCWHOzSXOt2CxDbC6skS/jO9ynEcmpANMoPrD+W1r1K6Vx7iNm+AQmETU1Xr2t+n8nzkV9t6xh3w==
   
+  chalk@~1.1.3:
+    version "1.1.3"
+    resolved "https://registry.yarnpkg.com/chalk/-/chalk-1.1.3.tgz#a8115c55e4a702fe4d150abd3872822a7e09fc98"
+    integrity sha512-U3lRVLMSlsCfjqYPbLyVv11M9CPW4I728d6TCKMAOJueEeB9/8o+eSsMnxPJD+Q+K909sdESg7C+tIkoH6on1A==
+    dependencies:
+      ansi-styles "^2.2.1"
+      escape-string-regexp "^1.0.2"
+      has-ansi "^2.0.0"
+      strip-ansi "^3.0.0"
+      supports-color "^2.0.0"
+  
   chokidar@^3.5.2, chokidar@^3.5.3:
     version "3.5.3"
     resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.3.tgz#1cf37c8707b932bd1af1ae22c0432e2acd1903bd"
@@ -2007,6 +2057,13 @@ Lockfile:
     dependencies:
       object-assign "^4"
       vary "^1"
+  
+  cross-fetch@^3.1.5:
+    version "3.1.5"
+    resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
+    integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
+    dependencies:
+      node-fetch "2.6.7"
   
   cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     version "7.0.3"
@@ -2316,7 +2373,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
     integrity sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==
   
-  escape-string-regexp@^1.0.5:
+  escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
     version "1.0.5"
     resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
     integrity sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==
@@ -2568,6 +2625,18 @@ Lockfile:
       signal-exit "^3.0.3"
       strip-final-newline "^2.0.0"
   
+  express-blacklist@^1.0.3:
+    version "1.0.3"
+    resolved "https://registry.yarnpkg.com/express-blacklist/-/express-blacklist-1.0.3.tgz#78d19cb790be87316e5a5fe7ab621987f8be4935"
+    integrity sha512-d46sZTYlFCklKLgK7BFk0CCjGrWwuhWyLt40zvI/BQ5K3y5I/H7VM2VcTam1/Vf64CzHfwOVcY2+jOIYrBWeKw==
+    dependencies:
+      chalk "~1.1.3"
+  
+  express-rate-limit@^6.6.0:
+    version "6.6.0"
+    resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-6.6.0.tgz#3bbc2546540d327b1b0bfa9ab5f1b2c49075af98"
+    integrity sha512-HFN2+4ZGdkQOS8Qli4z6knmJFnw6lZed67o6b7RGplWeb1Z0s8VXaj3dUgPIdm9hrhZXTRpCTHXA0/2Eqex0vA==
+  
   express@^4.18.1:
     version "4.18.1"
     resolved "https://registry.yarnpkg.com/express/-/express-4.18.1.tgz#7797de8b9c72c857b9cd0e14a5eea80666267caf"
@@ -2718,6 +2787,15 @@ Lockfile:
     version "1.15.1"
     resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.1.tgz#0ca6a452306c9b276e4d3127483e29575e207ad5"
     integrity sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==
+  
+  form-data@^3.0.0:
+    version "3.0.1"
+    resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
+    integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
+    dependencies:
+      asynckit "^0.4.0"
+      combined-stream "^1.0.8"
+      mime-types "^2.1.12"
   
   form-data@^4.0.0:
     version "4.0.0"
@@ -2934,6 +3012,13 @@ Lockfile:
     dependencies:
       sparse-array "^1.3.1"
       uint8arrays "^3.0.0"
+  
+  has-ansi@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/has-ansi/-/has-ansi-2.0.0.tgz#34f5049ce1ecdf2b0649af3ef24e45ed35416d91"
+    integrity sha512-C8vBJ8DwUCx19vhm7urhTuUsr4/IyP6l4VzNQDv+ryHQObW3TTTp9yB68WpYgRe2bbaGuZ/se74IqFeVnMnLZg==
+    dependencies:
+      ansi-regex "^2.0.0"
   
   has-bigints@^1.0.1, has-bigints@^1.0.2:
     version "1.0.2"
@@ -3670,6 +3755,14 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/iso-url/-/iso-url-1.2.1.tgz#db96a49d8d9a64a1c889fc07cc525d093afb1811"
     integrity sha512-9JPDgCN4B7QPkLtYAAOrEuAWvP9rWvR5offAr0/SeF046wIkglqH3VXgYYP6NcsKslH80UIVgmPqNe3j7tG2ng==
   
+  isomorphic-fetch@^3.0.0:
+    version "3.0.0"
+    resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-3.0.0.tgz#0267b005049046d2421207215d45d6a262b8b8b4"
+    integrity sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==
+    dependencies:
+      node-fetch "^2.6.1"
+      whatwg-fetch "^3.4.1"
+  
   it-all@^1.0.4, it-all@^1.0.5, it-all@^1.0.6:
     version "1.0.6"
     resolved "https://registry.yarnpkg.com/it-all/-/it-all-1.0.6.tgz#852557355367606295c4c3b7eff0136f07749335"
@@ -4303,7 +4396,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
     integrity sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==
   
-  node-fetch@^2.6.1, "node-fetch@https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz":
+  node-fetch@2.6.7, node-fetch@^2.6.1, "node-fetch@https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz":
     version "2.6.7"
     resolved "https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz#1b5d62978f2ed07b99444f64f0df39f960a6d34d"
   
@@ -4611,12 +4704,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/prisma-client/-/prisma-client-0.0.0.tgz#f735e787f12dbf0518cf2c49beb4c8a1a4f09d47"
     integrity sha512-tbK0ZaUt4E9IkQalS+2V5dv45lTcwxWNSXenRNEgSuzTJWW3T6SUgBfuk0gUS5wC07eQNEOU6/SVomVL/hsaHw==
   
-  prisma@^4.4.0:
-    version "4.4.0"
-    resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.4.0.tgz#0c53324bf6a29474636b3e1964e0d72e0277bf8f"
-    integrity sha512-l/QKLmLcKJQFuc+X02LyICo0NWTUVaNNZ00jKJBqwDyhwMAhboD1FWwYV50rkH4Wls0RviAJSFzkC2ZrfawpfA==
+  prisma@^4.6.1:
+    version "4.6.1"
+    resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.6.1.tgz#6c85fb667abed006a6b849c9c1ddd81d3f071b87"
+    integrity sha512-BR4itMCuzrDV4tn3e2TF+nh1zIX/RVU0isKtKoN28ADeoJ9nYaMhiuRRkFd2TZN8+l/XfYzoRKyHzUFXLQhmBQ==
     dependencies:
-      "@prisma/engines" "4.4.0"
+      "@prisma/engines" "4.6.1"
   
   private-ip@^2.1.1, private-ip@^2.3.3:
     version "2.3.4"
@@ -5095,6 +5188,13 @@ Lockfile:
     dependencies:
       safe-buffer "~5.2.0"
   
+  strip-ansi@^3.0.0:
+    version "3.0.1"
+    resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-3.0.1.tgz#6a385fb8853d952d5ff05d0e8aaf94278dc63dcf"
+    integrity sha512-VhumSSbBqDTP8p2ZLKj40UjBCV4+v8bUSEpUb4KjRgWk9pbqGF4REFj6KEagidb2f/M6AzC0EmFyDNGaw9OCzg==
+    dependencies:
+      ansi-regex "^2.0.0"
+  
   strip-ansi@^6.0.1:
     version "6.0.1"
     resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
@@ -5125,6 +5225,11 @@ Lockfile:
       clone-regexp "^3.0.0"
       function-timeout "^0.1.0"
       time-span "^5.1.0"
+  
+  supports-color@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
+    integrity sha512-KKNVtd6pCYgPIKU4cp2733HWYCpplQhddZLBUryaAHou723x+FRzQ5Df824Fj+IyyuiQTRoub4SnIFfIcrp70g==
   
   supports-color@^5.3.0, supports-color@^5.5.0:
     version "5.5.0"
@@ -5289,7 +5394,7 @@ Lockfile:
       uint8arraylist "^2.0.0"
       uint8arrays "^3.1.0"
   
-  uint8arraylist@^2.0.0, uint8arraylist@^2.1.0, uint8arraylist@^2.1.1, uint8arraylist@^2.3.1, uint8arraylist@^2.3.2:
+  uint8arraylist@2.3.2, uint8arraylist@^2.0.0, uint8arraylist@^2.1.0, uint8arraylist@^2.1.1, uint8arraylist@^2.3.1, uint8arraylist@^2.3.2:
     version "2.3.2"
     resolved "https://registry.yarnpkg.com/uint8arraylist/-/uint8arraylist-2.3.2.tgz#d301f6cb570828b456ef09655c0a4d3b0929ef06"
     integrity sha512-4ybc/jixmtGhUrebJ0bzB95TjEbskWxBKBRrAozw7P6WcAcZdPMYSLdDuNoEEGo/Cwe+0TNic9CXzWUWzy1quw==
@@ -5386,6 +5491,11 @@ Lockfile:
     version "3.2.1"
     resolved "https://registry.yarnpkg.com/web-streams-polyfill/-/web-streams-polyfill-3.2.1.tgz#71c2718c52b45fd49dbeee88634b3a60ceab42a6"
     integrity sha512-e0MO3wdXWKrLbL0DgGnUV7WHVuw9OUvL4hjgnPkIeEvESk74gAITi5G606JtZPp39cd8HA9VQzCIvA49LpPN5Q==
+  
+  whatwg-fetch@^3.4.1:
+    version "3.6.2"
+    resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.2.tgz#dced24f37f2624ed0281725d51d0e2e3fe677f8c"
+    integrity sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==
   
   wherearewe@^2.0.0, wherearewe@^2.0.1:
     version "2.0.1"

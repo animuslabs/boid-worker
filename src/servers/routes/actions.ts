@@ -1,5 +1,5 @@
 import { Action } from "@greymass/eosio"
-import { FahData, InviteCode, InviteCodeUsed } from "@prisma/client"
+import { FahData } from "@prisma/client"
 import db from "lib/db"
 import { doAction, getAbi } from "lib/eosio"
 import { ipfsClient, jsonToBytes, jsonToCID } from "lib/ipfs"
