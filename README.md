@@ -53,12 +53,15 @@ to build the worker first make your configuration files
 cp example.env.json .env.json
 cp example.ecosystem.config.json ecosystem.config.json
 ```
-Modify `.env.json` with your information about your worker node. Make sure the worker name, authority, key are correct. For the rpc nodes you can specify as many as you like and the scripts will automat
+Modify `.env.json` with your information about your worker node. 
+
+Make sure the worker name, authority, key are correct. For the rpc nodes you can specify as many as you like and the scripts will use it.
+
 Modify `ecosystem.config.json` as you see fit, the defaults should be fine but can be optimized if you like. The env LOGLEVEL can be adjusted based on your preference between TRACE DEBUG INFO WARN ERROR
 
 to build the container image do
 ```
-docker build , -t boidworker
+docker build . -t boidworker
 ```
 
 once the image is created you can start it with docker-compose
