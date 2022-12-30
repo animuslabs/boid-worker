@@ -5,7 +5,9 @@
 - You need tesnet BOID tokens, earn them by running the testnet app or ask for free tokens from boid devs in social channels.
 
 ## Setup
-From a fresh Ubuntu VM
+There are 2 ways to setup a Boid Worker, barebone in a VM or via a Docker container.
+
+### 1. Ubuntu 22.04 LTS VM Setup Method
 
 ```sh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
@@ -25,7 +27,7 @@ Modify `.env.json` with your information about your worker node. Make sure the w
 
 Modify `ecosystem.config.json` as you see fit, the defaults should be fine but can be optimized if you like. The env LOGLEVEL can be adjusted based on your preference between TRACE DEBUG INFO WARN ERROR.
 
-## Start Oracle Node
+#### Start Oracle Node
 
 ```sh
 pm2 start ecosystem.config.json
@@ -33,24 +35,24 @@ pm2 start ecosystem.config.json
 
 To ensure everything is running properly, run `PM2 logs` and watch for any errors.
 
-## NOTE - if you want to add more log time data run oracle like this
+#### NOTE - if you want to add more log time data run oracle like this
 
 ```sh
 pm2 start ecosystem.config.json --log-date-format "YYYY-D-MM HH:mm:ss"
 ```
 
-## Important transactions to start
+#### Important transactions to start
 To register your oracle node you need to deposit BOID collateral.
-### 1. Send Collateral to power.boid smartcontract
+##### 1. Send Collateral to power.boid smartcontract
 You will need to specify your sending a custom token as the default is TLOS.
 The token contract is "token.boid" the symbol is BOID
-#### send 10000 BOID with memo: collateral to the contract --> power.boid
+##### send 10000 BOID with memo: collateral to the contract --> power.boid
 
-#### 2. Set your worker to active mode
+##### 2. Set your worker to active mode
 
-#### "setstandby" action --> oracle: "yourvalidacc", standby: "false", actor: "yourvalidacc", permission: "active"
+##### "setstandby" action --> oracle: "yourvalidacc", standby: "false", actor: "yourvalidacc", permission: "active"
 
-## Docker Setup
+### 2. Docker Setup Method
 to build the worker first make your configuration files
 ```
 cp example.env.json .env.json
