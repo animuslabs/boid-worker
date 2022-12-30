@@ -295,8 +295,73 @@ exports.Prisma.SortOrder = makeEnum({
   desc: 'desc'
 });
 
+exports.Prisma.StakeDelegScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  from_boid_id: 'from_boid_id',
+  to_boid_id: 'to_boid_id',
+  stake_quantity: 'stake_quantity',
+  lock_until_round: 'lock_until_round'
+});
+
+exports.Prisma.StakeScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  boid_id: 'boid_id',
+  quantity: 'quantity'
+});
+
+exports.Prisma.TeamChangeScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  boid_id: 'boid_id',
+  new_team_id: 'new_team_id',
+  new_pwr_tax_mult: 'new_pwr_tax_mult'
+});
+
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
+});
+
+exports.Prisma.UnstakeDelegScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  stake_id: 'stake_id'
+});
+
+exports.Prisma.UnstakeEndScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  boid_id: 'boid_id'
+});
+
+exports.Prisma.UnstakeInitScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  boid_id: 'boid_id',
+  quantity: 'quantity'
+});
+
+exports.Prisma.UnstakeStopScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  boid_id: 'boid_id'
+});
+
+exports.Prisma.WithdrawScalarFieldEnum = makeEnum({
+  sequence: 'sequence',
+  trxId: 'trxId',
+  timeStamp: 'timeStamp',
+  boid_id: 'boid_id',
+  quantity: 'quantity',
+  to: 'to'
 });
 
 
@@ -322,7 +387,15 @@ exports.Prisma.ModelName = makeEnum({
   OwnerAdd: 'OwnerAdd',
   OwnerRm: 'OwnerRm',
   PwrModAdd: 'PwrModAdd',
-  PwrModRm: 'PwrModRm'
+  PwrModRm: 'PwrModRm',
+  Stake: 'Stake',
+  StakeDeleg: 'StakeDeleg',
+  TeamChange: 'TeamChange',
+  UnstakeEnd: 'UnstakeEnd',
+  UnstakeStop: 'UnstakeStop',
+  UnstakeInit: 'UnstakeInit',
+  UnstakeDeleg: 'UnstakeDeleg',
+  Withdraw: 'Withdraw'
 });
 
 /**

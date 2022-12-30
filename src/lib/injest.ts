@@ -1,5 +1,5 @@
 import { Action } from "@proton/hyperion"
-import { AccountAdd } from "./types/boid.system"
+import { AccountAdd, UnstakeInit } from "./types/boid.system"
 import db from "lib/db"
 import { parseISOString } from "./utils"
 import Logger from "lib/logger"
@@ -12,29 +12,61 @@ type DBKeys = keyof Partial<typeof db>
 export type ActionMapType = Partial<Record<DBKeys, string>>
 
 export const actionMap:ActionMapType = {
-  // accountAdd: "account.add",
-  // accountBuy: "account.buy",
-  // accountEdit: "account.edit",
-  // accountFree: "account.free"
-  // authAddKey: "auth.addkey"
-  // authRmKey: "auth.rmkey"
-  // internalXfer: "internalxfer"
-  // inviteAdd: "invite.add"
-  // inviteClaim: "invite.claim"
-  // inviteRm: "invite.rm"
-  // logPwrAdd: "logpwradd",
-  // logPwrClaim: "logpwrclaim",
-  // nftLock: "nft.lock",
-  // nftWithdraw: "nft.withdraw",
-  // nftXfer: "nft.xfer",
-  // offerClaim: "offer.claim"
-  // ownerAdd: "owner.add",
-  // ownerRm: "owner.rm",
-  // pwrModAdd: "pwrmod.add",
-  pwrModRm: "pwrmod.rm"
+  accountAdd: "account.add",
+  accountBuy: "account.buy",
+  accountEdit: "account.edit",
+  accountFree: "account.free",
+  authAddKey: "auth.addkey",
+  authRmKey: "auth.rmkey",
+  internalXfer: "internalxfer",
+  inviteAdd: "invite.add",
+  inviteClaim: "invite.claim",
+  inviteRm: "invite.rm",
+  logPwrAdd: "logpwradd",
+  logPwrClaim: "logpwrclaim",
+  nftLock: "nft.lock",
+  nftWithdraw: "nft.withdraw",
+  nftXfer: "nft.xfer",
+  offerClaim: "offer.claim",
+  ownerAdd: "owner.add",
+  ownerRm: "owner.rm",
+  pwrModAdd: "pwrmod.add",
+  pwrModRm: "pwrmod.rm",
+  stake: "stake",
+  stakeDeleg: "stake.deleg",
+  teamChange: "team.change",
+  unstakeInit: "unstake.init",
+  unstakeStop: "unstake.stop",
+  unstakeEnd: "unstake.end",
+  withdraw: "withdraw",
+  unstakeDeleg: "unstke.deleg"
 }
 
-const sys = {
+const sys:Partial<Record<keyof ActionMapType, any>> = {
+  async withdraw(action:Action<any>) {
+    return basicInjest("withdraw", action)
+  },
+  async unstakeDeleg(action:Action<any>) {
+    return basicInjest("unstakeDeleg", action)
+  },
+  async unstakeInit(action:Action<any>) {
+    return basicInjest("unstakeInit", action)
+  },
+  async unstakeEnd(action:Action<any>) {
+    return basicInjest("unstakeEnd", action)
+  },
+  async unstakeStop(action:Action<any>) {
+    return basicInjest("unstakeStop", action)
+  },
+  async teamChange(action:Action<any>) {
+    return basicInjest("teamChange", action)
+  },
+  async stake(action:Action<any>) {
+    return basicInjest("stake", action)
+  },
+  async stakeDeleg(action:Action<any>) {
+    return basicInjest("stakeDeleg", action)
+  },
   async accountAdd(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
@@ -209,7 +241,17 @@ const sys = {
     } 
   },
   async pwrModRm(action:Action<any>) {
-    return basicInjest("pwrModRm", action)
+    try {
+      const data = action.act.data.data || action.act.data
+      log.info(data)
+      const params = {
+        boid_id: data.boid_id,
+        pwrmod_index: JSON.stringify(data.pwrmod_index)
+      }
+      await addRow("pwrModRm", action, params)
+    } catch (error) {
+      log.error(error)
+    }
   }
 }
 

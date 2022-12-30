@@ -298,7 +298,104 @@ export type PwrModRm = {
   trxId: string
   timeStamp: Date
   boid_id: string
-  pwrmod_index: number
+  pwrmod_index: string
+}
+
+/**
+ * Model Stake
+ * 
+ */
+export type Stake = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  boid_id: string
+  quantity: number
+}
+
+/**
+ * Model StakeDeleg
+ * 
+ */
+export type StakeDeleg = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  from_boid_id: string
+  to_boid_id: string
+  stake_quantity: number
+  lock_until_round: number
+}
+
+/**
+ * Model TeamChange
+ * 
+ */
+export type TeamChange = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  boid_id: string
+  new_team_id: number
+  new_pwr_tax_mult: number
+}
+
+/**
+ * Model UnstakeEnd
+ * 
+ */
+export type UnstakeEnd = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  boid_id: string
+}
+
+/**
+ * Model UnstakeStop
+ * 
+ */
+export type UnstakeStop = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  boid_id: string
+}
+
+/**
+ * Model UnstakeInit
+ * 
+ */
+export type UnstakeInit = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  boid_id: string
+  quantity: number
+}
+
+/**
+ * Model UnstakeDeleg
+ * 
+ */
+export type UnstakeDeleg = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  stake_id: string
+}
+
+/**
+ * Model Withdraw
+ * 
+ */
+export type Withdraw = {
+  sequence: bigint
+  trxId: string
+  timeStamp: Date
+  boid_id: string
+  quantity: number
+  to: string
 }
 
 
@@ -638,6 +735,86 @@ export class PrismaClient<
     * ```
     */
   get pwrModRm(): Prisma.PwrModRmDelegate<GlobalReject>;
+
+  /**
+   * `prisma.stake`: Exposes CRUD operations for the **Stake** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Stakes
+    * const stakes = await prisma.stake.findMany()
+    * ```
+    */
+  get stake(): Prisma.StakeDelegate<GlobalReject>;
+
+  /**
+   * `prisma.stakeDeleg`: Exposes CRUD operations for the **StakeDeleg** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more StakeDelegs
+    * const stakeDelegs = await prisma.stakeDeleg.findMany()
+    * ```
+    */
+  get stakeDeleg(): Prisma.StakeDelegDelegate<GlobalReject>;
+
+  /**
+   * `prisma.teamChange`: Exposes CRUD operations for the **TeamChange** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TeamChanges
+    * const teamChanges = await prisma.teamChange.findMany()
+    * ```
+    */
+  get teamChange(): Prisma.TeamChangeDelegate<GlobalReject>;
+
+  /**
+   * `prisma.unstakeEnd`: Exposes CRUD operations for the **UnstakeEnd** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UnstakeEnds
+    * const unstakeEnds = await prisma.unstakeEnd.findMany()
+    * ```
+    */
+  get unstakeEnd(): Prisma.UnstakeEndDelegate<GlobalReject>;
+
+  /**
+   * `prisma.unstakeStop`: Exposes CRUD operations for the **UnstakeStop** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UnstakeStops
+    * const unstakeStops = await prisma.unstakeStop.findMany()
+    * ```
+    */
+  get unstakeStop(): Prisma.UnstakeStopDelegate<GlobalReject>;
+
+  /**
+   * `prisma.unstakeInit`: Exposes CRUD operations for the **UnstakeInit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UnstakeInits
+    * const unstakeInits = await prisma.unstakeInit.findMany()
+    * ```
+    */
+  get unstakeInit(): Prisma.UnstakeInitDelegate<GlobalReject>;
+
+  /**
+   * `prisma.unstakeDeleg`: Exposes CRUD operations for the **UnstakeDeleg** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UnstakeDelegs
+    * const unstakeDelegs = await prisma.unstakeDeleg.findMany()
+    * ```
+    */
+  get unstakeDeleg(): Prisma.UnstakeDelegDelegate<GlobalReject>;
+
+  /**
+   * `prisma.withdraw`: Exposes CRUD operations for the **Withdraw** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Withdraws
+    * const withdraws = await prisma.withdraw.findMany()
+    * ```
+    */
+  get withdraw(): Prisma.WithdrawDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -1143,7 +1320,15 @@ export namespace Prisma {
     OwnerAdd: 'OwnerAdd',
     OwnerRm: 'OwnerRm',
     PwrModAdd: 'PwrModAdd',
-    PwrModRm: 'PwrModRm'
+    PwrModRm: 'PwrModRm',
+    Stake: 'Stake',
+    StakeDeleg: 'StakeDeleg',
+    TeamChange: 'TeamChange',
+    UnstakeEnd: 'UnstakeEnd',
+    UnstakeStop: 'UnstakeStop',
+    UnstakeInit: 'UnstakeInit',
+    UnstakeDeleg: 'UnstakeDeleg',
+    Withdraw: 'Withdraw'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -21192,12 +21377,10 @@ export namespace Prisma {
 
   export type PwrModRmAvgAggregateOutputType = {
     sequence: number | null
-    pwrmod_index: number | null
   }
 
   export type PwrModRmSumAggregateOutputType = {
     sequence: bigint | null
-    pwrmod_index: number | null
   }
 
   export type PwrModRmMinAggregateOutputType = {
@@ -21205,7 +21388,7 @@ export namespace Prisma {
     trxId: string | null
     timeStamp: Date | null
     boid_id: string | null
-    pwrmod_index: number | null
+    pwrmod_index: string | null
   }
 
   export type PwrModRmMaxAggregateOutputType = {
@@ -21213,7 +21396,7 @@ export namespace Prisma {
     trxId: string | null
     timeStamp: Date | null
     boid_id: string | null
-    pwrmod_index: number | null
+    pwrmod_index: string | null
   }
 
   export type PwrModRmCountAggregateOutputType = {
@@ -21228,12 +21411,10 @@ export namespace Prisma {
 
   export type PwrModRmAvgAggregateInputType = {
     sequence?: true
-    pwrmod_index?: true
   }
 
   export type PwrModRmSumAggregateInputType = {
     sequence?: true
-    pwrmod_index?: true
   }
 
   export type PwrModRmMinAggregateInputType = {
@@ -21358,7 +21539,7 @@ export namespace Prisma {
     trxId: string
     timeStamp: Date
     boid_id: string
-    pwrmod_index: number
+    pwrmod_index: string
     _count: PwrModRmCountAggregateOutputType | null
     _avg: PwrModRmAvgAggregateOutputType | null
     _sum: PwrModRmSumAggregateOutputType | null
@@ -22116,6 +22297,7514 @@ export namespace Prisma {
 
 
   /**
+   * Model Stake
+   */
+
+
+  export type AggregateStake = {
+    _count: StakeCountAggregateOutputType | null
+    _avg: StakeAvgAggregateOutputType | null
+    _sum: StakeSumAggregateOutputType | null
+    _min: StakeMinAggregateOutputType | null
+    _max: StakeMaxAggregateOutputType | null
+  }
+
+  export type StakeAvgAggregateOutputType = {
+    sequence: number | null
+    quantity: number | null
+  }
+
+  export type StakeSumAggregateOutputType = {
+    sequence: bigint | null
+    quantity: number | null
+  }
+
+  export type StakeMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    quantity: number | null
+  }
+
+  export type StakeMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    quantity: number | null
+  }
+
+  export type StakeCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    boid_id: number
+    quantity: number
+    _all: number
+  }
+
+
+  export type StakeAvgAggregateInputType = {
+    sequence?: true
+    quantity?: true
+  }
+
+  export type StakeSumAggregateInputType = {
+    sequence?: true
+    quantity?: true
+  }
+
+  export type StakeMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+  }
+
+  export type StakeMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+  }
+
+  export type StakeCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+    _all?: true
+  }
+
+  export type StakeAggregateArgs = {
+    /**
+     * Filter which Stake to aggregate.
+     * 
+    **/
+    where?: StakeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Stakes to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: StakeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Stakes from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Stakes.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Stakes
+    **/
+    _count?: true | StakeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StakeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StakeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StakeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StakeMaxAggregateInputType
+  }
+
+  export type GetStakeAggregateType<T extends StakeAggregateArgs> = {
+        [P in keyof T & keyof AggregateStake]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStake[P]>
+      : GetScalarType<T[P], AggregateStake[P]>
+  }
+
+
+
+
+  export type StakeGroupByArgs = {
+    where?: StakeWhereInput
+    orderBy?: Enumerable<StakeOrderByWithAggregationInput>
+    by: Array<StakeScalarFieldEnum>
+    having?: StakeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StakeCountAggregateInputType | true
+    _avg?: StakeAvgAggregateInputType
+    _sum?: StakeSumAggregateInputType
+    _min?: StakeMinAggregateInputType
+    _max?: StakeMaxAggregateInputType
+  }
+
+
+  export type StakeGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    boid_id: string
+    quantity: number
+    _count: StakeCountAggregateOutputType | null
+    _avg: StakeAvgAggregateOutputType | null
+    _sum: StakeSumAggregateOutputType | null
+    _min: StakeMinAggregateOutputType | null
+    _max: StakeMaxAggregateOutputType | null
+  }
+
+  type GetStakeGroupByPayload<T extends StakeGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<StakeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StakeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StakeGroupByOutputType[P]>
+            : GetScalarType<T[P], StakeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StakeSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    boid_id?: boolean
+    quantity?: boolean
+  }
+
+
+  export type StakeGetPayload<S extends boolean | null | undefined | StakeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? Stake :
+    S extends undefined ? never :
+    S extends { include: any } & (StakeArgs | StakeFindManyArgs)
+    ? Stake 
+    : S extends { select: any } & (StakeArgs | StakeFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof Stake ? Stake[P] : never
+  } 
+      : Stake
+
+
+  type StakeCountArgs = Merge<
+    Omit<StakeFindManyArgs, 'select' | 'include'> & {
+      select?: StakeCountAggregateInputType | true
+    }
+  >
+
+  export interface StakeDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one Stake that matches the filter.
+     * @param {StakeFindUniqueArgs} args - Arguments to find a Stake
+     * @example
+     * // Get one Stake
+     * const stake = await prisma.stake.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends StakeFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, StakeFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Stake'> extends True ? Prisma__StakeClient<StakeGetPayload<T>> : Prisma__StakeClient<StakeGetPayload<T> | null, null>
+
+    /**
+     * Find one Stake that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {StakeFindUniqueOrThrowArgs} args - Arguments to find a Stake
+     * @example
+     * // Get one Stake
+     * const stake = await prisma.stake.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends StakeFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, StakeFindUniqueOrThrowArgs>
+    ): Prisma__StakeClient<StakeGetPayload<T>>
+
+    /**
+     * Find the first Stake that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeFindFirstArgs} args - Arguments to find a Stake
+     * @example
+     * // Get one Stake
+     * const stake = await prisma.stake.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends StakeFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, StakeFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Stake'> extends True ? Prisma__StakeClient<StakeGetPayload<T>> : Prisma__StakeClient<StakeGetPayload<T> | null, null>
+
+    /**
+     * Find the first Stake that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeFindFirstOrThrowArgs} args - Arguments to find a Stake
+     * @example
+     * // Get one Stake
+     * const stake = await prisma.stake.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends StakeFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, StakeFindFirstOrThrowArgs>
+    ): Prisma__StakeClient<StakeGetPayload<T>>
+
+    /**
+     * Find zero or more Stakes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Stakes
+     * const stakes = await prisma.stake.findMany()
+     * 
+     * // Get first 10 Stakes
+     * const stakes = await prisma.stake.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const stakeWithSequenceOnly = await prisma.stake.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends StakeFindManyArgs>(
+      args?: SelectSubset<T, StakeFindManyArgs>
+    ): PrismaPromise<Array<StakeGetPayload<T>>>
+
+    /**
+     * Create a Stake.
+     * @param {StakeCreateArgs} args - Arguments to create a Stake.
+     * @example
+     * // Create one Stake
+     * const Stake = await prisma.stake.create({
+     *   data: {
+     *     // ... data to create a Stake
+     *   }
+     * })
+     * 
+    **/
+    create<T extends StakeCreateArgs>(
+      args: SelectSubset<T, StakeCreateArgs>
+    ): Prisma__StakeClient<StakeGetPayload<T>>
+
+    /**
+     * Delete a Stake.
+     * @param {StakeDeleteArgs} args - Arguments to delete one Stake.
+     * @example
+     * // Delete one Stake
+     * const Stake = await prisma.stake.delete({
+     *   where: {
+     *     // ... filter to delete one Stake
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends StakeDeleteArgs>(
+      args: SelectSubset<T, StakeDeleteArgs>
+    ): Prisma__StakeClient<StakeGetPayload<T>>
+
+    /**
+     * Update one Stake.
+     * @param {StakeUpdateArgs} args - Arguments to update one Stake.
+     * @example
+     * // Update one Stake
+     * const stake = await prisma.stake.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends StakeUpdateArgs>(
+      args: SelectSubset<T, StakeUpdateArgs>
+    ): Prisma__StakeClient<StakeGetPayload<T>>
+
+    /**
+     * Delete zero or more Stakes.
+     * @param {StakeDeleteManyArgs} args - Arguments to filter Stakes to delete.
+     * @example
+     * // Delete a few Stakes
+     * const { count } = await prisma.stake.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends StakeDeleteManyArgs>(
+      args?: SelectSubset<T, StakeDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Stakes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Stakes
+     * const stake = await prisma.stake.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends StakeUpdateManyArgs>(
+      args: SelectSubset<T, StakeUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Stake.
+     * @param {StakeUpsertArgs} args - Arguments to update or create a Stake.
+     * @example
+     * // Update or create a Stake
+     * const stake = await prisma.stake.upsert({
+     *   create: {
+     *     // ... data to create a Stake
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Stake we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends StakeUpsertArgs>(
+      args: SelectSubset<T, StakeUpsertArgs>
+    ): Prisma__StakeClient<StakeGetPayload<T>>
+
+    /**
+     * Count the number of Stakes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeCountArgs} args - Arguments to filter Stakes to count.
+     * @example
+     * // Count the number of Stakes
+     * const count = await prisma.stake.count({
+     *   where: {
+     *     // ... the filter for the Stakes we want to count
+     *   }
+     * })
+    **/
+    count<T extends StakeCountArgs>(
+      args?: Subset<T, StakeCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StakeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Stake.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StakeAggregateArgs>(args: Subset<T, StakeAggregateArgs>): PrismaPromise<GetStakeAggregateType<T>>
+
+    /**
+     * Group by Stake.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StakeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StakeGroupByArgs['orderBy'] }
+        : { orderBy?: StakeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StakeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStakeGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Stake.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__StakeClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Stake base type for findUnique actions
+   */
+  export type StakeFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * Filter, which Stake to fetch.
+     * 
+    **/
+    where: StakeWhereUniqueInput
+  }
+
+  /**
+   * Stake findUnique
+   */
+  export interface StakeFindUniqueArgs extends StakeFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Stake findUniqueOrThrow
+   */
+  export type StakeFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * Filter, which Stake to fetch.
+     * 
+    **/
+    where: StakeWhereUniqueInput
+  }
+
+
+  /**
+   * Stake base type for findFirst actions
+   */
+  export type StakeFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * Filter, which Stake to fetch.
+     * 
+    **/
+    where?: StakeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Stakes to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Stakes.
+     * 
+    **/
+    cursor?: StakeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Stakes from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Stakes.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Stakes.
+     * 
+    **/
+    distinct?: Enumerable<StakeScalarFieldEnum>
+  }
+
+  /**
+   * Stake findFirst
+   */
+  export interface StakeFindFirstArgs extends StakeFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Stake findFirstOrThrow
+   */
+  export type StakeFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * Filter, which Stake to fetch.
+     * 
+    **/
+    where?: StakeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Stakes to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Stakes.
+     * 
+    **/
+    cursor?: StakeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Stakes from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Stakes.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Stakes.
+     * 
+    **/
+    distinct?: Enumerable<StakeScalarFieldEnum>
+  }
+
+
+  /**
+   * Stake findMany
+   */
+  export type StakeFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * Filter, which Stakes to fetch.
+     * 
+    **/
+    where?: StakeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Stakes to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Stakes.
+     * 
+    **/
+    cursor?: StakeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Stakes from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Stakes.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<StakeScalarFieldEnum>
+  }
+
+
+  /**
+   * Stake create
+   */
+  export type StakeCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * The data needed to create a Stake.
+     * 
+    **/
+    data: XOR<StakeCreateInput, StakeUncheckedCreateInput>
+  }
+
+
+  /**
+   * Stake update
+   */
+  export type StakeUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * The data needed to update a Stake.
+     * 
+    **/
+    data: XOR<StakeUpdateInput, StakeUncheckedUpdateInput>
+    /**
+     * Choose, which Stake to update.
+     * 
+    **/
+    where: StakeWhereUniqueInput
+  }
+
+
+  /**
+   * Stake updateMany
+   */
+  export type StakeUpdateManyArgs = {
+    /**
+     * The data used to update Stakes.
+     * 
+    **/
+    data: XOR<StakeUpdateManyMutationInput, StakeUncheckedUpdateManyInput>
+    /**
+     * Filter which Stakes to update
+     * 
+    **/
+    where?: StakeWhereInput
+  }
+
+
+  /**
+   * Stake upsert
+   */
+  export type StakeUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * The filter to search for the Stake to update in case it exists.
+     * 
+    **/
+    where: StakeWhereUniqueInput
+    /**
+     * In case the Stake found by the `where` argument doesn't exist, create a new Stake with this data.
+     * 
+    **/
+    create: XOR<StakeCreateInput, StakeUncheckedCreateInput>
+    /**
+     * In case the Stake was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<StakeUpdateInput, StakeUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Stake delete
+   */
+  export type StakeDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+    /**
+     * Filter which Stake to delete.
+     * 
+    **/
+    where: StakeWhereUniqueInput
+  }
+
+
+  /**
+   * Stake deleteMany
+   */
+  export type StakeDeleteManyArgs = {
+    /**
+     * Filter which Stakes to delete
+     * 
+    **/
+    where?: StakeWhereInput
+  }
+
+
+  /**
+   * Stake without action
+   */
+  export type StakeArgs = {
+    /**
+     * Select specific fields to fetch from the Stake
+     * 
+    **/
+    select?: StakeSelect | null
+  }
+
+
+
+  /**
+   * Model StakeDeleg
+   */
+
+
+  export type AggregateStakeDeleg = {
+    _count: StakeDelegCountAggregateOutputType | null
+    _avg: StakeDelegAvgAggregateOutputType | null
+    _sum: StakeDelegSumAggregateOutputType | null
+    _min: StakeDelegMinAggregateOutputType | null
+    _max: StakeDelegMaxAggregateOutputType | null
+  }
+
+  export type StakeDelegAvgAggregateOutputType = {
+    sequence: number | null
+    stake_quantity: number | null
+    lock_until_round: number | null
+  }
+
+  export type StakeDelegSumAggregateOutputType = {
+    sequence: bigint | null
+    stake_quantity: number | null
+    lock_until_round: number | null
+  }
+
+  export type StakeDelegMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    from_boid_id: string | null
+    to_boid_id: string | null
+    stake_quantity: number | null
+    lock_until_round: number | null
+  }
+
+  export type StakeDelegMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    from_boid_id: string | null
+    to_boid_id: string | null
+    stake_quantity: number | null
+    lock_until_round: number | null
+  }
+
+  export type StakeDelegCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    from_boid_id: number
+    to_boid_id: number
+    stake_quantity: number
+    lock_until_round: number
+    _all: number
+  }
+
+
+  export type StakeDelegAvgAggregateInputType = {
+    sequence?: true
+    stake_quantity?: true
+    lock_until_round?: true
+  }
+
+  export type StakeDelegSumAggregateInputType = {
+    sequence?: true
+    stake_quantity?: true
+    lock_until_round?: true
+  }
+
+  export type StakeDelegMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    from_boid_id?: true
+    to_boid_id?: true
+    stake_quantity?: true
+    lock_until_round?: true
+  }
+
+  export type StakeDelegMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    from_boid_id?: true
+    to_boid_id?: true
+    stake_quantity?: true
+    lock_until_round?: true
+  }
+
+  export type StakeDelegCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    from_boid_id?: true
+    to_boid_id?: true
+    stake_quantity?: true
+    lock_until_round?: true
+    _all?: true
+  }
+
+  export type StakeDelegAggregateArgs = {
+    /**
+     * Filter which StakeDeleg to aggregate.
+     * 
+    **/
+    where?: StakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: StakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StakeDelegs.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned StakeDelegs
+    **/
+    _count?: true | StakeDelegCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: StakeDelegAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: StakeDelegSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: StakeDelegMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: StakeDelegMaxAggregateInputType
+  }
+
+  export type GetStakeDelegAggregateType<T extends StakeDelegAggregateArgs> = {
+        [P in keyof T & keyof AggregateStakeDeleg]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStakeDeleg[P]>
+      : GetScalarType<T[P], AggregateStakeDeleg[P]>
+  }
+
+
+
+
+  export type StakeDelegGroupByArgs = {
+    where?: StakeDelegWhereInput
+    orderBy?: Enumerable<StakeDelegOrderByWithAggregationInput>
+    by: Array<StakeDelegScalarFieldEnum>
+    having?: StakeDelegScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: StakeDelegCountAggregateInputType | true
+    _avg?: StakeDelegAvgAggregateInputType
+    _sum?: StakeDelegSumAggregateInputType
+    _min?: StakeDelegMinAggregateInputType
+    _max?: StakeDelegMaxAggregateInputType
+  }
+
+
+  export type StakeDelegGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    from_boid_id: string
+    to_boid_id: string
+    stake_quantity: number
+    lock_until_round: number
+    _count: StakeDelegCountAggregateOutputType | null
+    _avg: StakeDelegAvgAggregateOutputType | null
+    _sum: StakeDelegSumAggregateOutputType | null
+    _min: StakeDelegMinAggregateOutputType | null
+    _max: StakeDelegMaxAggregateOutputType | null
+  }
+
+  type GetStakeDelegGroupByPayload<T extends StakeDelegGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<StakeDelegGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof StakeDelegGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], StakeDelegGroupByOutputType[P]>
+            : GetScalarType<T[P], StakeDelegGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type StakeDelegSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    from_boid_id?: boolean
+    to_boid_id?: boolean
+    stake_quantity?: boolean
+    lock_until_round?: boolean
+  }
+
+
+  export type StakeDelegGetPayload<S extends boolean | null | undefined | StakeDelegArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? StakeDeleg :
+    S extends undefined ? never :
+    S extends { include: any } & (StakeDelegArgs | StakeDelegFindManyArgs)
+    ? StakeDeleg 
+    : S extends { select: any } & (StakeDelegArgs | StakeDelegFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof StakeDeleg ? StakeDeleg[P] : never
+  } 
+      : StakeDeleg
+
+
+  type StakeDelegCountArgs = Merge<
+    Omit<StakeDelegFindManyArgs, 'select' | 'include'> & {
+      select?: StakeDelegCountAggregateInputType | true
+    }
+  >
+
+  export interface StakeDelegDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one StakeDeleg that matches the filter.
+     * @param {StakeDelegFindUniqueArgs} args - Arguments to find a StakeDeleg
+     * @example
+     * // Get one StakeDeleg
+     * const stakeDeleg = await prisma.stakeDeleg.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends StakeDelegFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, StakeDelegFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'StakeDeleg'> extends True ? Prisma__StakeDelegClient<StakeDelegGetPayload<T>> : Prisma__StakeDelegClient<StakeDelegGetPayload<T> | null, null>
+
+    /**
+     * Find one StakeDeleg that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {StakeDelegFindUniqueOrThrowArgs} args - Arguments to find a StakeDeleg
+     * @example
+     * // Get one StakeDeleg
+     * const stakeDeleg = await prisma.stakeDeleg.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends StakeDelegFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, StakeDelegFindUniqueOrThrowArgs>
+    ): Prisma__StakeDelegClient<StakeDelegGetPayload<T>>
+
+    /**
+     * Find the first StakeDeleg that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeDelegFindFirstArgs} args - Arguments to find a StakeDeleg
+     * @example
+     * // Get one StakeDeleg
+     * const stakeDeleg = await prisma.stakeDeleg.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends StakeDelegFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, StakeDelegFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'StakeDeleg'> extends True ? Prisma__StakeDelegClient<StakeDelegGetPayload<T>> : Prisma__StakeDelegClient<StakeDelegGetPayload<T> | null, null>
+
+    /**
+     * Find the first StakeDeleg that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeDelegFindFirstOrThrowArgs} args - Arguments to find a StakeDeleg
+     * @example
+     * // Get one StakeDeleg
+     * const stakeDeleg = await prisma.stakeDeleg.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends StakeDelegFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, StakeDelegFindFirstOrThrowArgs>
+    ): Prisma__StakeDelegClient<StakeDelegGetPayload<T>>
+
+    /**
+     * Find zero or more StakeDelegs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeDelegFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all StakeDelegs
+     * const stakeDelegs = await prisma.stakeDeleg.findMany()
+     * 
+     * // Get first 10 StakeDelegs
+     * const stakeDelegs = await prisma.stakeDeleg.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const stakeDelegWithSequenceOnly = await prisma.stakeDeleg.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends StakeDelegFindManyArgs>(
+      args?: SelectSubset<T, StakeDelegFindManyArgs>
+    ): PrismaPromise<Array<StakeDelegGetPayload<T>>>
+
+    /**
+     * Create a StakeDeleg.
+     * @param {StakeDelegCreateArgs} args - Arguments to create a StakeDeleg.
+     * @example
+     * // Create one StakeDeleg
+     * const StakeDeleg = await prisma.stakeDeleg.create({
+     *   data: {
+     *     // ... data to create a StakeDeleg
+     *   }
+     * })
+     * 
+    **/
+    create<T extends StakeDelegCreateArgs>(
+      args: SelectSubset<T, StakeDelegCreateArgs>
+    ): Prisma__StakeDelegClient<StakeDelegGetPayload<T>>
+
+    /**
+     * Delete a StakeDeleg.
+     * @param {StakeDelegDeleteArgs} args - Arguments to delete one StakeDeleg.
+     * @example
+     * // Delete one StakeDeleg
+     * const StakeDeleg = await prisma.stakeDeleg.delete({
+     *   where: {
+     *     // ... filter to delete one StakeDeleg
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends StakeDelegDeleteArgs>(
+      args: SelectSubset<T, StakeDelegDeleteArgs>
+    ): Prisma__StakeDelegClient<StakeDelegGetPayload<T>>
+
+    /**
+     * Update one StakeDeleg.
+     * @param {StakeDelegUpdateArgs} args - Arguments to update one StakeDeleg.
+     * @example
+     * // Update one StakeDeleg
+     * const stakeDeleg = await prisma.stakeDeleg.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends StakeDelegUpdateArgs>(
+      args: SelectSubset<T, StakeDelegUpdateArgs>
+    ): Prisma__StakeDelegClient<StakeDelegGetPayload<T>>
+
+    /**
+     * Delete zero or more StakeDelegs.
+     * @param {StakeDelegDeleteManyArgs} args - Arguments to filter StakeDelegs to delete.
+     * @example
+     * // Delete a few StakeDelegs
+     * const { count } = await prisma.stakeDeleg.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends StakeDelegDeleteManyArgs>(
+      args?: SelectSubset<T, StakeDelegDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more StakeDelegs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeDelegUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many StakeDelegs
+     * const stakeDeleg = await prisma.stakeDeleg.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends StakeDelegUpdateManyArgs>(
+      args: SelectSubset<T, StakeDelegUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one StakeDeleg.
+     * @param {StakeDelegUpsertArgs} args - Arguments to update or create a StakeDeleg.
+     * @example
+     * // Update or create a StakeDeleg
+     * const stakeDeleg = await prisma.stakeDeleg.upsert({
+     *   create: {
+     *     // ... data to create a StakeDeleg
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the StakeDeleg we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends StakeDelegUpsertArgs>(
+      args: SelectSubset<T, StakeDelegUpsertArgs>
+    ): Prisma__StakeDelegClient<StakeDelegGetPayload<T>>
+
+    /**
+     * Count the number of StakeDelegs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeDelegCountArgs} args - Arguments to filter StakeDelegs to count.
+     * @example
+     * // Count the number of StakeDelegs
+     * const count = await prisma.stakeDeleg.count({
+     *   where: {
+     *     // ... the filter for the StakeDelegs we want to count
+     *   }
+     * })
+    **/
+    count<T extends StakeDelegCountArgs>(
+      args?: Subset<T, StakeDelegCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], StakeDelegCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a StakeDeleg.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeDelegAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends StakeDelegAggregateArgs>(args: Subset<T, StakeDelegAggregateArgs>): PrismaPromise<GetStakeDelegAggregateType<T>>
+
+    /**
+     * Group by StakeDeleg.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {StakeDelegGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends StakeDelegGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: StakeDelegGroupByArgs['orderBy'] }
+        : { orderBy?: StakeDelegGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, StakeDelegGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStakeDelegGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for StakeDeleg.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__StakeDelegClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * StakeDeleg base type for findUnique actions
+   */
+  export type StakeDelegFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * Filter, which StakeDeleg to fetch.
+     * 
+    **/
+    where: StakeDelegWhereUniqueInput
+  }
+
+  /**
+   * StakeDeleg findUnique
+   */
+  export interface StakeDelegFindUniqueArgs extends StakeDelegFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * StakeDeleg findUniqueOrThrow
+   */
+  export type StakeDelegFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * Filter, which StakeDeleg to fetch.
+     * 
+    **/
+    where: StakeDelegWhereUniqueInput
+  }
+
+
+  /**
+   * StakeDeleg base type for findFirst actions
+   */
+  export type StakeDelegFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * Filter, which StakeDeleg to fetch.
+     * 
+    **/
+    where?: StakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StakeDelegs.
+     * 
+    **/
+    cursor?: StakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StakeDelegs.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StakeDelegs.
+     * 
+    **/
+    distinct?: Enumerable<StakeDelegScalarFieldEnum>
+  }
+
+  /**
+   * StakeDeleg findFirst
+   */
+  export interface StakeDelegFindFirstArgs extends StakeDelegFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * StakeDeleg findFirstOrThrow
+   */
+  export type StakeDelegFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * Filter, which StakeDeleg to fetch.
+     * 
+    **/
+    where?: StakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for StakeDelegs.
+     * 
+    **/
+    cursor?: StakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StakeDelegs.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of StakeDelegs.
+     * 
+    **/
+    distinct?: Enumerable<StakeDelegScalarFieldEnum>
+  }
+
+
+  /**
+   * StakeDeleg findMany
+   */
+  export type StakeDelegFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * Filter, which StakeDelegs to fetch.
+     * 
+    **/
+    where?: StakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of StakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<StakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing StakeDelegs.
+     * 
+    **/
+    cursor?: StakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` StakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` StakeDelegs.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<StakeDelegScalarFieldEnum>
+  }
+
+
+  /**
+   * StakeDeleg create
+   */
+  export type StakeDelegCreateArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * The data needed to create a StakeDeleg.
+     * 
+    **/
+    data: XOR<StakeDelegCreateInput, StakeDelegUncheckedCreateInput>
+  }
+
+
+  /**
+   * StakeDeleg update
+   */
+  export type StakeDelegUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * The data needed to update a StakeDeleg.
+     * 
+    **/
+    data: XOR<StakeDelegUpdateInput, StakeDelegUncheckedUpdateInput>
+    /**
+     * Choose, which StakeDeleg to update.
+     * 
+    **/
+    where: StakeDelegWhereUniqueInput
+  }
+
+
+  /**
+   * StakeDeleg updateMany
+   */
+  export type StakeDelegUpdateManyArgs = {
+    /**
+     * The data used to update StakeDelegs.
+     * 
+    **/
+    data: XOR<StakeDelegUpdateManyMutationInput, StakeDelegUncheckedUpdateManyInput>
+    /**
+     * Filter which StakeDelegs to update
+     * 
+    **/
+    where?: StakeDelegWhereInput
+  }
+
+
+  /**
+   * StakeDeleg upsert
+   */
+  export type StakeDelegUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * The filter to search for the StakeDeleg to update in case it exists.
+     * 
+    **/
+    where: StakeDelegWhereUniqueInput
+    /**
+     * In case the StakeDeleg found by the `where` argument doesn't exist, create a new StakeDeleg with this data.
+     * 
+    **/
+    create: XOR<StakeDelegCreateInput, StakeDelegUncheckedCreateInput>
+    /**
+     * In case the StakeDeleg was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<StakeDelegUpdateInput, StakeDelegUncheckedUpdateInput>
+  }
+
+
+  /**
+   * StakeDeleg delete
+   */
+  export type StakeDelegDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+    /**
+     * Filter which StakeDeleg to delete.
+     * 
+    **/
+    where: StakeDelegWhereUniqueInput
+  }
+
+
+  /**
+   * StakeDeleg deleteMany
+   */
+  export type StakeDelegDeleteManyArgs = {
+    /**
+     * Filter which StakeDelegs to delete
+     * 
+    **/
+    where?: StakeDelegWhereInput
+  }
+
+
+  /**
+   * StakeDeleg without action
+   */
+  export type StakeDelegArgs = {
+    /**
+     * Select specific fields to fetch from the StakeDeleg
+     * 
+    **/
+    select?: StakeDelegSelect | null
+  }
+
+
+
+  /**
+   * Model TeamChange
+   */
+
+
+  export type AggregateTeamChange = {
+    _count: TeamChangeCountAggregateOutputType | null
+    _avg: TeamChangeAvgAggregateOutputType | null
+    _sum: TeamChangeSumAggregateOutputType | null
+    _min: TeamChangeMinAggregateOutputType | null
+    _max: TeamChangeMaxAggregateOutputType | null
+  }
+
+  export type TeamChangeAvgAggregateOutputType = {
+    sequence: number | null
+    new_team_id: number | null
+    new_pwr_tax_mult: number | null
+  }
+
+  export type TeamChangeSumAggregateOutputType = {
+    sequence: bigint | null
+    new_team_id: number | null
+    new_pwr_tax_mult: number | null
+  }
+
+  export type TeamChangeMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    new_team_id: number | null
+    new_pwr_tax_mult: number | null
+  }
+
+  export type TeamChangeMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    new_team_id: number | null
+    new_pwr_tax_mult: number | null
+  }
+
+  export type TeamChangeCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    boid_id: number
+    new_team_id: number
+    new_pwr_tax_mult: number
+    _all: number
+  }
+
+
+  export type TeamChangeAvgAggregateInputType = {
+    sequence?: true
+    new_team_id?: true
+    new_pwr_tax_mult?: true
+  }
+
+  export type TeamChangeSumAggregateInputType = {
+    sequence?: true
+    new_team_id?: true
+    new_pwr_tax_mult?: true
+  }
+
+  export type TeamChangeMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    new_team_id?: true
+    new_pwr_tax_mult?: true
+  }
+
+  export type TeamChangeMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    new_team_id?: true
+    new_pwr_tax_mult?: true
+  }
+
+  export type TeamChangeCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    new_team_id?: true
+    new_pwr_tax_mult?: true
+    _all?: true
+  }
+
+  export type TeamChangeAggregateArgs = {
+    /**
+     * Filter which TeamChange to aggregate.
+     * 
+    **/
+    where?: TeamChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamChanges to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<TeamChangeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: TeamChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamChanges from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamChanges.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TeamChanges
+    **/
+    _count?: true | TeamChangeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TeamChangeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TeamChangeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TeamChangeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TeamChangeMaxAggregateInputType
+  }
+
+  export type GetTeamChangeAggregateType<T extends TeamChangeAggregateArgs> = {
+        [P in keyof T & keyof AggregateTeamChange]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTeamChange[P]>
+      : GetScalarType<T[P], AggregateTeamChange[P]>
+  }
+
+
+
+
+  export type TeamChangeGroupByArgs = {
+    where?: TeamChangeWhereInput
+    orderBy?: Enumerable<TeamChangeOrderByWithAggregationInput>
+    by: Array<TeamChangeScalarFieldEnum>
+    having?: TeamChangeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TeamChangeCountAggregateInputType | true
+    _avg?: TeamChangeAvgAggregateInputType
+    _sum?: TeamChangeSumAggregateInputType
+    _min?: TeamChangeMinAggregateInputType
+    _max?: TeamChangeMaxAggregateInputType
+  }
+
+
+  export type TeamChangeGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    boid_id: string
+    new_team_id: number
+    new_pwr_tax_mult: number
+    _count: TeamChangeCountAggregateOutputType | null
+    _avg: TeamChangeAvgAggregateOutputType | null
+    _sum: TeamChangeSumAggregateOutputType | null
+    _min: TeamChangeMinAggregateOutputType | null
+    _max: TeamChangeMaxAggregateOutputType | null
+  }
+
+  type GetTeamChangeGroupByPayload<T extends TeamChangeGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<TeamChangeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TeamChangeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TeamChangeGroupByOutputType[P]>
+            : GetScalarType<T[P], TeamChangeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TeamChangeSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    boid_id?: boolean
+    new_team_id?: boolean
+    new_pwr_tax_mult?: boolean
+  }
+
+
+  export type TeamChangeGetPayload<S extends boolean | null | undefined | TeamChangeArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? TeamChange :
+    S extends undefined ? never :
+    S extends { include: any } & (TeamChangeArgs | TeamChangeFindManyArgs)
+    ? TeamChange 
+    : S extends { select: any } & (TeamChangeArgs | TeamChangeFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof TeamChange ? TeamChange[P] : never
+  } 
+      : TeamChange
+
+
+  type TeamChangeCountArgs = Merge<
+    Omit<TeamChangeFindManyArgs, 'select' | 'include'> & {
+      select?: TeamChangeCountAggregateInputType | true
+    }
+  >
+
+  export interface TeamChangeDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one TeamChange that matches the filter.
+     * @param {TeamChangeFindUniqueArgs} args - Arguments to find a TeamChange
+     * @example
+     * // Get one TeamChange
+     * const teamChange = await prisma.teamChange.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends TeamChangeFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, TeamChangeFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'TeamChange'> extends True ? Prisma__TeamChangeClient<TeamChangeGetPayload<T>> : Prisma__TeamChangeClient<TeamChangeGetPayload<T> | null, null>
+
+    /**
+     * Find one TeamChange that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {TeamChangeFindUniqueOrThrowArgs} args - Arguments to find a TeamChange
+     * @example
+     * // Get one TeamChange
+     * const teamChange = await prisma.teamChange.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends TeamChangeFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, TeamChangeFindUniqueOrThrowArgs>
+    ): Prisma__TeamChangeClient<TeamChangeGetPayload<T>>
+
+    /**
+     * Find the first TeamChange that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamChangeFindFirstArgs} args - Arguments to find a TeamChange
+     * @example
+     * // Get one TeamChange
+     * const teamChange = await prisma.teamChange.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends TeamChangeFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, TeamChangeFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'TeamChange'> extends True ? Prisma__TeamChangeClient<TeamChangeGetPayload<T>> : Prisma__TeamChangeClient<TeamChangeGetPayload<T> | null, null>
+
+    /**
+     * Find the first TeamChange that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamChangeFindFirstOrThrowArgs} args - Arguments to find a TeamChange
+     * @example
+     * // Get one TeamChange
+     * const teamChange = await prisma.teamChange.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends TeamChangeFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, TeamChangeFindFirstOrThrowArgs>
+    ): Prisma__TeamChangeClient<TeamChangeGetPayload<T>>
+
+    /**
+     * Find zero or more TeamChanges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamChangeFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TeamChanges
+     * const teamChanges = await prisma.teamChange.findMany()
+     * 
+     * // Get first 10 TeamChanges
+     * const teamChanges = await prisma.teamChange.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const teamChangeWithSequenceOnly = await prisma.teamChange.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends TeamChangeFindManyArgs>(
+      args?: SelectSubset<T, TeamChangeFindManyArgs>
+    ): PrismaPromise<Array<TeamChangeGetPayload<T>>>
+
+    /**
+     * Create a TeamChange.
+     * @param {TeamChangeCreateArgs} args - Arguments to create a TeamChange.
+     * @example
+     * // Create one TeamChange
+     * const TeamChange = await prisma.teamChange.create({
+     *   data: {
+     *     // ... data to create a TeamChange
+     *   }
+     * })
+     * 
+    **/
+    create<T extends TeamChangeCreateArgs>(
+      args: SelectSubset<T, TeamChangeCreateArgs>
+    ): Prisma__TeamChangeClient<TeamChangeGetPayload<T>>
+
+    /**
+     * Delete a TeamChange.
+     * @param {TeamChangeDeleteArgs} args - Arguments to delete one TeamChange.
+     * @example
+     * // Delete one TeamChange
+     * const TeamChange = await prisma.teamChange.delete({
+     *   where: {
+     *     // ... filter to delete one TeamChange
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends TeamChangeDeleteArgs>(
+      args: SelectSubset<T, TeamChangeDeleteArgs>
+    ): Prisma__TeamChangeClient<TeamChangeGetPayload<T>>
+
+    /**
+     * Update one TeamChange.
+     * @param {TeamChangeUpdateArgs} args - Arguments to update one TeamChange.
+     * @example
+     * // Update one TeamChange
+     * const teamChange = await prisma.teamChange.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends TeamChangeUpdateArgs>(
+      args: SelectSubset<T, TeamChangeUpdateArgs>
+    ): Prisma__TeamChangeClient<TeamChangeGetPayload<T>>
+
+    /**
+     * Delete zero or more TeamChanges.
+     * @param {TeamChangeDeleteManyArgs} args - Arguments to filter TeamChanges to delete.
+     * @example
+     * // Delete a few TeamChanges
+     * const { count } = await prisma.teamChange.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends TeamChangeDeleteManyArgs>(
+      args?: SelectSubset<T, TeamChangeDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TeamChanges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamChangeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TeamChanges
+     * const teamChange = await prisma.teamChange.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends TeamChangeUpdateManyArgs>(
+      args: SelectSubset<T, TeamChangeUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TeamChange.
+     * @param {TeamChangeUpsertArgs} args - Arguments to update or create a TeamChange.
+     * @example
+     * // Update or create a TeamChange
+     * const teamChange = await prisma.teamChange.upsert({
+     *   create: {
+     *     // ... data to create a TeamChange
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TeamChange we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends TeamChangeUpsertArgs>(
+      args: SelectSubset<T, TeamChangeUpsertArgs>
+    ): Prisma__TeamChangeClient<TeamChangeGetPayload<T>>
+
+    /**
+     * Count the number of TeamChanges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamChangeCountArgs} args - Arguments to filter TeamChanges to count.
+     * @example
+     * // Count the number of TeamChanges
+     * const count = await prisma.teamChange.count({
+     *   where: {
+     *     // ... the filter for the TeamChanges we want to count
+     *   }
+     * })
+    **/
+    count<T extends TeamChangeCountArgs>(
+      args?: Subset<T, TeamChangeCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TeamChangeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TeamChange.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamChangeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TeamChangeAggregateArgs>(args: Subset<T, TeamChangeAggregateArgs>): PrismaPromise<GetTeamChangeAggregateType<T>>
+
+    /**
+     * Group by TeamChange.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamChangeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TeamChangeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TeamChangeGroupByArgs['orderBy'] }
+        : { orderBy?: TeamChangeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TeamChangeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTeamChangeGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TeamChange.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__TeamChangeClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * TeamChange base type for findUnique actions
+   */
+  export type TeamChangeFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * Filter, which TeamChange to fetch.
+     * 
+    **/
+    where: TeamChangeWhereUniqueInput
+  }
+
+  /**
+   * TeamChange findUnique
+   */
+  export interface TeamChangeFindUniqueArgs extends TeamChangeFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * TeamChange findUniqueOrThrow
+   */
+  export type TeamChangeFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * Filter, which TeamChange to fetch.
+     * 
+    **/
+    where: TeamChangeWhereUniqueInput
+  }
+
+
+  /**
+   * TeamChange base type for findFirst actions
+   */
+  export type TeamChangeFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * Filter, which TeamChange to fetch.
+     * 
+    **/
+    where?: TeamChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamChanges to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<TeamChangeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamChanges.
+     * 
+    **/
+    cursor?: TeamChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamChanges from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamChanges.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamChanges.
+     * 
+    **/
+    distinct?: Enumerable<TeamChangeScalarFieldEnum>
+  }
+
+  /**
+   * TeamChange findFirst
+   */
+  export interface TeamChangeFindFirstArgs extends TeamChangeFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * TeamChange findFirstOrThrow
+   */
+  export type TeamChangeFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * Filter, which TeamChange to fetch.
+     * 
+    **/
+    where?: TeamChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamChanges to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<TeamChangeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TeamChanges.
+     * 
+    **/
+    cursor?: TeamChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamChanges from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamChanges.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TeamChanges.
+     * 
+    **/
+    distinct?: Enumerable<TeamChangeScalarFieldEnum>
+  }
+
+
+  /**
+   * TeamChange findMany
+   */
+  export type TeamChangeFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * Filter, which TeamChanges to fetch.
+     * 
+    **/
+    where?: TeamChangeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TeamChanges to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<TeamChangeOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TeamChanges.
+     * 
+    **/
+    cursor?: TeamChangeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TeamChanges from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TeamChanges.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<TeamChangeScalarFieldEnum>
+  }
+
+
+  /**
+   * TeamChange create
+   */
+  export type TeamChangeCreateArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * The data needed to create a TeamChange.
+     * 
+    **/
+    data: XOR<TeamChangeCreateInput, TeamChangeUncheckedCreateInput>
+  }
+
+
+  /**
+   * TeamChange update
+   */
+  export type TeamChangeUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * The data needed to update a TeamChange.
+     * 
+    **/
+    data: XOR<TeamChangeUpdateInput, TeamChangeUncheckedUpdateInput>
+    /**
+     * Choose, which TeamChange to update.
+     * 
+    **/
+    where: TeamChangeWhereUniqueInput
+  }
+
+
+  /**
+   * TeamChange updateMany
+   */
+  export type TeamChangeUpdateManyArgs = {
+    /**
+     * The data used to update TeamChanges.
+     * 
+    **/
+    data: XOR<TeamChangeUpdateManyMutationInput, TeamChangeUncheckedUpdateManyInput>
+    /**
+     * Filter which TeamChanges to update
+     * 
+    **/
+    where?: TeamChangeWhereInput
+  }
+
+
+  /**
+   * TeamChange upsert
+   */
+  export type TeamChangeUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * The filter to search for the TeamChange to update in case it exists.
+     * 
+    **/
+    where: TeamChangeWhereUniqueInput
+    /**
+     * In case the TeamChange found by the `where` argument doesn't exist, create a new TeamChange with this data.
+     * 
+    **/
+    create: XOR<TeamChangeCreateInput, TeamChangeUncheckedCreateInput>
+    /**
+     * In case the TeamChange was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<TeamChangeUpdateInput, TeamChangeUncheckedUpdateInput>
+  }
+
+
+  /**
+   * TeamChange delete
+   */
+  export type TeamChangeDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+    /**
+     * Filter which TeamChange to delete.
+     * 
+    **/
+    where: TeamChangeWhereUniqueInput
+  }
+
+
+  /**
+   * TeamChange deleteMany
+   */
+  export type TeamChangeDeleteManyArgs = {
+    /**
+     * Filter which TeamChanges to delete
+     * 
+    **/
+    where?: TeamChangeWhereInput
+  }
+
+
+  /**
+   * TeamChange without action
+   */
+  export type TeamChangeArgs = {
+    /**
+     * Select specific fields to fetch from the TeamChange
+     * 
+    **/
+    select?: TeamChangeSelect | null
+  }
+
+
+
+  /**
+   * Model UnstakeEnd
+   */
+
+
+  export type AggregateUnstakeEnd = {
+    _count: UnstakeEndCountAggregateOutputType | null
+    _avg: UnstakeEndAvgAggregateOutputType | null
+    _sum: UnstakeEndSumAggregateOutputType | null
+    _min: UnstakeEndMinAggregateOutputType | null
+    _max: UnstakeEndMaxAggregateOutputType | null
+  }
+
+  export type UnstakeEndAvgAggregateOutputType = {
+    sequence: number | null
+  }
+
+  export type UnstakeEndSumAggregateOutputType = {
+    sequence: bigint | null
+  }
+
+  export type UnstakeEndMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+  }
+
+  export type UnstakeEndMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+  }
+
+  export type UnstakeEndCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    boid_id: number
+    _all: number
+  }
+
+
+  export type UnstakeEndAvgAggregateInputType = {
+    sequence?: true
+  }
+
+  export type UnstakeEndSumAggregateInputType = {
+    sequence?: true
+  }
+
+  export type UnstakeEndMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+  }
+
+  export type UnstakeEndMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+  }
+
+  export type UnstakeEndCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    _all?: true
+  }
+
+  export type UnstakeEndAggregateArgs = {
+    /**
+     * Filter which UnstakeEnd to aggregate.
+     * 
+    **/
+    where?: UnstakeEndWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeEnds to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeEndOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: UnstakeEndWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeEnds from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeEnds.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UnstakeEnds
+    **/
+    _count?: true | UnstakeEndCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UnstakeEndAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UnstakeEndSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UnstakeEndMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UnstakeEndMaxAggregateInputType
+  }
+
+  export type GetUnstakeEndAggregateType<T extends UnstakeEndAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnstakeEnd]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUnstakeEnd[P]>
+      : GetScalarType<T[P], AggregateUnstakeEnd[P]>
+  }
+
+
+
+
+  export type UnstakeEndGroupByArgs = {
+    where?: UnstakeEndWhereInput
+    orderBy?: Enumerable<UnstakeEndOrderByWithAggregationInput>
+    by: Array<UnstakeEndScalarFieldEnum>
+    having?: UnstakeEndScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UnstakeEndCountAggregateInputType | true
+    _avg?: UnstakeEndAvgAggregateInputType
+    _sum?: UnstakeEndSumAggregateInputType
+    _min?: UnstakeEndMinAggregateInputType
+    _max?: UnstakeEndMaxAggregateInputType
+  }
+
+
+  export type UnstakeEndGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    boid_id: string
+    _count: UnstakeEndCountAggregateOutputType | null
+    _avg: UnstakeEndAvgAggregateOutputType | null
+    _sum: UnstakeEndSumAggregateOutputType | null
+    _min: UnstakeEndMinAggregateOutputType | null
+    _max: UnstakeEndMaxAggregateOutputType | null
+  }
+
+  type GetUnstakeEndGroupByPayload<T extends UnstakeEndGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<UnstakeEndGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UnstakeEndGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UnstakeEndGroupByOutputType[P]>
+            : GetScalarType<T[P], UnstakeEndGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UnstakeEndSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    boid_id?: boolean
+  }
+
+
+  export type UnstakeEndGetPayload<S extends boolean | null | undefined | UnstakeEndArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? UnstakeEnd :
+    S extends undefined ? never :
+    S extends { include: any } & (UnstakeEndArgs | UnstakeEndFindManyArgs)
+    ? UnstakeEnd 
+    : S extends { select: any } & (UnstakeEndArgs | UnstakeEndFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof UnstakeEnd ? UnstakeEnd[P] : never
+  } 
+      : UnstakeEnd
+
+
+  type UnstakeEndCountArgs = Merge<
+    Omit<UnstakeEndFindManyArgs, 'select' | 'include'> & {
+      select?: UnstakeEndCountAggregateInputType | true
+    }
+  >
+
+  export interface UnstakeEndDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one UnstakeEnd that matches the filter.
+     * @param {UnstakeEndFindUniqueArgs} args - Arguments to find a UnstakeEnd
+     * @example
+     * // Get one UnstakeEnd
+     * const unstakeEnd = await prisma.unstakeEnd.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UnstakeEndFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, UnstakeEndFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'UnstakeEnd'> extends True ? Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>> : Prisma__UnstakeEndClient<UnstakeEndGetPayload<T> | null, null>
+
+    /**
+     * Find one UnstakeEnd that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UnstakeEndFindUniqueOrThrowArgs} args - Arguments to find a UnstakeEnd
+     * @example
+     * // Get one UnstakeEnd
+     * const unstakeEnd = await prisma.unstakeEnd.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UnstakeEndFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeEndFindUniqueOrThrowArgs>
+    ): Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>>
+
+    /**
+     * Find the first UnstakeEnd that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeEndFindFirstArgs} args - Arguments to find a UnstakeEnd
+     * @example
+     * // Get one UnstakeEnd
+     * const unstakeEnd = await prisma.unstakeEnd.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UnstakeEndFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, UnstakeEndFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'UnstakeEnd'> extends True ? Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>> : Prisma__UnstakeEndClient<UnstakeEndGetPayload<T> | null, null>
+
+    /**
+     * Find the first UnstakeEnd that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeEndFindFirstOrThrowArgs} args - Arguments to find a UnstakeEnd
+     * @example
+     * // Get one UnstakeEnd
+     * const unstakeEnd = await prisma.unstakeEnd.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UnstakeEndFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeEndFindFirstOrThrowArgs>
+    ): Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>>
+
+    /**
+     * Find zero or more UnstakeEnds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeEndFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UnstakeEnds
+     * const unstakeEnds = await prisma.unstakeEnd.findMany()
+     * 
+     * // Get first 10 UnstakeEnds
+     * const unstakeEnds = await prisma.unstakeEnd.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const unstakeEndWithSequenceOnly = await prisma.unstakeEnd.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends UnstakeEndFindManyArgs>(
+      args?: SelectSubset<T, UnstakeEndFindManyArgs>
+    ): PrismaPromise<Array<UnstakeEndGetPayload<T>>>
+
+    /**
+     * Create a UnstakeEnd.
+     * @param {UnstakeEndCreateArgs} args - Arguments to create a UnstakeEnd.
+     * @example
+     * // Create one UnstakeEnd
+     * const UnstakeEnd = await prisma.unstakeEnd.create({
+     *   data: {
+     *     // ... data to create a UnstakeEnd
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UnstakeEndCreateArgs>(
+      args: SelectSubset<T, UnstakeEndCreateArgs>
+    ): Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>>
+
+    /**
+     * Delete a UnstakeEnd.
+     * @param {UnstakeEndDeleteArgs} args - Arguments to delete one UnstakeEnd.
+     * @example
+     * // Delete one UnstakeEnd
+     * const UnstakeEnd = await prisma.unstakeEnd.delete({
+     *   where: {
+     *     // ... filter to delete one UnstakeEnd
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UnstakeEndDeleteArgs>(
+      args: SelectSubset<T, UnstakeEndDeleteArgs>
+    ): Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>>
+
+    /**
+     * Update one UnstakeEnd.
+     * @param {UnstakeEndUpdateArgs} args - Arguments to update one UnstakeEnd.
+     * @example
+     * // Update one UnstakeEnd
+     * const unstakeEnd = await prisma.unstakeEnd.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UnstakeEndUpdateArgs>(
+      args: SelectSubset<T, UnstakeEndUpdateArgs>
+    ): Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>>
+
+    /**
+     * Delete zero or more UnstakeEnds.
+     * @param {UnstakeEndDeleteManyArgs} args - Arguments to filter UnstakeEnds to delete.
+     * @example
+     * // Delete a few UnstakeEnds
+     * const { count } = await prisma.unstakeEnd.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UnstakeEndDeleteManyArgs>(
+      args?: SelectSubset<T, UnstakeEndDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UnstakeEnds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeEndUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UnstakeEnds
+     * const unstakeEnd = await prisma.unstakeEnd.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UnstakeEndUpdateManyArgs>(
+      args: SelectSubset<T, UnstakeEndUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UnstakeEnd.
+     * @param {UnstakeEndUpsertArgs} args - Arguments to update or create a UnstakeEnd.
+     * @example
+     * // Update or create a UnstakeEnd
+     * const unstakeEnd = await prisma.unstakeEnd.upsert({
+     *   create: {
+     *     // ... data to create a UnstakeEnd
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UnstakeEnd we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UnstakeEndUpsertArgs>(
+      args: SelectSubset<T, UnstakeEndUpsertArgs>
+    ): Prisma__UnstakeEndClient<UnstakeEndGetPayload<T>>
+
+    /**
+     * Count the number of UnstakeEnds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeEndCountArgs} args - Arguments to filter UnstakeEnds to count.
+     * @example
+     * // Count the number of UnstakeEnds
+     * const count = await prisma.unstakeEnd.count({
+     *   where: {
+     *     // ... the filter for the UnstakeEnds we want to count
+     *   }
+     * })
+    **/
+    count<T extends UnstakeEndCountArgs>(
+      args?: Subset<T, UnstakeEndCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UnstakeEndCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UnstakeEnd.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeEndAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UnstakeEndAggregateArgs>(args: Subset<T, UnstakeEndAggregateArgs>): PrismaPromise<GetUnstakeEndAggregateType<T>>
+
+    /**
+     * Group by UnstakeEnd.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeEndGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UnstakeEndGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UnstakeEndGroupByArgs['orderBy'] }
+        : { orderBy?: UnstakeEndGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UnstakeEndGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnstakeEndGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UnstakeEnd.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__UnstakeEndClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * UnstakeEnd base type for findUnique actions
+   */
+  export type UnstakeEndFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * Filter, which UnstakeEnd to fetch.
+     * 
+    **/
+    where: UnstakeEndWhereUniqueInput
+  }
+
+  /**
+   * UnstakeEnd findUnique
+   */
+  export interface UnstakeEndFindUniqueArgs extends UnstakeEndFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeEnd findUniqueOrThrow
+   */
+  export type UnstakeEndFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * Filter, which UnstakeEnd to fetch.
+     * 
+    **/
+    where: UnstakeEndWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeEnd base type for findFirst actions
+   */
+  export type UnstakeEndFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * Filter, which UnstakeEnd to fetch.
+     * 
+    **/
+    where?: UnstakeEndWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeEnds to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeEndOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeEnds.
+     * 
+    **/
+    cursor?: UnstakeEndWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeEnds from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeEnds.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeEnds.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeEndScalarFieldEnum>
+  }
+
+  /**
+   * UnstakeEnd findFirst
+   */
+  export interface UnstakeEndFindFirstArgs extends UnstakeEndFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeEnd findFirstOrThrow
+   */
+  export type UnstakeEndFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * Filter, which UnstakeEnd to fetch.
+     * 
+    **/
+    where?: UnstakeEndWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeEnds to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeEndOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeEnds.
+     * 
+    **/
+    cursor?: UnstakeEndWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeEnds from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeEnds.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeEnds.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeEndScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeEnd findMany
+   */
+  export type UnstakeEndFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * Filter, which UnstakeEnds to fetch.
+     * 
+    **/
+    where?: UnstakeEndWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeEnds to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeEndOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UnstakeEnds.
+     * 
+    **/
+    cursor?: UnstakeEndWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeEnds from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeEnds.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<UnstakeEndScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeEnd create
+   */
+  export type UnstakeEndCreateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * The data needed to create a UnstakeEnd.
+     * 
+    **/
+    data: XOR<UnstakeEndCreateInput, UnstakeEndUncheckedCreateInput>
+  }
+
+
+  /**
+   * UnstakeEnd update
+   */
+  export type UnstakeEndUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * The data needed to update a UnstakeEnd.
+     * 
+    **/
+    data: XOR<UnstakeEndUpdateInput, UnstakeEndUncheckedUpdateInput>
+    /**
+     * Choose, which UnstakeEnd to update.
+     * 
+    **/
+    where: UnstakeEndWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeEnd updateMany
+   */
+  export type UnstakeEndUpdateManyArgs = {
+    /**
+     * The data used to update UnstakeEnds.
+     * 
+    **/
+    data: XOR<UnstakeEndUpdateManyMutationInput, UnstakeEndUncheckedUpdateManyInput>
+    /**
+     * Filter which UnstakeEnds to update
+     * 
+    **/
+    where?: UnstakeEndWhereInput
+  }
+
+
+  /**
+   * UnstakeEnd upsert
+   */
+  export type UnstakeEndUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * The filter to search for the UnstakeEnd to update in case it exists.
+     * 
+    **/
+    where: UnstakeEndWhereUniqueInput
+    /**
+     * In case the UnstakeEnd found by the `where` argument doesn't exist, create a new UnstakeEnd with this data.
+     * 
+    **/
+    create: XOR<UnstakeEndCreateInput, UnstakeEndUncheckedCreateInput>
+    /**
+     * In case the UnstakeEnd was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<UnstakeEndUpdateInput, UnstakeEndUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UnstakeEnd delete
+   */
+  export type UnstakeEndDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+    /**
+     * Filter which UnstakeEnd to delete.
+     * 
+    **/
+    where: UnstakeEndWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeEnd deleteMany
+   */
+  export type UnstakeEndDeleteManyArgs = {
+    /**
+     * Filter which UnstakeEnds to delete
+     * 
+    **/
+    where?: UnstakeEndWhereInput
+  }
+
+
+  /**
+   * UnstakeEnd without action
+   */
+  export type UnstakeEndArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeEnd
+     * 
+    **/
+    select?: UnstakeEndSelect | null
+  }
+
+
+
+  /**
+   * Model UnstakeStop
+   */
+
+
+  export type AggregateUnstakeStop = {
+    _count: UnstakeStopCountAggregateOutputType | null
+    _avg: UnstakeStopAvgAggregateOutputType | null
+    _sum: UnstakeStopSumAggregateOutputType | null
+    _min: UnstakeStopMinAggregateOutputType | null
+    _max: UnstakeStopMaxAggregateOutputType | null
+  }
+
+  export type UnstakeStopAvgAggregateOutputType = {
+    sequence: number | null
+  }
+
+  export type UnstakeStopSumAggregateOutputType = {
+    sequence: bigint | null
+  }
+
+  export type UnstakeStopMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+  }
+
+  export type UnstakeStopMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+  }
+
+  export type UnstakeStopCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    boid_id: number
+    _all: number
+  }
+
+
+  export type UnstakeStopAvgAggregateInputType = {
+    sequence?: true
+  }
+
+  export type UnstakeStopSumAggregateInputType = {
+    sequence?: true
+  }
+
+  export type UnstakeStopMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+  }
+
+  export type UnstakeStopMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+  }
+
+  export type UnstakeStopCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    _all?: true
+  }
+
+  export type UnstakeStopAggregateArgs = {
+    /**
+     * Filter which UnstakeStop to aggregate.
+     * 
+    **/
+    where?: UnstakeStopWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeStops to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeStopOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: UnstakeStopWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeStops from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeStops.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UnstakeStops
+    **/
+    _count?: true | UnstakeStopCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UnstakeStopAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UnstakeStopSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UnstakeStopMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UnstakeStopMaxAggregateInputType
+  }
+
+  export type GetUnstakeStopAggregateType<T extends UnstakeStopAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnstakeStop]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUnstakeStop[P]>
+      : GetScalarType<T[P], AggregateUnstakeStop[P]>
+  }
+
+
+
+
+  export type UnstakeStopGroupByArgs = {
+    where?: UnstakeStopWhereInput
+    orderBy?: Enumerable<UnstakeStopOrderByWithAggregationInput>
+    by: Array<UnstakeStopScalarFieldEnum>
+    having?: UnstakeStopScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UnstakeStopCountAggregateInputType | true
+    _avg?: UnstakeStopAvgAggregateInputType
+    _sum?: UnstakeStopSumAggregateInputType
+    _min?: UnstakeStopMinAggregateInputType
+    _max?: UnstakeStopMaxAggregateInputType
+  }
+
+
+  export type UnstakeStopGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    boid_id: string
+    _count: UnstakeStopCountAggregateOutputType | null
+    _avg: UnstakeStopAvgAggregateOutputType | null
+    _sum: UnstakeStopSumAggregateOutputType | null
+    _min: UnstakeStopMinAggregateOutputType | null
+    _max: UnstakeStopMaxAggregateOutputType | null
+  }
+
+  type GetUnstakeStopGroupByPayload<T extends UnstakeStopGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<UnstakeStopGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UnstakeStopGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UnstakeStopGroupByOutputType[P]>
+            : GetScalarType<T[P], UnstakeStopGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UnstakeStopSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    boid_id?: boolean
+  }
+
+
+  export type UnstakeStopGetPayload<S extends boolean | null | undefined | UnstakeStopArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? UnstakeStop :
+    S extends undefined ? never :
+    S extends { include: any } & (UnstakeStopArgs | UnstakeStopFindManyArgs)
+    ? UnstakeStop 
+    : S extends { select: any } & (UnstakeStopArgs | UnstakeStopFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof UnstakeStop ? UnstakeStop[P] : never
+  } 
+      : UnstakeStop
+
+
+  type UnstakeStopCountArgs = Merge<
+    Omit<UnstakeStopFindManyArgs, 'select' | 'include'> & {
+      select?: UnstakeStopCountAggregateInputType | true
+    }
+  >
+
+  export interface UnstakeStopDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one UnstakeStop that matches the filter.
+     * @param {UnstakeStopFindUniqueArgs} args - Arguments to find a UnstakeStop
+     * @example
+     * // Get one UnstakeStop
+     * const unstakeStop = await prisma.unstakeStop.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UnstakeStopFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, UnstakeStopFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'UnstakeStop'> extends True ? Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>> : Prisma__UnstakeStopClient<UnstakeStopGetPayload<T> | null, null>
+
+    /**
+     * Find one UnstakeStop that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UnstakeStopFindUniqueOrThrowArgs} args - Arguments to find a UnstakeStop
+     * @example
+     * // Get one UnstakeStop
+     * const unstakeStop = await prisma.unstakeStop.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UnstakeStopFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeStopFindUniqueOrThrowArgs>
+    ): Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>>
+
+    /**
+     * Find the first UnstakeStop that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeStopFindFirstArgs} args - Arguments to find a UnstakeStop
+     * @example
+     * // Get one UnstakeStop
+     * const unstakeStop = await prisma.unstakeStop.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UnstakeStopFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, UnstakeStopFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'UnstakeStop'> extends True ? Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>> : Prisma__UnstakeStopClient<UnstakeStopGetPayload<T> | null, null>
+
+    /**
+     * Find the first UnstakeStop that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeStopFindFirstOrThrowArgs} args - Arguments to find a UnstakeStop
+     * @example
+     * // Get one UnstakeStop
+     * const unstakeStop = await prisma.unstakeStop.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UnstakeStopFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeStopFindFirstOrThrowArgs>
+    ): Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>>
+
+    /**
+     * Find zero or more UnstakeStops that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeStopFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UnstakeStops
+     * const unstakeStops = await prisma.unstakeStop.findMany()
+     * 
+     * // Get first 10 UnstakeStops
+     * const unstakeStops = await prisma.unstakeStop.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const unstakeStopWithSequenceOnly = await prisma.unstakeStop.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends UnstakeStopFindManyArgs>(
+      args?: SelectSubset<T, UnstakeStopFindManyArgs>
+    ): PrismaPromise<Array<UnstakeStopGetPayload<T>>>
+
+    /**
+     * Create a UnstakeStop.
+     * @param {UnstakeStopCreateArgs} args - Arguments to create a UnstakeStop.
+     * @example
+     * // Create one UnstakeStop
+     * const UnstakeStop = await prisma.unstakeStop.create({
+     *   data: {
+     *     // ... data to create a UnstakeStop
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UnstakeStopCreateArgs>(
+      args: SelectSubset<T, UnstakeStopCreateArgs>
+    ): Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>>
+
+    /**
+     * Delete a UnstakeStop.
+     * @param {UnstakeStopDeleteArgs} args - Arguments to delete one UnstakeStop.
+     * @example
+     * // Delete one UnstakeStop
+     * const UnstakeStop = await prisma.unstakeStop.delete({
+     *   where: {
+     *     // ... filter to delete one UnstakeStop
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UnstakeStopDeleteArgs>(
+      args: SelectSubset<T, UnstakeStopDeleteArgs>
+    ): Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>>
+
+    /**
+     * Update one UnstakeStop.
+     * @param {UnstakeStopUpdateArgs} args - Arguments to update one UnstakeStop.
+     * @example
+     * // Update one UnstakeStop
+     * const unstakeStop = await prisma.unstakeStop.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UnstakeStopUpdateArgs>(
+      args: SelectSubset<T, UnstakeStopUpdateArgs>
+    ): Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>>
+
+    /**
+     * Delete zero or more UnstakeStops.
+     * @param {UnstakeStopDeleteManyArgs} args - Arguments to filter UnstakeStops to delete.
+     * @example
+     * // Delete a few UnstakeStops
+     * const { count } = await prisma.unstakeStop.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UnstakeStopDeleteManyArgs>(
+      args?: SelectSubset<T, UnstakeStopDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UnstakeStops.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeStopUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UnstakeStops
+     * const unstakeStop = await prisma.unstakeStop.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UnstakeStopUpdateManyArgs>(
+      args: SelectSubset<T, UnstakeStopUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UnstakeStop.
+     * @param {UnstakeStopUpsertArgs} args - Arguments to update or create a UnstakeStop.
+     * @example
+     * // Update or create a UnstakeStop
+     * const unstakeStop = await prisma.unstakeStop.upsert({
+     *   create: {
+     *     // ... data to create a UnstakeStop
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UnstakeStop we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UnstakeStopUpsertArgs>(
+      args: SelectSubset<T, UnstakeStopUpsertArgs>
+    ): Prisma__UnstakeStopClient<UnstakeStopGetPayload<T>>
+
+    /**
+     * Count the number of UnstakeStops.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeStopCountArgs} args - Arguments to filter UnstakeStops to count.
+     * @example
+     * // Count the number of UnstakeStops
+     * const count = await prisma.unstakeStop.count({
+     *   where: {
+     *     // ... the filter for the UnstakeStops we want to count
+     *   }
+     * })
+    **/
+    count<T extends UnstakeStopCountArgs>(
+      args?: Subset<T, UnstakeStopCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UnstakeStopCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UnstakeStop.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeStopAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UnstakeStopAggregateArgs>(args: Subset<T, UnstakeStopAggregateArgs>): PrismaPromise<GetUnstakeStopAggregateType<T>>
+
+    /**
+     * Group by UnstakeStop.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeStopGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UnstakeStopGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UnstakeStopGroupByArgs['orderBy'] }
+        : { orderBy?: UnstakeStopGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UnstakeStopGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnstakeStopGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UnstakeStop.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__UnstakeStopClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * UnstakeStop base type for findUnique actions
+   */
+  export type UnstakeStopFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * Filter, which UnstakeStop to fetch.
+     * 
+    **/
+    where: UnstakeStopWhereUniqueInput
+  }
+
+  /**
+   * UnstakeStop findUnique
+   */
+  export interface UnstakeStopFindUniqueArgs extends UnstakeStopFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeStop findUniqueOrThrow
+   */
+  export type UnstakeStopFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * Filter, which UnstakeStop to fetch.
+     * 
+    **/
+    where: UnstakeStopWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeStop base type for findFirst actions
+   */
+  export type UnstakeStopFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * Filter, which UnstakeStop to fetch.
+     * 
+    **/
+    where?: UnstakeStopWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeStops to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeStopOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeStops.
+     * 
+    **/
+    cursor?: UnstakeStopWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeStops from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeStops.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeStops.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeStopScalarFieldEnum>
+  }
+
+  /**
+   * UnstakeStop findFirst
+   */
+  export interface UnstakeStopFindFirstArgs extends UnstakeStopFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeStop findFirstOrThrow
+   */
+  export type UnstakeStopFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * Filter, which UnstakeStop to fetch.
+     * 
+    **/
+    where?: UnstakeStopWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeStops to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeStopOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeStops.
+     * 
+    **/
+    cursor?: UnstakeStopWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeStops from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeStops.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeStops.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeStopScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeStop findMany
+   */
+  export type UnstakeStopFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * Filter, which UnstakeStops to fetch.
+     * 
+    **/
+    where?: UnstakeStopWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeStops to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeStopOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UnstakeStops.
+     * 
+    **/
+    cursor?: UnstakeStopWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeStops from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeStops.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<UnstakeStopScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeStop create
+   */
+  export type UnstakeStopCreateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * The data needed to create a UnstakeStop.
+     * 
+    **/
+    data: XOR<UnstakeStopCreateInput, UnstakeStopUncheckedCreateInput>
+  }
+
+
+  /**
+   * UnstakeStop update
+   */
+  export type UnstakeStopUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * The data needed to update a UnstakeStop.
+     * 
+    **/
+    data: XOR<UnstakeStopUpdateInput, UnstakeStopUncheckedUpdateInput>
+    /**
+     * Choose, which UnstakeStop to update.
+     * 
+    **/
+    where: UnstakeStopWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeStop updateMany
+   */
+  export type UnstakeStopUpdateManyArgs = {
+    /**
+     * The data used to update UnstakeStops.
+     * 
+    **/
+    data: XOR<UnstakeStopUpdateManyMutationInput, UnstakeStopUncheckedUpdateManyInput>
+    /**
+     * Filter which UnstakeStops to update
+     * 
+    **/
+    where?: UnstakeStopWhereInput
+  }
+
+
+  /**
+   * UnstakeStop upsert
+   */
+  export type UnstakeStopUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * The filter to search for the UnstakeStop to update in case it exists.
+     * 
+    **/
+    where: UnstakeStopWhereUniqueInput
+    /**
+     * In case the UnstakeStop found by the `where` argument doesn't exist, create a new UnstakeStop with this data.
+     * 
+    **/
+    create: XOR<UnstakeStopCreateInput, UnstakeStopUncheckedCreateInput>
+    /**
+     * In case the UnstakeStop was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<UnstakeStopUpdateInput, UnstakeStopUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UnstakeStop delete
+   */
+  export type UnstakeStopDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+    /**
+     * Filter which UnstakeStop to delete.
+     * 
+    **/
+    where: UnstakeStopWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeStop deleteMany
+   */
+  export type UnstakeStopDeleteManyArgs = {
+    /**
+     * Filter which UnstakeStops to delete
+     * 
+    **/
+    where?: UnstakeStopWhereInput
+  }
+
+
+  /**
+   * UnstakeStop without action
+   */
+  export type UnstakeStopArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeStop
+     * 
+    **/
+    select?: UnstakeStopSelect | null
+  }
+
+
+
+  /**
+   * Model UnstakeInit
+   */
+
+
+  export type AggregateUnstakeInit = {
+    _count: UnstakeInitCountAggregateOutputType | null
+    _avg: UnstakeInitAvgAggregateOutputType | null
+    _sum: UnstakeInitSumAggregateOutputType | null
+    _min: UnstakeInitMinAggregateOutputType | null
+    _max: UnstakeInitMaxAggregateOutputType | null
+  }
+
+  export type UnstakeInitAvgAggregateOutputType = {
+    sequence: number | null
+    quantity: number | null
+  }
+
+  export type UnstakeInitSumAggregateOutputType = {
+    sequence: bigint | null
+    quantity: number | null
+  }
+
+  export type UnstakeInitMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    quantity: number | null
+  }
+
+  export type UnstakeInitMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    quantity: number | null
+  }
+
+  export type UnstakeInitCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    boid_id: number
+    quantity: number
+    _all: number
+  }
+
+
+  export type UnstakeInitAvgAggregateInputType = {
+    sequence?: true
+    quantity?: true
+  }
+
+  export type UnstakeInitSumAggregateInputType = {
+    sequence?: true
+    quantity?: true
+  }
+
+  export type UnstakeInitMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+  }
+
+  export type UnstakeInitMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+  }
+
+  export type UnstakeInitCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+    _all?: true
+  }
+
+  export type UnstakeInitAggregateArgs = {
+    /**
+     * Filter which UnstakeInit to aggregate.
+     * 
+    **/
+    where?: UnstakeInitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeInits to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeInitOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: UnstakeInitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeInits from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeInits.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UnstakeInits
+    **/
+    _count?: true | UnstakeInitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UnstakeInitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UnstakeInitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UnstakeInitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UnstakeInitMaxAggregateInputType
+  }
+
+  export type GetUnstakeInitAggregateType<T extends UnstakeInitAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnstakeInit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUnstakeInit[P]>
+      : GetScalarType<T[P], AggregateUnstakeInit[P]>
+  }
+
+
+
+
+  export type UnstakeInitGroupByArgs = {
+    where?: UnstakeInitWhereInput
+    orderBy?: Enumerable<UnstakeInitOrderByWithAggregationInput>
+    by: Array<UnstakeInitScalarFieldEnum>
+    having?: UnstakeInitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UnstakeInitCountAggregateInputType | true
+    _avg?: UnstakeInitAvgAggregateInputType
+    _sum?: UnstakeInitSumAggregateInputType
+    _min?: UnstakeInitMinAggregateInputType
+    _max?: UnstakeInitMaxAggregateInputType
+  }
+
+
+  export type UnstakeInitGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    boid_id: string
+    quantity: number
+    _count: UnstakeInitCountAggregateOutputType | null
+    _avg: UnstakeInitAvgAggregateOutputType | null
+    _sum: UnstakeInitSumAggregateOutputType | null
+    _min: UnstakeInitMinAggregateOutputType | null
+    _max: UnstakeInitMaxAggregateOutputType | null
+  }
+
+  type GetUnstakeInitGroupByPayload<T extends UnstakeInitGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<UnstakeInitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UnstakeInitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UnstakeInitGroupByOutputType[P]>
+            : GetScalarType<T[P], UnstakeInitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UnstakeInitSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    boid_id?: boolean
+    quantity?: boolean
+  }
+
+
+  export type UnstakeInitGetPayload<S extends boolean | null | undefined | UnstakeInitArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? UnstakeInit :
+    S extends undefined ? never :
+    S extends { include: any } & (UnstakeInitArgs | UnstakeInitFindManyArgs)
+    ? UnstakeInit 
+    : S extends { select: any } & (UnstakeInitArgs | UnstakeInitFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof UnstakeInit ? UnstakeInit[P] : never
+  } 
+      : UnstakeInit
+
+
+  type UnstakeInitCountArgs = Merge<
+    Omit<UnstakeInitFindManyArgs, 'select' | 'include'> & {
+      select?: UnstakeInitCountAggregateInputType | true
+    }
+  >
+
+  export interface UnstakeInitDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one UnstakeInit that matches the filter.
+     * @param {UnstakeInitFindUniqueArgs} args - Arguments to find a UnstakeInit
+     * @example
+     * // Get one UnstakeInit
+     * const unstakeInit = await prisma.unstakeInit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UnstakeInitFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, UnstakeInitFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'UnstakeInit'> extends True ? Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>> : Prisma__UnstakeInitClient<UnstakeInitGetPayload<T> | null, null>
+
+    /**
+     * Find one UnstakeInit that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UnstakeInitFindUniqueOrThrowArgs} args - Arguments to find a UnstakeInit
+     * @example
+     * // Get one UnstakeInit
+     * const unstakeInit = await prisma.unstakeInit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UnstakeInitFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeInitFindUniqueOrThrowArgs>
+    ): Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>>
+
+    /**
+     * Find the first UnstakeInit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeInitFindFirstArgs} args - Arguments to find a UnstakeInit
+     * @example
+     * // Get one UnstakeInit
+     * const unstakeInit = await prisma.unstakeInit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UnstakeInitFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, UnstakeInitFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'UnstakeInit'> extends True ? Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>> : Prisma__UnstakeInitClient<UnstakeInitGetPayload<T> | null, null>
+
+    /**
+     * Find the first UnstakeInit that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeInitFindFirstOrThrowArgs} args - Arguments to find a UnstakeInit
+     * @example
+     * // Get one UnstakeInit
+     * const unstakeInit = await prisma.unstakeInit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UnstakeInitFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeInitFindFirstOrThrowArgs>
+    ): Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>>
+
+    /**
+     * Find zero or more UnstakeInits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeInitFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UnstakeInits
+     * const unstakeInits = await prisma.unstakeInit.findMany()
+     * 
+     * // Get first 10 UnstakeInits
+     * const unstakeInits = await prisma.unstakeInit.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const unstakeInitWithSequenceOnly = await prisma.unstakeInit.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends UnstakeInitFindManyArgs>(
+      args?: SelectSubset<T, UnstakeInitFindManyArgs>
+    ): PrismaPromise<Array<UnstakeInitGetPayload<T>>>
+
+    /**
+     * Create a UnstakeInit.
+     * @param {UnstakeInitCreateArgs} args - Arguments to create a UnstakeInit.
+     * @example
+     * // Create one UnstakeInit
+     * const UnstakeInit = await prisma.unstakeInit.create({
+     *   data: {
+     *     // ... data to create a UnstakeInit
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UnstakeInitCreateArgs>(
+      args: SelectSubset<T, UnstakeInitCreateArgs>
+    ): Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>>
+
+    /**
+     * Delete a UnstakeInit.
+     * @param {UnstakeInitDeleteArgs} args - Arguments to delete one UnstakeInit.
+     * @example
+     * // Delete one UnstakeInit
+     * const UnstakeInit = await prisma.unstakeInit.delete({
+     *   where: {
+     *     // ... filter to delete one UnstakeInit
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UnstakeInitDeleteArgs>(
+      args: SelectSubset<T, UnstakeInitDeleteArgs>
+    ): Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>>
+
+    /**
+     * Update one UnstakeInit.
+     * @param {UnstakeInitUpdateArgs} args - Arguments to update one UnstakeInit.
+     * @example
+     * // Update one UnstakeInit
+     * const unstakeInit = await prisma.unstakeInit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UnstakeInitUpdateArgs>(
+      args: SelectSubset<T, UnstakeInitUpdateArgs>
+    ): Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>>
+
+    /**
+     * Delete zero or more UnstakeInits.
+     * @param {UnstakeInitDeleteManyArgs} args - Arguments to filter UnstakeInits to delete.
+     * @example
+     * // Delete a few UnstakeInits
+     * const { count } = await prisma.unstakeInit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UnstakeInitDeleteManyArgs>(
+      args?: SelectSubset<T, UnstakeInitDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UnstakeInits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeInitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UnstakeInits
+     * const unstakeInit = await prisma.unstakeInit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UnstakeInitUpdateManyArgs>(
+      args: SelectSubset<T, UnstakeInitUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UnstakeInit.
+     * @param {UnstakeInitUpsertArgs} args - Arguments to update or create a UnstakeInit.
+     * @example
+     * // Update or create a UnstakeInit
+     * const unstakeInit = await prisma.unstakeInit.upsert({
+     *   create: {
+     *     // ... data to create a UnstakeInit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UnstakeInit we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UnstakeInitUpsertArgs>(
+      args: SelectSubset<T, UnstakeInitUpsertArgs>
+    ): Prisma__UnstakeInitClient<UnstakeInitGetPayload<T>>
+
+    /**
+     * Count the number of UnstakeInits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeInitCountArgs} args - Arguments to filter UnstakeInits to count.
+     * @example
+     * // Count the number of UnstakeInits
+     * const count = await prisma.unstakeInit.count({
+     *   where: {
+     *     // ... the filter for the UnstakeInits we want to count
+     *   }
+     * })
+    **/
+    count<T extends UnstakeInitCountArgs>(
+      args?: Subset<T, UnstakeInitCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UnstakeInitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UnstakeInit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeInitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UnstakeInitAggregateArgs>(args: Subset<T, UnstakeInitAggregateArgs>): PrismaPromise<GetUnstakeInitAggregateType<T>>
+
+    /**
+     * Group by UnstakeInit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeInitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UnstakeInitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UnstakeInitGroupByArgs['orderBy'] }
+        : { orderBy?: UnstakeInitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UnstakeInitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnstakeInitGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UnstakeInit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__UnstakeInitClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * UnstakeInit base type for findUnique actions
+   */
+  export type UnstakeInitFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * Filter, which UnstakeInit to fetch.
+     * 
+    **/
+    where: UnstakeInitWhereUniqueInput
+  }
+
+  /**
+   * UnstakeInit findUnique
+   */
+  export interface UnstakeInitFindUniqueArgs extends UnstakeInitFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeInit findUniqueOrThrow
+   */
+  export type UnstakeInitFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * Filter, which UnstakeInit to fetch.
+     * 
+    **/
+    where: UnstakeInitWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeInit base type for findFirst actions
+   */
+  export type UnstakeInitFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * Filter, which UnstakeInit to fetch.
+     * 
+    **/
+    where?: UnstakeInitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeInits to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeInitOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeInits.
+     * 
+    **/
+    cursor?: UnstakeInitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeInits from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeInits.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeInits.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeInitScalarFieldEnum>
+  }
+
+  /**
+   * UnstakeInit findFirst
+   */
+  export interface UnstakeInitFindFirstArgs extends UnstakeInitFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeInit findFirstOrThrow
+   */
+  export type UnstakeInitFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * Filter, which UnstakeInit to fetch.
+     * 
+    **/
+    where?: UnstakeInitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeInits to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeInitOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeInits.
+     * 
+    **/
+    cursor?: UnstakeInitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeInits from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeInits.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeInits.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeInitScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeInit findMany
+   */
+  export type UnstakeInitFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * Filter, which UnstakeInits to fetch.
+     * 
+    **/
+    where?: UnstakeInitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeInits to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeInitOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UnstakeInits.
+     * 
+    **/
+    cursor?: UnstakeInitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeInits from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeInits.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<UnstakeInitScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeInit create
+   */
+  export type UnstakeInitCreateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * The data needed to create a UnstakeInit.
+     * 
+    **/
+    data: XOR<UnstakeInitCreateInput, UnstakeInitUncheckedCreateInput>
+  }
+
+
+  /**
+   * UnstakeInit update
+   */
+  export type UnstakeInitUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * The data needed to update a UnstakeInit.
+     * 
+    **/
+    data: XOR<UnstakeInitUpdateInput, UnstakeInitUncheckedUpdateInput>
+    /**
+     * Choose, which UnstakeInit to update.
+     * 
+    **/
+    where: UnstakeInitWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeInit updateMany
+   */
+  export type UnstakeInitUpdateManyArgs = {
+    /**
+     * The data used to update UnstakeInits.
+     * 
+    **/
+    data: XOR<UnstakeInitUpdateManyMutationInput, UnstakeInitUncheckedUpdateManyInput>
+    /**
+     * Filter which UnstakeInits to update
+     * 
+    **/
+    where?: UnstakeInitWhereInput
+  }
+
+
+  /**
+   * UnstakeInit upsert
+   */
+  export type UnstakeInitUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * The filter to search for the UnstakeInit to update in case it exists.
+     * 
+    **/
+    where: UnstakeInitWhereUniqueInput
+    /**
+     * In case the UnstakeInit found by the `where` argument doesn't exist, create a new UnstakeInit with this data.
+     * 
+    **/
+    create: XOR<UnstakeInitCreateInput, UnstakeInitUncheckedCreateInput>
+    /**
+     * In case the UnstakeInit was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<UnstakeInitUpdateInput, UnstakeInitUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UnstakeInit delete
+   */
+  export type UnstakeInitDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+    /**
+     * Filter which UnstakeInit to delete.
+     * 
+    **/
+    where: UnstakeInitWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeInit deleteMany
+   */
+  export type UnstakeInitDeleteManyArgs = {
+    /**
+     * Filter which UnstakeInits to delete
+     * 
+    **/
+    where?: UnstakeInitWhereInput
+  }
+
+
+  /**
+   * UnstakeInit without action
+   */
+  export type UnstakeInitArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeInit
+     * 
+    **/
+    select?: UnstakeInitSelect | null
+  }
+
+
+
+  /**
+   * Model UnstakeDeleg
+   */
+
+
+  export type AggregateUnstakeDeleg = {
+    _count: UnstakeDelegCountAggregateOutputType | null
+    _avg: UnstakeDelegAvgAggregateOutputType | null
+    _sum: UnstakeDelegSumAggregateOutputType | null
+    _min: UnstakeDelegMinAggregateOutputType | null
+    _max: UnstakeDelegMaxAggregateOutputType | null
+  }
+
+  export type UnstakeDelegAvgAggregateOutputType = {
+    sequence: number | null
+  }
+
+  export type UnstakeDelegSumAggregateOutputType = {
+    sequence: bigint | null
+  }
+
+  export type UnstakeDelegMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    stake_id: string | null
+  }
+
+  export type UnstakeDelegMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    stake_id: string | null
+  }
+
+  export type UnstakeDelegCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    stake_id: number
+    _all: number
+  }
+
+
+  export type UnstakeDelegAvgAggregateInputType = {
+    sequence?: true
+  }
+
+  export type UnstakeDelegSumAggregateInputType = {
+    sequence?: true
+  }
+
+  export type UnstakeDelegMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    stake_id?: true
+  }
+
+  export type UnstakeDelegMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    stake_id?: true
+  }
+
+  export type UnstakeDelegCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    stake_id?: true
+    _all?: true
+  }
+
+  export type UnstakeDelegAggregateArgs = {
+    /**
+     * Filter which UnstakeDeleg to aggregate.
+     * 
+    **/
+    where?: UnstakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: UnstakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeDelegs.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UnstakeDelegs
+    **/
+    _count?: true | UnstakeDelegCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UnstakeDelegAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UnstakeDelegSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UnstakeDelegMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UnstakeDelegMaxAggregateInputType
+  }
+
+  export type GetUnstakeDelegAggregateType<T extends UnstakeDelegAggregateArgs> = {
+        [P in keyof T & keyof AggregateUnstakeDeleg]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUnstakeDeleg[P]>
+      : GetScalarType<T[P], AggregateUnstakeDeleg[P]>
+  }
+
+
+
+
+  export type UnstakeDelegGroupByArgs = {
+    where?: UnstakeDelegWhereInput
+    orderBy?: Enumerable<UnstakeDelegOrderByWithAggregationInput>
+    by: Array<UnstakeDelegScalarFieldEnum>
+    having?: UnstakeDelegScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UnstakeDelegCountAggregateInputType | true
+    _avg?: UnstakeDelegAvgAggregateInputType
+    _sum?: UnstakeDelegSumAggregateInputType
+    _min?: UnstakeDelegMinAggregateInputType
+    _max?: UnstakeDelegMaxAggregateInputType
+  }
+
+
+  export type UnstakeDelegGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    stake_id: string
+    _count: UnstakeDelegCountAggregateOutputType | null
+    _avg: UnstakeDelegAvgAggregateOutputType | null
+    _sum: UnstakeDelegSumAggregateOutputType | null
+    _min: UnstakeDelegMinAggregateOutputType | null
+    _max: UnstakeDelegMaxAggregateOutputType | null
+  }
+
+  type GetUnstakeDelegGroupByPayload<T extends UnstakeDelegGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<UnstakeDelegGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UnstakeDelegGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UnstakeDelegGroupByOutputType[P]>
+            : GetScalarType<T[P], UnstakeDelegGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UnstakeDelegSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    stake_id?: boolean
+  }
+
+
+  export type UnstakeDelegGetPayload<S extends boolean | null | undefined | UnstakeDelegArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? UnstakeDeleg :
+    S extends undefined ? never :
+    S extends { include: any } & (UnstakeDelegArgs | UnstakeDelegFindManyArgs)
+    ? UnstakeDeleg 
+    : S extends { select: any } & (UnstakeDelegArgs | UnstakeDelegFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof UnstakeDeleg ? UnstakeDeleg[P] : never
+  } 
+      : UnstakeDeleg
+
+
+  type UnstakeDelegCountArgs = Merge<
+    Omit<UnstakeDelegFindManyArgs, 'select' | 'include'> & {
+      select?: UnstakeDelegCountAggregateInputType | true
+    }
+  >
+
+  export interface UnstakeDelegDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one UnstakeDeleg that matches the filter.
+     * @param {UnstakeDelegFindUniqueArgs} args - Arguments to find a UnstakeDeleg
+     * @example
+     * // Get one UnstakeDeleg
+     * const unstakeDeleg = await prisma.unstakeDeleg.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UnstakeDelegFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, UnstakeDelegFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'UnstakeDeleg'> extends True ? Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>> : Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T> | null, null>
+
+    /**
+     * Find one UnstakeDeleg that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UnstakeDelegFindUniqueOrThrowArgs} args - Arguments to find a UnstakeDeleg
+     * @example
+     * // Get one UnstakeDeleg
+     * const unstakeDeleg = await prisma.unstakeDeleg.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UnstakeDelegFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeDelegFindUniqueOrThrowArgs>
+    ): Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>>
+
+    /**
+     * Find the first UnstakeDeleg that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeDelegFindFirstArgs} args - Arguments to find a UnstakeDeleg
+     * @example
+     * // Get one UnstakeDeleg
+     * const unstakeDeleg = await prisma.unstakeDeleg.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UnstakeDelegFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, UnstakeDelegFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'UnstakeDeleg'> extends True ? Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>> : Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T> | null, null>
+
+    /**
+     * Find the first UnstakeDeleg that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeDelegFindFirstOrThrowArgs} args - Arguments to find a UnstakeDeleg
+     * @example
+     * // Get one UnstakeDeleg
+     * const unstakeDeleg = await prisma.unstakeDeleg.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UnstakeDelegFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UnstakeDelegFindFirstOrThrowArgs>
+    ): Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>>
+
+    /**
+     * Find zero or more UnstakeDelegs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeDelegFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UnstakeDelegs
+     * const unstakeDelegs = await prisma.unstakeDeleg.findMany()
+     * 
+     * // Get first 10 UnstakeDelegs
+     * const unstakeDelegs = await prisma.unstakeDeleg.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const unstakeDelegWithSequenceOnly = await prisma.unstakeDeleg.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends UnstakeDelegFindManyArgs>(
+      args?: SelectSubset<T, UnstakeDelegFindManyArgs>
+    ): PrismaPromise<Array<UnstakeDelegGetPayload<T>>>
+
+    /**
+     * Create a UnstakeDeleg.
+     * @param {UnstakeDelegCreateArgs} args - Arguments to create a UnstakeDeleg.
+     * @example
+     * // Create one UnstakeDeleg
+     * const UnstakeDeleg = await prisma.unstakeDeleg.create({
+     *   data: {
+     *     // ... data to create a UnstakeDeleg
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UnstakeDelegCreateArgs>(
+      args: SelectSubset<T, UnstakeDelegCreateArgs>
+    ): Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>>
+
+    /**
+     * Delete a UnstakeDeleg.
+     * @param {UnstakeDelegDeleteArgs} args - Arguments to delete one UnstakeDeleg.
+     * @example
+     * // Delete one UnstakeDeleg
+     * const UnstakeDeleg = await prisma.unstakeDeleg.delete({
+     *   where: {
+     *     // ... filter to delete one UnstakeDeleg
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UnstakeDelegDeleteArgs>(
+      args: SelectSubset<T, UnstakeDelegDeleteArgs>
+    ): Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>>
+
+    /**
+     * Update one UnstakeDeleg.
+     * @param {UnstakeDelegUpdateArgs} args - Arguments to update one UnstakeDeleg.
+     * @example
+     * // Update one UnstakeDeleg
+     * const unstakeDeleg = await prisma.unstakeDeleg.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UnstakeDelegUpdateArgs>(
+      args: SelectSubset<T, UnstakeDelegUpdateArgs>
+    ): Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>>
+
+    /**
+     * Delete zero or more UnstakeDelegs.
+     * @param {UnstakeDelegDeleteManyArgs} args - Arguments to filter UnstakeDelegs to delete.
+     * @example
+     * // Delete a few UnstakeDelegs
+     * const { count } = await prisma.unstakeDeleg.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UnstakeDelegDeleteManyArgs>(
+      args?: SelectSubset<T, UnstakeDelegDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UnstakeDelegs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeDelegUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UnstakeDelegs
+     * const unstakeDeleg = await prisma.unstakeDeleg.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UnstakeDelegUpdateManyArgs>(
+      args: SelectSubset<T, UnstakeDelegUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UnstakeDeleg.
+     * @param {UnstakeDelegUpsertArgs} args - Arguments to update or create a UnstakeDeleg.
+     * @example
+     * // Update or create a UnstakeDeleg
+     * const unstakeDeleg = await prisma.unstakeDeleg.upsert({
+     *   create: {
+     *     // ... data to create a UnstakeDeleg
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UnstakeDeleg we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UnstakeDelegUpsertArgs>(
+      args: SelectSubset<T, UnstakeDelegUpsertArgs>
+    ): Prisma__UnstakeDelegClient<UnstakeDelegGetPayload<T>>
+
+    /**
+     * Count the number of UnstakeDelegs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeDelegCountArgs} args - Arguments to filter UnstakeDelegs to count.
+     * @example
+     * // Count the number of UnstakeDelegs
+     * const count = await prisma.unstakeDeleg.count({
+     *   where: {
+     *     // ... the filter for the UnstakeDelegs we want to count
+     *   }
+     * })
+    **/
+    count<T extends UnstakeDelegCountArgs>(
+      args?: Subset<T, UnstakeDelegCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UnstakeDelegCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UnstakeDeleg.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeDelegAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UnstakeDelegAggregateArgs>(args: Subset<T, UnstakeDelegAggregateArgs>): PrismaPromise<GetUnstakeDelegAggregateType<T>>
+
+    /**
+     * Group by UnstakeDeleg.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UnstakeDelegGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UnstakeDelegGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UnstakeDelegGroupByArgs['orderBy'] }
+        : { orderBy?: UnstakeDelegGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UnstakeDelegGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUnstakeDelegGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UnstakeDeleg.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__UnstakeDelegClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * UnstakeDeleg base type for findUnique actions
+   */
+  export type UnstakeDelegFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * Filter, which UnstakeDeleg to fetch.
+     * 
+    **/
+    where: UnstakeDelegWhereUniqueInput
+  }
+
+  /**
+   * UnstakeDeleg findUnique
+   */
+  export interface UnstakeDelegFindUniqueArgs extends UnstakeDelegFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeDeleg findUniqueOrThrow
+   */
+  export type UnstakeDelegFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * Filter, which UnstakeDeleg to fetch.
+     * 
+    **/
+    where: UnstakeDelegWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeDeleg base type for findFirst actions
+   */
+  export type UnstakeDelegFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * Filter, which UnstakeDeleg to fetch.
+     * 
+    **/
+    where?: UnstakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeDelegs.
+     * 
+    **/
+    cursor?: UnstakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeDelegs.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeDelegs.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeDelegScalarFieldEnum>
+  }
+
+  /**
+   * UnstakeDeleg findFirst
+   */
+  export interface UnstakeDelegFindFirstArgs extends UnstakeDelegFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * UnstakeDeleg findFirstOrThrow
+   */
+  export type UnstakeDelegFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * Filter, which UnstakeDeleg to fetch.
+     * 
+    **/
+    where?: UnstakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UnstakeDelegs.
+     * 
+    **/
+    cursor?: UnstakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeDelegs.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UnstakeDelegs.
+     * 
+    **/
+    distinct?: Enumerable<UnstakeDelegScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeDeleg findMany
+   */
+  export type UnstakeDelegFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * Filter, which UnstakeDelegs to fetch.
+     * 
+    **/
+    where?: UnstakeDelegWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UnstakeDelegs to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<UnstakeDelegOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UnstakeDelegs.
+     * 
+    **/
+    cursor?: UnstakeDelegWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UnstakeDelegs from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UnstakeDelegs.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<UnstakeDelegScalarFieldEnum>
+  }
+
+
+  /**
+   * UnstakeDeleg create
+   */
+  export type UnstakeDelegCreateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * The data needed to create a UnstakeDeleg.
+     * 
+    **/
+    data: XOR<UnstakeDelegCreateInput, UnstakeDelegUncheckedCreateInput>
+  }
+
+
+  /**
+   * UnstakeDeleg update
+   */
+  export type UnstakeDelegUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * The data needed to update a UnstakeDeleg.
+     * 
+    **/
+    data: XOR<UnstakeDelegUpdateInput, UnstakeDelegUncheckedUpdateInput>
+    /**
+     * Choose, which UnstakeDeleg to update.
+     * 
+    **/
+    where: UnstakeDelegWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeDeleg updateMany
+   */
+  export type UnstakeDelegUpdateManyArgs = {
+    /**
+     * The data used to update UnstakeDelegs.
+     * 
+    **/
+    data: XOR<UnstakeDelegUpdateManyMutationInput, UnstakeDelegUncheckedUpdateManyInput>
+    /**
+     * Filter which UnstakeDelegs to update
+     * 
+    **/
+    where?: UnstakeDelegWhereInput
+  }
+
+
+  /**
+   * UnstakeDeleg upsert
+   */
+  export type UnstakeDelegUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * The filter to search for the UnstakeDeleg to update in case it exists.
+     * 
+    **/
+    where: UnstakeDelegWhereUniqueInput
+    /**
+     * In case the UnstakeDeleg found by the `where` argument doesn't exist, create a new UnstakeDeleg with this data.
+     * 
+    **/
+    create: XOR<UnstakeDelegCreateInput, UnstakeDelegUncheckedCreateInput>
+    /**
+     * In case the UnstakeDeleg was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<UnstakeDelegUpdateInput, UnstakeDelegUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UnstakeDeleg delete
+   */
+  export type UnstakeDelegDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+    /**
+     * Filter which UnstakeDeleg to delete.
+     * 
+    **/
+    where: UnstakeDelegWhereUniqueInput
+  }
+
+
+  /**
+   * UnstakeDeleg deleteMany
+   */
+  export type UnstakeDelegDeleteManyArgs = {
+    /**
+     * Filter which UnstakeDelegs to delete
+     * 
+    **/
+    where?: UnstakeDelegWhereInput
+  }
+
+
+  /**
+   * UnstakeDeleg without action
+   */
+  export type UnstakeDelegArgs = {
+    /**
+     * Select specific fields to fetch from the UnstakeDeleg
+     * 
+    **/
+    select?: UnstakeDelegSelect | null
+  }
+
+
+
+  /**
+   * Model Withdraw
+   */
+
+
+  export type AggregateWithdraw = {
+    _count: WithdrawCountAggregateOutputType | null
+    _avg: WithdrawAvgAggregateOutputType | null
+    _sum: WithdrawSumAggregateOutputType | null
+    _min: WithdrawMinAggregateOutputType | null
+    _max: WithdrawMaxAggregateOutputType | null
+  }
+
+  export type WithdrawAvgAggregateOutputType = {
+    sequence: number | null
+    quantity: number | null
+  }
+
+  export type WithdrawSumAggregateOutputType = {
+    sequence: bigint | null
+    quantity: number | null
+  }
+
+  export type WithdrawMinAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    quantity: number | null
+    to: string | null
+  }
+
+  export type WithdrawMaxAggregateOutputType = {
+    sequence: bigint | null
+    trxId: string | null
+    timeStamp: Date | null
+    boid_id: string | null
+    quantity: number | null
+    to: string | null
+  }
+
+  export type WithdrawCountAggregateOutputType = {
+    sequence: number
+    trxId: number
+    timeStamp: number
+    boid_id: number
+    quantity: number
+    to: number
+    _all: number
+  }
+
+
+  export type WithdrawAvgAggregateInputType = {
+    sequence?: true
+    quantity?: true
+  }
+
+  export type WithdrawSumAggregateInputType = {
+    sequence?: true
+    quantity?: true
+  }
+
+  export type WithdrawMinAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+    to?: true
+  }
+
+  export type WithdrawMaxAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+    to?: true
+  }
+
+  export type WithdrawCountAggregateInputType = {
+    sequence?: true
+    trxId?: true
+    timeStamp?: true
+    boid_id?: true
+    quantity?: true
+    to?: true
+    _all?: true
+  }
+
+  export type WithdrawAggregateArgs = {
+    /**
+     * Filter which Withdraw to aggregate.
+     * 
+    **/
+    where?: WithdrawWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdraws to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<WithdrawOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     * 
+    **/
+    cursor?: WithdrawWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdraws from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdraws.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Withdraws
+    **/
+    _count?: true | WithdrawCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WithdrawAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WithdrawSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WithdrawMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WithdrawMaxAggregateInputType
+  }
+
+  export type GetWithdrawAggregateType<T extends WithdrawAggregateArgs> = {
+        [P in keyof T & keyof AggregateWithdraw]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWithdraw[P]>
+      : GetScalarType<T[P], AggregateWithdraw[P]>
+  }
+
+
+
+
+  export type WithdrawGroupByArgs = {
+    where?: WithdrawWhereInput
+    orderBy?: Enumerable<WithdrawOrderByWithAggregationInput>
+    by: Array<WithdrawScalarFieldEnum>
+    having?: WithdrawScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WithdrawCountAggregateInputType | true
+    _avg?: WithdrawAvgAggregateInputType
+    _sum?: WithdrawSumAggregateInputType
+    _min?: WithdrawMinAggregateInputType
+    _max?: WithdrawMaxAggregateInputType
+  }
+
+
+  export type WithdrawGroupByOutputType = {
+    sequence: bigint
+    trxId: string
+    timeStamp: Date
+    boid_id: string
+    quantity: number
+    to: string
+    _count: WithdrawCountAggregateOutputType | null
+    _avg: WithdrawAvgAggregateOutputType | null
+    _sum: WithdrawSumAggregateOutputType | null
+    _min: WithdrawMinAggregateOutputType | null
+    _max: WithdrawMaxAggregateOutputType | null
+  }
+
+  type GetWithdrawGroupByPayload<T extends WithdrawGroupByArgs> = PrismaPromise<
+    Array<
+      PickArray<WithdrawGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WithdrawGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WithdrawGroupByOutputType[P]>
+            : GetScalarType<T[P], WithdrawGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WithdrawSelect = {
+    sequence?: boolean
+    trxId?: boolean
+    timeStamp?: boolean
+    boid_id?: boolean
+    quantity?: boolean
+    to?: boolean
+  }
+
+
+  export type WithdrawGetPayload<S extends boolean | null | undefined | WithdrawArgs> =
+    S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
+    S extends true ? Withdraw :
+    S extends undefined ? never :
+    S extends { include: any } & (WithdrawArgs | WithdrawFindManyArgs)
+    ? Withdraw 
+    : S extends { select: any } & (WithdrawArgs | WithdrawFindManyArgs)
+      ? {
+    [P in TruthyKeys<S['select']>]:
+    P extends keyof Withdraw ? Withdraw[P] : never
+  } 
+      : Withdraw
+
+
+  type WithdrawCountArgs = Merge<
+    Omit<WithdrawFindManyArgs, 'select' | 'include'> & {
+      select?: WithdrawCountAggregateInputType | true
+    }
+  >
+
+  export interface WithdrawDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+    /**
+     * Find zero or one Withdraw that matches the filter.
+     * @param {WithdrawFindUniqueArgs} args - Arguments to find a Withdraw
+     * @example
+     * // Get one Withdraw
+     * const withdraw = await prisma.withdraw.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends WithdrawFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, WithdrawFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Withdraw'> extends True ? Prisma__WithdrawClient<WithdrawGetPayload<T>> : Prisma__WithdrawClient<WithdrawGetPayload<T> | null, null>
+
+    /**
+     * Find one Withdraw that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {WithdrawFindUniqueOrThrowArgs} args - Arguments to find a Withdraw
+     * @example
+     * // Get one Withdraw
+     * const withdraw = await prisma.withdraw.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends WithdrawFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, WithdrawFindUniqueOrThrowArgs>
+    ): Prisma__WithdrawClient<WithdrawGetPayload<T>>
+
+    /**
+     * Find the first Withdraw that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawFindFirstArgs} args - Arguments to find a Withdraw
+     * @example
+     * // Get one Withdraw
+     * const withdraw = await prisma.withdraw.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends WithdrawFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, WithdrawFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Withdraw'> extends True ? Prisma__WithdrawClient<WithdrawGetPayload<T>> : Prisma__WithdrawClient<WithdrawGetPayload<T> | null, null>
+
+    /**
+     * Find the first Withdraw that matches the filter or
+     * throw `NotFoundError` if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawFindFirstOrThrowArgs} args - Arguments to find a Withdraw
+     * @example
+     * // Get one Withdraw
+     * const withdraw = await prisma.withdraw.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends WithdrawFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, WithdrawFindFirstOrThrowArgs>
+    ): Prisma__WithdrawClient<WithdrawGetPayload<T>>
+
+    /**
+     * Find zero or more Withdraws that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Withdraws
+     * const withdraws = await prisma.withdraw.findMany()
+     * 
+     * // Get first 10 Withdraws
+     * const withdraws = await prisma.withdraw.findMany({ take: 10 })
+     * 
+     * // Only select the `sequence`
+     * const withdrawWithSequenceOnly = await prisma.withdraw.findMany({ select: { sequence: true } })
+     * 
+    **/
+    findMany<T extends WithdrawFindManyArgs>(
+      args?: SelectSubset<T, WithdrawFindManyArgs>
+    ): PrismaPromise<Array<WithdrawGetPayload<T>>>
+
+    /**
+     * Create a Withdraw.
+     * @param {WithdrawCreateArgs} args - Arguments to create a Withdraw.
+     * @example
+     * // Create one Withdraw
+     * const Withdraw = await prisma.withdraw.create({
+     *   data: {
+     *     // ... data to create a Withdraw
+     *   }
+     * })
+     * 
+    **/
+    create<T extends WithdrawCreateArgs>(
+      args: SelectSubset<T, WithdrawCreateArgs>
+    ): Prisma__WithdrawClient<WithdrawGetPayload<T>>
+
+    /**
+     * Delete a Withdraw.
+     * @param {WithdrawDeleteArgs} args - Arguments to delete one Withdraw.
+     * @example
+     * // Delete one Withdraw
+     * const Withdraw = await prisma.withdraw.delete({
+     *   where: {
+     *     // ... filter to delete one Withdraw
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends WithdrawDeleteArgs>(
+      args: SelectSubset<T, WithdrawDeleteArgs>
+    ): Prisma__WithdrawClient<WithdrawGetPayload<T>>
+
+    /**
+     * Update one Withdraw.
+     * @param {WithdrawUpdateArgs} args - Arguments to update one Withdraw.
+     * @example
+     * // Update one Withdraw
+     * const withdraw = await prisma.withdraw.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends WithdrawUpdateArgs>(
+      args: SelectSubset<T, WithdrawUpdateArgs>
+    ): Prisma__WithdrawClient<WithdrawGetPayload<T>>
+
+    /**
+     * Delete zero or more Withdraws.
+     * @param {WithdrawDeleteManyArgs} args - Arguments to filter Withdraws to delete.
+     * @example
+     * // Delete a few Withdraws
+     * const { count } = await prisma.withdraw.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends WithdrawDeleteManyArgs>(
+      args?: SelectSubset<T, WithdrawDeleteManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Withdraws.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Withdraws
+     * const withdraw = await prisma.withdraw.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends WithdrawUpdateManyArgs>(
+      args: SelectSubset<T, WithdrawUpdateManyArgs>
+    ): PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Withdraw.
+     * @param {WithdrawUpsertArgs} args - Arguments to update or create a Withdraw.
+     * @example
+     * // Update or create a Withdraw
+     * const withdraw = await prisma.withdraw.upsert({
+     *   create: {
+     *     // ... data to create a Withdraw
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Withdraw we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends WithdrawUpsertArgs>(
+      args: SelectSubset<T, WithdrawUpsertArgs>
+    ): Prisma__WithdrawClient<WithdrawGetPayload<T>>
+
+    /**
+     * Count the number of Withdraws.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawCountArgs} args - Arguments to filter Withdraws to count.
+     * @example
+     * // Count the number of Withdraws
+     * const count = await prisma.withdraw.count({
+     *   where: {
+     *     // ... the filter for the Withdraws we want to count
+     *   }
+     * })
+    **/
+    count<T extends WithdrawCountArgs>(
+      args?: Subset<T, WithdrawCountArgs>,
+    ): PrismaPromise<
+      T extends _Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WithdrawCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Withdraw.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WithdrawAggregateArgs>(args: Subset<T, WithdrawAggregateArgs>): PrismaPromise<GetWithdrawAggregateType<T>>
+
+    /**
+     * Group by Withdraw.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WithdrawGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WithdrawGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WithdrawGroupByArgs['orderBy'] }
+        : { orderBy?: WithdrawGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends TupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WithdrawGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWithdrawGroupByPayload<T> : PrismaPromise<InputErrors>
+
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Withdraw.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export class Prisma__WithdrawClient<T, Null = never> implements PrismaPromise<T> {
+    [prisma]: true;
+    private readonly _dmmf;
+    private readonly _fetcher;
+    private readonly _queryType;
+    private readonly _rootField;
+    private readonly _clientMethod;
+    private readonly _args;
+    private readonly _dataPath;
+    private readonly _errorFormat;
+    private readonly _measurePerformance?;
+    private _isList;
+    private _callsite;
+    private _requestPromise?;
+    constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
+    readonly [Symbol.toStringTag]: 'PrismaClientPromise';
+
+
+    private get _document();
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>;
+  }
+
+
+
+  // Custom InputTypes
+
+  /**
+   * Withdraw base type for findUnique actions
+   */
+  export type WithdrawFindUniqueArgsBase = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * Filter, which Withdraw to fetch.
+     * 
+    **/
+    where: WithdrawWhereUniqueInput
+  }
+
+  /**
+   * Withdraw findUnique
+   */
+  export interface WithdrawFindUniqueArgs extends WithdrawFindUniqueArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Withdraw findUniqueOrThrow
+   */
+  export type WithdrawFindUniqueOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * Filter, which Withdraw to fetch.
+     * 
+    **/
+    where: WithdrawWhereUniqueInput
+  }
+
+
+  /**
+   * Withdraw base type for findFirst actions
+   */
+  export type WithdrawFindFirstArgsBase = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * Filter, which Withdraw to fetch.
+     * 
+    **/
+    where?: WithdrawWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdraws to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<WithdrawOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Withdraws.
+     * 
+    **/
+    cursor?: WithdrawWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdraws from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdraws.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Withdraws.
+     * 
+    **/
+    distinct?: Enumerable<WithdrawScalarFieldEnum>
+  }
+
+  /**
+   * Withdraw findFirst
+   */
+  export interface WithdrawFindFirstArgs extends WithdrawFindFirstArgsBase {
+   /**
+    * Throw an Error if query returns no results
+    * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+    */
+    rejectOnNotFound?: RejectOnNotFound
+  }
+      
+
+  /**
+   * Withdraw findFirstOrThrow
+   */
+  export type WithdrawFindFirstOrThrowArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * Filter, which Withdraw to fetch.
+     * 
+    **/
+    where?: WithdrawWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdraws to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<WithdrawOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Withdraws.
+     * 
+    **/
+    cursor?: WithdrawWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdraws from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdraws.
+     * 
+    **/
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Withdraws.
+     * 
+    **/
+    distinct?: Enumerable<WithdrawScalarFieldEnum>
+  }
+
+
+  /**
+   * Withdraw findMany
+   */
+  export type WithdrawFindManyArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * Filter, which Withdraws to fetch.
+     * 
+    **/
+    where?: WithdrawWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Withdraws to fetch.
+     * 
+    **/
+    orderBy?: Enumerable<WithdrawOrderByWithRelationInput>
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Withdraws.
+     * 
+    **/
+    cursor?: WithdrawWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Withdraws from the position of the cursor.
+     * 
+    **/
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Withdraws.
+     * 
+    **/
+    skip?: number
+    distinct?: Enumerable<WithdrawScalarFieldEnum>
+  }
+
+
+  /**
+   * Withdraw create
+   */
+  export type WithdrawCreateArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * The data needed to create a Withdraw.
+     * 
+    **/
+    data: XOR<WithdrawCreateInput, WithdrawUncheckedCreateInput>
+  }
+
+
+  /**
+   * Withdraw update
+   */
+  export type WithdrawUpdateArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * The data needed to update a Withdraw.
+     * 
+    **/
+    data: XOR<WithdrawUpdateInput, WithdrawUncheckedUpdateInput>
+    /**
+     * Choose, which Withdraw to update.
+     * 
+    **/
+    where: WithdrawWhereUniqueInput
+  }
+
+
+  /**
+   * Withdraw updateMany
+   */
+  export type WithdrawUpdateManyArgs = {
+    /**
+     * The data used to update Withdraws.
+     * 
+    **/
+    data: XOR<WithdrawUpdateManyMutationInput, WithdrawUncheckedUpdateManyInput>
+    /**
+     * Filter which Withdraws to update
+     * 
+    **/
+    where?: WithdrawWhereInput
+  }
+
+
+  /**
+   * Withdraw upsert
+   */
+  export type WithdrawUpsertArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * The filter to search for the Withdraw to update in case it exists.
+     * 
+    **/
+    where: WithdrawWhereUniqueInput
+    /**
+     * In case the Withdraw found by the `where` argument doesn't exist, create a new Withdraw with this data.
+     * 
+    **/
+    create: XOR<WithdrawCreateInput, WithdrawUncheckedCreateInput>
+    /**
+     * In case the Withdraw was found with the provided `where` argument, update it with this data.
+     * 
+    **/
+    update: XOR<WithdrawUpdateInput, WithdrawUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Withdraw delete
+   */
+  export type WithdrawDeleteArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+    /**
+     * Filter which Withdraw to delete.
+     * 
+    **/
+    where: WithdrawWhereUniqueInput
+  }
+
+
+  /**
+   * Withdraw deleteMany
+   */
+  export type WithdrawDeleteManyArgs = {
+    /**
+     * Filter which Withdraws to delete
+     * 
+    **/
+    where?: WithdrawWhereInput
+  }
+
+
+  /**
+   * Withdraw without action
+   */
+  export type WithdrawArgs = {
+    /**
+     * Select specific fields to fetch from the Withdraw
+     * 
+    **/
+    select?: WithdrawSelect | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -22397,11 +30086,100 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const StakeDelegScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    from_boid_id: 'from_boid_id',
+    to_boid_id: 'to_boid_id',
+    stake_quantity: 'stake_quantity',
+    lock_until_round: 'lock_until_round'
+  };
+
+  export type StakeDelegScalarFieldEnum = (typeof StakeDelegScalarFieldEnum)[keyof typeof StakeDelegScalarFieldEnum]
+
+
+  export const StakeScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    boid_id: 'boid_id',
+    quantity: 'quantity'
+  };
+
+  export type StakeScalarFieldEnum = (typeof StakeScalarFieldEnum)[keyof typeof StakeScalarFieldEnum]
+
+
+  export const TeamChangeScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    boid_id: 'boid_id',
+    new_team_id: 'new_team_id',
+    new_pwr_tax_mult: 'new_pwr_tax_mult'
+  };
+
+  export type TeamChangeScalarFieldEnum = (typeof TeamChangeScalarFieldEnum)[keyof typeof TeamChangeScalarFieldEnum]
+
+
   export const TransactionIsolationLevel: {
     Serializable: 'Serializable'
   };
 
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+  export const UnstakeDelegScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    stake_id: 'stake_id'
+  };
+
+  export type UnstakeDelegScalarFieldEnum = (typeof UnstakeDelegScalarFieldEnum)[keyof typeof UnstakeDelegScalarFieldEnum]
+
+
+  export const UnstakeEndScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    boid_id: 'boid_id'
+  };
+
+  export type UnstakeEndScalarFieldEnum = (typeof UnstakeEndScalarFieldEnum)[keyof typeof UnstakeEndScalarFieldEnum]
+
+
+  export const UnstakeInitScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    boid_id: 'boid_id',
+    quantity: 'quantity'
+  };
+
+  export type UnstakeInitScalarFieldEnum = (typeof UnstakeInitScalarFieldEnum)[keyof typeof UnstakeInitScalarFieldEnum]
+
+
+  export const UnstakeStopScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    boid_id: 'boid_id'
+  };
+
+  export type UnstakeStopScalarFieldEnum = (typeof UnstakeStopScalarFieldEnum)[keyof typeof UnstakeStopScalarFieldEnum]
+
+
+  export const WithdrawScalarFieldEnum: {
+    sequence: 'sequence',
+    trxId: 'trxId',
+    timeStamp: 'timeStamp',
+    boid_id: 'boid_id',
+    quantity: 'quantity',
+    to: 'to'
+  };
+
+  export type WithdrawScalarFieldEnum = (typeof WithdrawScalarFieldEnum)[keyof typeof WithdrawScalarFieldEnum]
 
 
   /**
@@ -23502,7 +31280,7 @@ export namespace Prisma {
     trxId?: StringFilter | string
     timeStamp?: DateTimeFilter | Date | string
     boid_id?: StringFilter | string
-    pwrmod_index?: IntFilter | number
+    pwrmod_index?: StringFilter | string
   }
 
   export type PwrModRmOrderByWithRelationInput = {
@@ -23538,7 +31316,387 @@ export namespace Prisma {
     trxId?: StringWithAggregatesFilter | string
     timeStamp?: DateTimeWithAggregatesFilter | Date | string
     boid_id?: StringWithAggregatesFilter | string
-    pwrmod_index?: IntWithAggregatesFilter | number
+    pwrmod_index?: StringWithAggregatesFilter | string
+  }
+
+  export type StakeWhereInput = {
+    AND?: Enumerable<StakeWhereInput>
+    OR?: Enumerable<StakeWhereInput>
+    NOT?: Enumerable<StakeWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    boid_id?: StringFilter | string
+    quantity?: IntFilter | number
+  }
+
+  export type StakeOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type StakeWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type StakeOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+    _count?: StakeCountOrderByAggregateInput
+    _avg?: StakeAvgOrderByAggregateInput
+    _max?: StakeMaxOrderByAggregateInput
+    _min?: StakeMinOrderByAggregateInput
+    _sum?: StakeSumOrderByAggregateInput
+  }
+
+  export type StakeScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<StakeScalarWhereWithAggregatesInput>
+    OR?: Enumerable<StakeScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<StakeScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    boid_id?: StringWithAggregatesFilter | string
+    quantity?: IntWithAggregatesFilter | number
+  }
+
+  export type StakeDelegWhereInput = {
+    AND?: Enumerable<StakeDelegWhereInput>
+    OR?: Enumerable<StakeDelegWhereInput>
+    NOT?: Enumerable<StakeDelegWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    from_boid_id?: StringFilter | string
+    to_boid_id?: StringFilter | string
+    stake_quantity?: IntFilter | number
+    lock_until_round?: IntFilter | number
+  }
+
+  export type StakeDelegOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    from_boid_id?: SortOrder
+    to_boid_id?: SortOrder
+    stake_quantity?: SortOrder
+    lock_until_round?: SortOrder
+  }
+
+  export type StakeDelegWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type StakeDelegOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    from_boid_id?: SortOrder
+    to_boid_id?: SortOrder
+    stake_quantity?: SortOrder
+    lock_until_round?: SortOrder
+    _count?: StakeDelegCountOrderByAggregateInput
+    _avg?: StakeDelegAvgOrderByAggregateInput
+    _max?: StakeDelegMaxOrderByAggregateInput
+    _min?: StakeDelegMinOrderByAggregateInput
+    _sum?: StakeDelegSumOrderByAggregateInput
+  }
+
+  export type StakeDelegScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<StakeDelegScalarWhereWithAggregatesInput>
+    OR?: Enumerable<StakeDelegScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<StakeDelegScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    from_boid_id?: StringWithAggregatesFilter | string
+    to_boid_id?: StringWithAggregatesFilter | string
+    stake_quantity?: IntWithAggregatesFilter | number
+    lock_until_round?: IntWithAggregatesFilter | number
+  }
+
+  export type TeamChangeWhereInput = {
+    AND?: Enumerable<TeamChangeWhereInput>
+    OR?: Enumerable<TeamChangeWhereInput>
+    NOT?: Enumerable<TeamChangeWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    boid_id?: StringFilter | string
+    new_team_id?: IntFilter | number
+    new_pwr_tax_mult?: IntFilter | number
+  }
+
+  export type TeamChangeOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    new_team_id?: SortOrder
+    new_pwr_tax_mult?: SortOrder
+  }
+
+  export type TeamChangeWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type TeamChangeOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    new_team_id?: SortOrder
+    new_pwr_tax_mult?: SortOrder
+    _count?: TeamChangeCountOrderByAggregateInput
+    _avg?: TeamChangeAvgOrderByAggregateInput
+    _max?: TeamChangeMaxOrderByAggregateInput
+    _min?: TeamChangeMinOrderByAggregateInput
+    _sum?: TeamChangeSumOrderByAggregateInput
+  }
+
+  export type TeamChangeScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<TeamChangeScalarWhereWithAggregatesInput>
+    OR?: Enumerable<TeamChangeScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<TeamChangeScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    boid_id?: StringWithAggregatesFilter | string
+    new_team_id?: IntWithAggregatesFilter | number
+    new_pwr_tax_mult?: IntWithAggregatesFilter | number
+  }
+
+  export type UnstakeEndWhereInput = {
+    AND?: Enumerable<UnstakeEndWhereInput>
+    OR?: Enumerable<UnstakeEndWhereInput>
+    NOT?: Enumerable<UnstakeEndWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    boid_id?: StringFilter | string
+  }
+
+  export type UnstakeEndOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeEndWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type UnstakeEndOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    _count?: UnstakeEndCountOrderByAggregateInput
+    _avg?: UnstakeEndAvgOrderByAggregateInput
+    _max?: UnstakeEndMaxOrderByAggregateInput
+    _min?: UnstakeEndMinOrderByAggregateInput
+    _sum?: UnstakeEndSumOrderByAggregateInput
+  }
+
+  export type UnstakeEndScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<UnstakeEndScalarWhereWithAggregatesInput>
+    OR?: Enumerable<UnstakeEndScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<UnstakeEndScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    boid_id?: StringWithAggregatesFilter | string
+  }
+
+  export type UnstakeStopWhereInput = {
+    AND?: Enumerable<UnstakeStopWhereInput>
+    OR?: Enumerable<UnstakeStopWhereInput>
+    NOT?: Enumerable<UnstakeStopWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    boid_id?: StringFilter | string
+  }
+
+  export type UnstakeStopOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeStopWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type UnstakeStopOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    _count?: UnstakeStopCountOrderByAggregateInput
+    _avg?: UnstakeStopAvgOrderByAggregateInput
+    _max?: UnstakeStopMaxOrderByAggregateInput
+    _min?: UnstakeStopMinOrderByAggregateInput
+    _sum?: UnstakeStopSumOrderByAggregateInput
+  }
+
+  export type UnstakeStopScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<UnstakeStopScalarWhereWithAggregatesInput>
+    OR?: Enumerable<UnstakeStopScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<UnstakeStopScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    boid_id?: StringWithAggregatesFilter | string
+  }
+
+  export type UnstakeInitWhereInput = {
+    AND?: Enumerable<UnstakeInitWhereInput>
+    OR?: Enumerable<UnstakeInitWhereInput>
+    NOT?: Enumerable<UnstakeInitWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    boid_id?: StringFilter | string
+    quantity?: IntFilter | number
+  }
+
+  export type UnstakeInitOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type UnstakeInitWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type UnstakeInitOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+    _count?: UnstakeInitCountOrderByAggregateInput
+    _avg?: UnstakeInitAvgOrderByAggregateInput
+    _max?: UnstakeInitMaxOrderByAggregateInput
+    _min?: UnstakeInitMinOrderByAggregateInput
+    _sum?: UnstakeInitSumOrderByAggregateInput
+  }
+
+  export type UnstakeInitScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<UnstakeInitScalarWhereWithAggregatesInput>
+    OR?: Enumerable<UnstakeInitScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<UnstakeInitScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    boid_id?: StringWithAggregatesFilter | string
+    quantity?: IntWithAggregatesFilter | number
+  }
+
+  export type UnstakeDelegWhereInput = {
+    AND?: Enumerable<UnstakeDelegWhereInput>
+    OR?: Enumerable<UnstakeDelegWhereInput>
+    NOT?: Enumerable<UnstakeDelegWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    stake_id?: StringFilter | string
+  }
+
+  export type UnstakeDelegOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    stake_id?: SortOrder
+  }
+
+  export type UnstakeDelegWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type UnstakeDelegOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    stake_id?: SortOrder
+    _count?: UnstakeDelegCountOrderByAggregateInput
+    _avg?: UnstakeDelegAvgOrderByAggregateInput
+    _max?: UnstakeDelegMaxOrderByAggregateInput
+    _min?: UnstakeDelegMinOrderByAggregateInput
+    _sum?: UnstakeDelegSumOrderByAggregateInput
+  }
+
+  export type UnstakeDelegScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<UnstakeDelegScalarWhereWithAggregatesInput>
+    OR?: Enumerable<UnstakeDelegScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<UnstakeDelegScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    stake_id?: StringWithAggregatesFilter | string
+  }
+
+  export type WithdrawWhereInput = {
+    AND?: Enumerable<WithdrawWhereInput>
+    OR?: Enumerable<WithdrawWhereInput>
+    NOT?: Enumerable<WithdrawWhereInput>
+    sequence?: BigIntFilter | bigint | number
+    trxId?: StringFilter | string
+    timeStamp?: DateTimeFilter | Date | string
+    boid_id?: StringFilter | string
+    quantity?: IntFilter | number
+    to?: StringFilter | string
+  }
+
+  export type WithdrawOrderByWithRelationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+    to?: SortOrder
+  }
+
+  export type WithdrawWhereUniqueInput = {
+    sequence?: bigint | number
+  }
+
+  export type WithdrawOrderByWithAggregationInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+    to?: SortOrder
+    _count?: WithdrawCountOrderByAggregateInput
+    _avg?: WithdrawAvgOrderByAggregateInput
+    _max?: WithdrawMaxOrderByAggregateInput
+    _min?: WithdrawMinOrderByAggregateInput
+    _sum?: WithdrawSumOrderByAggregateInput
+  }
+
+  export type WithdrawScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<WithdrawScalarWhereWithAggregatesInput>
+    OR?: Enumerable<WithdrawScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<WithdrawScalarWhereWithAggregatesInput>
+    sequence?: BigIntWithAggregatesFilter | bigint | number
+    trxId?: StringWithAggregatesFilter | string
+    timeStamp?: DateTimeWithAggregatesFilter | Date | string
+    boid_id?: StringWithAggregatesFilter | string
+    quantity?: IntWithAggregatesFilter | number
+    to?: StringWithAggregatesFilter | string
   }
 
   export type FahDataCreateInput = {
@@ -24704,7 +32862,7 @@ export namespace Prisma {
     trxId: string
     timeStamp: Date | string
     boid_id: string
-    pwrmod_index: number
+    pwrmod_index: string
   }
 
   export type PwrModRmUncheckedCreateInput = {
@@ -24712,7 +32870,7 @@ export namespace Prisma {
     trxId: string
     timeStamp: Date | string
     boid_id: string
-    pwrmod_index: number
+    pwrmod_index: string
   }
 
   export type PwrModRmUpdateInput = {
@@ -24720,7 +32878,7 @@ export namespace Prisma {
     trxId?: StringFieldUpdateOperationsInput | string
     timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
     boid_id?: StringFieldUpdateOperationsInput | string
-    pwrmod_index?: IntFieldUpdateOperationsInput | number
+    pwrmod_index?: StringFieldUpdateOperationsInput | string
   }
 
   export type PwrModRmUncheckedUpdateInput = {
@@ -24728,7 +32886,7 @@ export namespace Prisma {
     trxId?: StringFieldUpdateOperationsInput | string
     timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
     boid_id?: StringFieldUpdateOperationsInput | string
-    pwrmod_index?: IntFieldUpdateOperationsInput | number
+    pwrmod_index?: StringFieldUpdateOperationsInput | string
   }
 
   export type PwrModRmUpdateManyMutationInput = {
@@ -24736,7 +32894,7 @@ export namespace Prisma {
     trxId?: StringFieldUpdateOperationsInput | string
     timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
     boid_id?: StringFieldUpdateOperationsInput | string
-    pwrmod_index?: IntFieldUpdateOperationsInput | number
+    pwrmod_index?: StringFieldUpdateOperationsInput | string
   }
 
   export type PwrModRmUncheckedUpdateManyInput = {
@@ -24744,7 +32902,397 @@ export namespace Prisma {
     trxId?: StringFieldUpdateOperationsInput | string
     timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
     boid_id?: StringFieldUpdateOperationsInput | string
-    pwrmod_index?: IntFieldUpdateOperationsInput | number
+    pwrmod_index?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StakeCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    quantity: number
+  }
+
+  export type StakeUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    quantity: number
+  }
+
+  export type StakeUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StakeUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StakeUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StakeUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StakeDelegCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    from_boid_id: string
+    to_boid_id: string
+    stake_quantity: number
+    lock_until_round: number
+  }
+
+  export type StakeDelegUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    from_boid_id: string
+    to_boid_id: string
+    stake_quantity: number
+    lock_until_round: number
+  }
+
+  export type StakeDelegUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    from_boid_id?: StringFieldUpdateOperationsInput | string
+    to_boid_id?: StringFieldUpdateOperationsInput | string
+    stake_quantity?: IntFieldUpdateOperationsInput | number
+    lock_until_round?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StakeDelegUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    from_boid_id?: StringFieldUpdateOperationsInput | string
+    to_boid_id?: StringFieldUpdateOperationsInput | string
+    stake_quantity?: IntFieldUpdateOperationsInput | number
+    lock_until_round?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StakeDelegUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    from_boid_id?: StringFieldUpdateOperationsInput | string
+    to_boid_id?: StringFieldUpdateOperationsInput | string
+    stake_quantity?: IntFieldUpdateOperationsInput | number
+    lock_until_round?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StakeDelegUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    from_boid_id?: StringFieldUpdateOperationsInput | string
+    to_boid_id?: StringFieldUpdateOperationsInput | string
+    stake_quantity?: IntFieldUpdateOperationsInput | number
+    lock_until_round?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TeamChangeCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    new_team_id: number
+    new_pwr_tax_mult: number
+  }
+
+  export type TeamChangeUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    new_team_id: number
+    new_pwr_tax_mult: number
+  }
+
+  export type TeamChangeUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    new_team_id?: IntFieldUpdateOperationsInput | number
+    new_pwr_tax_mult?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TeamChangeUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    new_team_id?: IntFieldUpdateOperationsInput | number
+    new_pwr_tax_mult?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TeamChangeUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    new_team_id?: IntFieldUpdateOperationsInput | number
+    new_pwr_tax_mult?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type TeamChangeUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    new_team_id?: IntFieldUpdateOperationsInput | number
+    new_pwr_tax_mult?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UnstakeEndCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+  }
+
+  export type UnstakeEndUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+  }
+
+  export type UnstakeEndUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeEndUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeEndUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeEndUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeStopCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+  }
+
+  export type UnstakeStopUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+  }
+
+  export type UnstakeStopUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeStopUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeStopUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeStopUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeInitCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    quantity: number
+  }
+
+  export type UnstakeInitUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    quantity: number
+  }
+
+  export type UnstakeInitUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UnstakeInitUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UnstakeInitUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UnstakeInitUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type UnstakeDelegCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    stake_id: string
+  }
+
+  export type UnstakeDelegUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    stake_id: string
+  }
+
+  export type UnstakeDelegUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    stake_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeDelegUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    stake_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeDelegUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    stake_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type UnstakeDelegUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    stake_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type WithdrawCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    quantity: number
+    to: string
+  }
+
+  export type WithdrawUncheckedCreateInput = {
+    sequence: bigint | number
+    trxId: string
+    timeStamp: Date | string
+    boid_id: string
+    quantity: number
+    to: string
+  }
+
+  export type WithdrawUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    to?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type WithdrawUncheckedUpdateInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    to?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type WithdrawUpdateManyMutationInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    to?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type WithdrawUncheckedUpdateManyInput = {
+    sequence?: BigIntFieldUpdateOperationsInput | bigint | number
+    trxId?: StringFieldUpdateOperationsInput | string
+    timeStamp?: DateTimeFieldUpdateOperationsInput | Date | string
+    boid_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    to?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter = {
@@ -25679,7 +34227,6 @@ export namespace Prisma {
 
   export type PwrModRmAvgOrderByAggregateInput = {
     sequence?: SortOrder
-    pwrmod_index?: SortOrder
   }
 
   export type PwrModRmMaxOrderByAggregateInput = {
@@ -25700,7 +34247,279 @@ export namespace Prisma {
 
   export type PwrModRmSumOrderByAggregateInput = {
     sequence?: SortOrder
-    pwrmod_index?: SortOrder
+  }
+
+  export type StakeCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type StakeAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type StakeMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type StakeMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type StakeSumOrderByAggregateInput = {
+    sequence?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type StakeDelegCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    from_boid_id?: SortOrder
+    to_boid_id?: SortOrder
+    stake_quantity?: SortOrder
+    lock_until_round?: SortOrder
+  }
+
+  export type StakeDelegAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+    stake_quantity?: SortOrder
+    lock_until_round?: SortOrder
+  }
+
+  export type StakeDelegMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    from_boid_id?: SortOrder
+    to_boid_id?: SortOrder
+    stake_quantity?: SortOrder
+    lock_until_round?: SortOrder
+  }
+
+  export type StakeDelegMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    from_boid_id?: SortOrder
+    to_boid_id?: SortOrder
+    stake_quantity?: SortOrder
+    lock_until_round?: SortOrder
+  }
+
+  export type StakeDelegSumOrderByAggregateInput = {
+    sequence?: SortOrder
+    stake_quantity?: SortOrder
+    lock_until_round?: SortOrder
+  }
+
+  export type TeamChangeCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    new_team_id?: SortOrder
+    new_pwr_tax_mult?: SortOrder
+  }
+
+  export type TeamChangeAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+    new_team_id?: SortOrder
+    new_pwr_tax_mult?: SortOrder
+  }
+
+  export type TeamChangeMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    new_team_id?: SortOrder
+    new_pwr_tax_mult?: SortOrder
+  }
+
+  export type TeamChangeMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    new_team_id?: SortOrder
+    new_pwr_tax_mult?: SortOrder
+  }
+
+  export type TeamChangeSumOrderByAggregateInput = {
+    sequence?: SortOrder
+    new_team_id?: SortOrder
+    new_pwr_tax_mult?: SortOrder
+  }
+
+  export type UnstakeEndCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeEndAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+  }
+
+  export type UnstakeEndMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeEndMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeEndSumOrderByAggregateInput = {
+    sequence?: SortOrder
+  }
+
+  export type UnstakeStopCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeStopAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+  }
+
+  export type UnstakeStopMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeStopMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+  }
+
+  export type UnstakeStopSumOrderByAggregateInput = {
+    sequence?: SortOrder
+  }
+
+  export type UnstakeInitCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type UnstakeInitAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type UnstakeInitMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type UnstakeInitMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type UnstakeInitSumOrderByAggregateInput = {
+    sequence?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type UnstakeDelegCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    stake_id?: SortOrder
+  }
+
+  export type UnstakeDelegAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+  }
+
+  export type UnstakeDelegMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    stake_id?: SortOrder
+  }
+
+  export type UnstakeDelegMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    stake_id?: SortOrder
+  }
+
+  export type UnstakeDelegSumOrderByAggregateInput = {
+    sequence?: SortOrder
+  }
+
+  export type WithdrawCountOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+    to?: SortOrder
+  }
+
+  export type WithdrawAvgOrderByAggregateInput = {
+    sequence?: SortOrder
+    quantity?: SortOrder
+  }
+
+  export type WithdrawMaxOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+    to?: SortOrder
+  }
+
+  export type WithdrawMinOrderByAggregateInput = {
+    sequence?: SortOrder
+    trxId?: SortOrder
+    timeStamp?: SortOrder
+    boid_id?: SortOrder
+    quantity?: SortOrder
+    to?: SortOrder
+  }
+
+  export type WithdrawSumOrderByAggregateInput = {
+    sequence?: SortOrder
+    quantity?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {
