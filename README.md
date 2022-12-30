@@ -41,10 +41,13 @@ pm2 start ecosystem.config.json --log-date-format "YYYY-D-MM HH:mm:ss"
 
 ## Important transactions to start
 To register your oracle node you need to deposit BOID collateral.
-### example
-#### send 10000 BOID(token.boid contract) memo: collateral --> power.boid
+### 1. Send Collateral to power.boid smartcontract
+You will need to specify your sending a custom token as the default is TLOS.
+The token contract is "token.boid" the symbol is BOID
+#### send 10000 BOID with memo: collateral to the contract --> power.boid
 
-#### Smart Contract - power.boid
+#### 2. Set your worker to active mode
+
 #### "setstandby" action --> oracle: "yourvalidacc", standby: "false", actor: "yourvalidacc", permission: "active"
 
 ## Docker Setup
