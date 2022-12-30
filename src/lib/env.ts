@@ -7,7 +7,8 @@ dotenv.config()
 type chains = "eos" | "kylin" | "jungle" | "wax" | "waxTest" | "telos" | "telosTest"
 interface eosioConfig {
   chain:string
-  endpoints:URL[]
+  endpoints:URL[],
+  hyperion?:string[],
   worker:{
     account:NameType
     permission:NameType
@@ -42,6 +43,7 @@ const untyped = readEnv.chain[useChain]
 const typed:eosioConfig = {
   chain: useChain,
   endpoints: untyped.endpoints.map(el => new URL(el)),
+  hyperion: untyped.hyperion,
   worker: {
     account: Name.from(untyped.worker.account),
     permission: Name.from(untyped.worker.permission),

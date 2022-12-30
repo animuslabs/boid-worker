@@ -136,7 +136,10 @@ export async function shouldMergeReports(roundNum:number, reports:PwrReportRow[]
   if (cumulativeWeight >= minApproval) return true
   return false
 }
-
+export function pickRand<T>(arr:T[]):T {
+  const randomIndex = Math.floor(Math.random() * arr.length)
+  return arr[randomIndex]
+}
 export async function finalizedRound():Promise<number> {
   const round = await currentRound()
   const config = await tables.pwr.config()
