@@ -12,34 +12,34 @@ type DBKeys = keyof Partial<typeof db>
 export type ActionMapType = Partial<Record<DBKeys, string>>
 
 export const actionMap:ActionMapType = {
-  accountAdd: "account.add",
-  accountBuy: "account.buy",
-  accountEdit: "account.edit",
-  accountFree: "account.free",
-  authAddKey: "auth.addkey",
-  authRmKey: "auth.rmkey",
-  internalXfer: "internalxfer",
-  inviteAdd: "invite.add",
-  inviteClaim: "invite.claim",
-  inviteRm: "invite.rm",
-  logPwrAdd: "logpwradd",
-  logPwrClaim: "logpwrclaim",
-  nftLock: "nft.lock",
-  nftWithdraw: "nft.withdraw",
-  nftXfer: "nft.xfer",
-  offerClaim: "offer.claim",
-  ownerAdd: "owner.add",
-  ownerRm: "owner.rm",
-  pwrModAdd: "pwrmod.add",
-  pwrModRm: "pwrmod.rm",
-  stake: "stake",
-  stakeDeleg: "stake.deleg",
-  teamChange: "team.change",
-  unstakeInit: "unstake.init",
-  unstakeStop: "unstake.stop",
-  unstakeEnd: "unstake.end",
-  withdraw: "withdraw",
-  unstakeDeleg: "unstke.deleg"
+  // accountAdd: "account.add",
+  // accountBuy: "account.buy",
+  // accountEdit: "account.edit",
+  // accountFree: "account.free",
+  // authAddKey: "auth.addkey",
+  // authRmKey: "auth.rmkey",
+  // internalXfer: "internalxfer",
+  // inviteAdd: "invite.add",
+  // inviteClaim: "invite.claim",
+  // inviteRm: "invite.rm",
+  logPwrAdd: "logpwradd"
+  // logPwrClaim: "logpwrclaim",
+  // nftLock: "nft.lock",
+  // nftWithdraw: "nft.withdraw",
+  // nftXfer: "nft.xfer",
+  // offerClaim: "offer.claim",
+  // ownerAdd: "owner.add",
+  // ownerRm: "owner.rm",
+  // pwrModAdd: "pwrmod.add",
+  // pwrModRm: "pwrmod.rm",
+  // stake: "stake",
+  // stakeDeleg: "stake.deleg",
+  // teamChange: "team.change",
+  // unstakeInit: "unstake.init",
+  // unstakeStop: "unstake.stop",
+  // unstakeEnd: "unstake.end",
+  // withdraw: "withdraw",
+  // unstakeDeleg: "unstke.deleg"
 }
 
 const sys:Partial<Record<keyof ActionMapType, any>> = {
@@ -70,9 +70,7 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async accountAdd(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      console.log("Data:", data)
-      
-      const params = { 
+      const params = {
         boid_id: data.boid_id,
         key: data.keys ? data.keys[0] : null,
         sponsor: data.sponsors[0],
@@ -86,8 +84,7 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async accountBuy(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      console.log("Data:", action.act)
-      const params = { 
+      const params = {
         payer_boid_id: data.payer_boid_id,
         boid_id: data.new_account.boid_id,
         key: data.new_account.keys[0],
@@ -101,10 +98,9 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async accountEdit(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info(data)
-      const params = { 
+      const params = {
         boid_id: data.boid_id,
-        ipfs_meta: data.social_ipfs_json || data.ipfs_meta.toString() 
+        ipfs_meta: data.social_ipfs_json || data.ipfs_meta.toString()
       }
       await addRow("accountEdit", action, params)
     } catch (error) {
@@ -129,7 +125,6 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async inviteClaim(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info(data)
       const params = {
         sponsor_boid_id: data.sponsor_boid_id,
         invite_code: data.invite_code,
@@ -152,7 +147,6 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async logPwrClaim(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info(data)
       const params = {
         boid_id: data.boid_id || "null",
 
@@ -180,7 +174,6 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async nftWithdraw(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info(data)
       const params = {
         boid_id: data.boid_id,
         asset_ids: JSON.stringify(data.asset_ids),
@@ -194,7 +187,6 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async nftXfer(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info(data)
       const params = {
         from_boid_id: data.from_boid_id,
         to_boid_id: data.to_boid_id,
@@ -208,7 +200,6 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async offerClaim(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info(data)
       const params = {
         boid_id: data.boid_id,
         offer_id: data.offer_id,
@@ -228,7 +219,7 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
   async pwrModAdd(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info("injestData:", data)
+      // log.info("injestData:", data)
       if (data.params) return
 
       const params = {
@@ -238,12 +229,12 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
       await addRow("pwrModAdd", action, params)
     } catch (error) {
       log.error(error)
-    } 
+    }
   },
   async pwrModRm(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      log.info(data)
+      // log.info(data)
       const params = {
         boid_id: data.boid_id,
         pwrmod_index: JSON.stringify(data.pwrmod_index)
@@ -258,7 +249,7 @@ const sys:Partial<Record<keyof ActionMapType, any>> = {
 async function basicInjest(name:keyof ActionMapType, action:Action<any>) {
   try {
     const data = action.act.data.data || action.act.data
-    log.info(data)
+    // log.info(data)
     const params = data
     await addRow(name, action, params)
   } catch (error) {
@@ -267,7 +258,7 @@ async function basicInjest(name:keyof ActionMapType, action:Action<any>) {
 }
 
 function upsertData(action:Action<any>) {
-  return { 
+  return {
     sequence: action.global_sequence,
     timeStamp: parseISOString(action["@timestamp"]),
     trxId: action.trx_id
@@ -282,7 +273,7 @@ async function addRow(table:keyof ActionMapType, action:Action<any>, params:any)
       create,
       update: create
     })
-  log.info(result)
+  // log.info(result)
 }
 
 export default { sys }

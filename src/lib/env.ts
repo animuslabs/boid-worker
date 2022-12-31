@@ -8,7 +8,7 @@ type chains = "eos" | "kylin" | "jungle" | "wax" | "waxTest" | "telos" | "telosT
 interface eosioConfig {
   chain:string
   endpoints:URL[],
-  hyperion?:string[],
+
   worker:{
     account:NameType
     permission:NameType
@@ -25,6 +25,12 @@ interface eosioConfig {
     proxies:Array<{external:string[], internal:string[]}>
   }, relayer?:{
     port:number
+  },
+  history?:{
+    hyperion:string[],
+    injestChunkSize:number,
+    keepHistoryDataDays:number,
+    injestCycleDelaySec:number
   }
 }
 type eosioConfigs = { [k in chains]?:eosioConfig }
@@ -43,7 +49,6 @@ const untyped = readEnv.chain[useChain]
 const typed:eosioConfig = {
   chain: useChain,
   endpoints: untyped.endpoints.map(el => new URL(el)),
-  hyperion: untyped.hyperion,
   worker: {
     account: Name.from(untyped.worker.account),
     permission: Name.from(untyped.worker.permission),
@@ -64,6 +69,14 @@ const typed:eosioConfig = {
   relayer: untyped.relayer
     ? {
         port: untyped.relayer.port
+      }
+    : undefined,
+  history: untyped.history
+    ? {
+        hyperion: untyped.history.hyperion,
+        injestChunkSize: untyped.history.injestChunkSize,
+        keepHistoryDataDays: untyped.history.keepHistoryDataDays,
+        injestCycleDelaySec: untyped.history.injestCycleDelaySec
       }
     : undefined
 }

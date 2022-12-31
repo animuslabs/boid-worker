@@ -1,73 +1,58 @@
 import config from "lib/env"
 import Logger from "lib/logger"
 import ms from "ms"
-import { GetActions, JsonRpc } from "@proton/hyperion"
 import injest, { actionMap } from "lib/injest"
 import db from "lib/db"
-import { parseISOString, pickRand, shuffle } from "lib/utils"
-
-const log = Logger.getLogger("loadActions")
-
-const endpoint = "https://hyperion.telos-testnet.animus.is"
-// const endpoint = "https://testnet.telos.net"
-const hyp = new JsonRpc(endpoint)
-if (!config.hyperion || config.hyperion?.length == 0) throw (new Error("must configure at least one hyperion endpoint in .env.json"))
-const hypClients = config.hyperion.map(el => new JsonRpc(el))
+import { parseISOString, shuffle, sleep } from "lib/utils"
+import { getActions } from "lib/hyp"
 const sysContract = config.contracts.system.toString()
+const log = Logger.getLogger("loadSysActions")
 
-async function getActions(params:any, retry = 0):Promise<null|GetActions<any>> {
-  if (retry > 5) {
-    log.error("too many hyperion errors: " + JSON.stringify(params, params))
-    return null
-  } 
-  const hyp = pickRand(hypClients)
-  try {
-    log.info("trying get_action using endpoint:", hyp.endpoint)
-    const result = await hyp.get_actions(sysContract, params)
-    return result
-  } catch (error) {
-    log.error(hyp.endpoint, error)
-    return getActions(params, retry++)
-  }
+let skip:any = {
+
 }
 
-async function getPastActions(action:string, table:string) {
-  const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "asc" } })
-  const before:Date = existing?.timeStamp || new Date()
-  log.info("before:", before)
-  const cutoff = Date.now() - ms("30d")
-  const params = {
-    "act.name": action,
-    "act.account": sysContract,
-    limit: 500,
-    before: before.toISOString(),
-    after: new Date(cutoff).toISOString()
-  }
-  log.info(params)
-  const result = await getActions(params)
-  if (!result) return
-  log.info("results", result.actions.length)
-  log.info(result)
-  for (const act of result.actions) {
-    await injest.sys[table](act)
-  }
-}
+
 async function getRecentActions(action:string, table:string) {
   const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "desc" } })
-  const after = existing?.timeStamp.toISOString()
+  // const existing = await db.logPwrAdd.findFirst({ orderBy: { timeStamp: "desc" } })
+  let after
+  if (existing) {
+    log.info("skip:", skip)
+    after = existing.timeStamp.toISOString()
+    if (after == skip[table]) {
+      const milli = existing.timeStamp.getUTCMilliseconds()
+      existing.timeStamp.setUTCMilliseconds(milli + 1)
+      after = existing.timeStamp.toISOString()
+    }
+  }
+  // const afterSeq = existing?.timeStamp.toISOString()
   const params:any = {
     "act.name": action,
     "act.account": sysContract,
-    limit: 500
+    limit: config.history?.injestChunkSize || 500,
+    sort: "asc"
   }
   if (after) params.after = after
+  // if (afterSeq) params.filter = "global_sequence=" + existing.sequence
   log.info(params)
   const result = await getActions(params)
   if (!result) return
   log.info("results", result.actions.length)
-  log.info(result)
+  log.info("query results total:", result.total.value)
+  log.info("actions returned:", result.actions.length)
+  if (result.actions.length > 0) {
+    log.info("first seq", result.actions[0].global_sequence, result.actions[0]["@timestamp"])
+    log.info("last seq", result.actions[result.actions.length - 1].global_sequence, result.actions[result.actions.length - 1]["@timestamp"])
+  }
+
   for (const act of result.actions) {
     await injest.sys[table](act)
+  }
+  if (result.actions.length > 0 && result.actions.length < (config.history?.injestChunkSize || 500)) {
+    log.info("saving to skip", table, after)
+    skip[table] = after
+    log.info(skip)
   }
 }
 
@@ -75,10 +60,11 @@ async function init() {
   for (const action of shuffle(Object.entries(actionMap))) {
     log.info("starting injest of:", action[1])
     await getRecentActions(action[1], action[0])
-    await getPastActions(action[1], action[0])
     log.info("finished injest of:", action[1])
   }
-  // return init()
+  log.info("waiting for next cycle...")
+  await sleep(ms(config.history?.injestCycleDelaySec + "s" || "10s"))
+  return init()
 }
 init().catch(log.error)
 
