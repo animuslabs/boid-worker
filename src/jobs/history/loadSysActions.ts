@@ -18,7 +18,7 @@ async function getRecentActions(action:string, table:string) {
   // const existing = await db.logPwrAdd.findFirst({ orderBy: { timeStamp: "desc" } })
   let after
   if (existing) {
-    log.info("skip:", skip)
+    // log.info("skip:", skip)
     after = existing.timeStamp.toISOString()
     if (after == skip[table]) {
       const milli = existing.timeStamp.getUTCMilliseconds()
@@ -49,11 +49,7 @@ async function getRecentActions(action:string, table:string) {
   for (const act of result.actions) {
     await injest.sys[table](act)
   }
-  if (result.actions.length > 0 && result.actions.length < (config.history?.injestChunkSize || 500)) {
-    log.info("saving to skip", table, after)
-    skip[table] = after
-    log.info(skip)
-  }
+  if (result.actions.length > 0 && result.actions.length < (config.history?.injestChunkSize || 500)) skip[table] = after
 }
 
 async function init() {

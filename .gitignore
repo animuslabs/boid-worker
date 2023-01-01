@@ -1,7 +1,7 @@
 .env.json
 .DS_Store
 prisma/dev.db
-prisma/dev.db
+prisma/client/
 ecosystem.config.json
 node_modules
 dist
