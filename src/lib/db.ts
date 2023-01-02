@@ -1,4 +1,4 @@
-import * as prisma from "../../prisma/client"
-const db = new prisma.PrismaClient({ errorFormat: "pretty" })
-
+import { Prisma, PrismaClient } from "../../prisma/client"
+const db = new PrismaClient({ errorFormat: "pretty" })
+export { Prisma }
 export default db

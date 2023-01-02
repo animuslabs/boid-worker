@@ -11,7 +11,8 @@
     "lint": "eslint ./src/**/* --fix",
     "relayer": "cd dist && LOGLEVEL=DEBUG node ./servers/relayer.js",
     "relayer:dev": "cd dist && LOGLEVEL=DEBUG nodemon -d 3 ./servers/relayer.js",
-    "cpRouter": "cp ./dist/servers/relayer.d.ts ../boid-web/src/lib/types "
+    "cpRelayer": "cp ./dist/servers/relayer.d.ts ../boid-web/src/lib/types ",
+    "cpHistory": "cp ./dist/servers/history.d.ts ../boid-web/src/lib/types "
   },
   "license": "ISC",
   "devDependencies": {

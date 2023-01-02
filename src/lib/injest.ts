@@ -42,6 +42,12 @@ export const actionMap:ActionMapType = {
   unstakeDeleg: "unstke.deleg"
 }
 
+export function getTableFromAction(actionName:string):string {
+  const val = Object.entries(actionMap).find(([key, value]) => value == actionName)
+  if (!val) throw (new Error("invalid action name"))
+  else return val[0]
+}
+
 const sys = {
   async withdraw(action:Action<any>) {
     return basicInjest("withdraw", action)
