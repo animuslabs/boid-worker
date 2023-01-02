@@ -16,9 +16,8 @@ let skip:any = {
 async function getRecentActions(action:string, table:string) {
   const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "desc" } })
   // const existing = await db.logPwrAdd.findFirst({ orderBy: { timeStamp: "desc" } })
-  let after
+  let after = new Date(Date.now() - ms("24h")).toISOString()
   if (existing) {
-    // log.info("skip:", skip)
     after = existing.timeStamp.toISOString()
     if (after == skip[table]) {
       const milli = existing.timeStamp.getUTCMilliseconds()
@@ -59,7 +58,7 @@ async function init() {
     log.info("finished injest of:", action[1])
   }
   log.info("waiting for next cycle...")
-  await sleep(ms(config.history?.injestCycleDelaySec + "s" || "10s"))
+  await sleep(ms(config.history?.injestLoopDelaySec + "s" || "10s"))
   return init()
 }
 init().catch(log.error)

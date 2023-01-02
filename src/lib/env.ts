@@ -30,7 +30,7 @@ interface eosioConfig {
     hyperion:string[],
     injestChunkSize:number,
     keepHistoryDataDays:number,
-    injestCycleDelaySec:number
+    injestLoopDelaySec:number
   }
 }
 type eosioConfigs = { [k in chains]?:eosioConfig }
@@ -76,7 +76,7 @@ const typed:eosioConfig = {
         hyperion: untyped.history.hyperion,
         injestChunkSize: untyped.history.injestChunkSize,
         keepHistoryDataDays: untyped.history.keepHistoryDataDays,
-        injestCycleDelaySec: untyped.history.injestCycleDelaySec
+        injestLoopDelaySec: untyped.history.injestLoopDelaySec
       }
     : undefined
 }

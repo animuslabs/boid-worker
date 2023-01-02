@@ -82,3 +82,48 @@ docker-compose up -d
 You can find the latest verison of docker-compose for ubuntu 22.04 here
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04
 
+
+## History
+
+### Configuration
+
+If you want to provide a boid History API make sure the history segment of your .env.json is configured properly.
+
+`hyperion`:[]
+
+This array is for Hyperion nodes which you can pull history data from, nodes are used randomly and if one node returns error the query will be retried with another node.
+
+`injestChunkSize`: 500
+
+When pulling actions from the Hyperion node, how many actions to request at once. Greater than 1000 or less than 100 could cause issues.
+
+`keepHistoryDataDays`:30 
+
+How many days of history should your node retain. The purpose is to cleanup old data from your node. On testnet it's not recommended to keep more than 30 days of data because abi changes could cause issues. On mainnet a good amount of history to keep might be 6 months to one year.
+
+`injestLoopDelaySec`:10
+
+When injesting data, how long to wait between each loop. The primary purpose is to keep from getting automatically rate-limited by hyperion nodes.
+
+### Operation
+
+copy the history ecosystem file, customize it as you need and then run it with pm2.
+```sh
+cp ./example.history.ecosystem.config.json ./history.ecosystem.config.json
+pm2 start ./history.ecosystem.config.json
+```
+The file runs `loadSysActions.js` to pull recent history data (runs in a continuous loop) and `cleanOldRecords.js` (runs daily) to cleanup old history data.
+
+The job only pulls the past 24 hours of history data when you first run it, to backfill all history data (up to your configured limit) You need to manually run the `backfillSysActions` script. The script only needs to be run once during initial setup. If you node goes offline for an extended period but still retains the history data in your database then the loadSysActions script will automatically grab all the actions that happened while you were offline.
+
+```sh
+cd dist
+node ./util/backfillSysActions.js
+```
+
+While this script is running you can browse the database to see data being loaded
+```sh 
+yarn prisma studio
+```
+
+When the script finishes that means all history data is loaded into your DB up to your limits. 
