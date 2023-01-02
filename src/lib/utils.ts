@@ -1,6 +1,7 @@
 import { ABI, Name, Serializer, UInt64 } from "@greymass/eosio"
 import { safeDo, getAccount } from "./eosio"
 import { tables } from "./queries"
+import moment from "moment"
 
 import { dirname } from "path"
 import { fileURLToPath } from "url"
@@ -150,3 +151,50 @@ export function parseISOString(s) {
   let b = s.split(/\D+/)
   return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]))
 }
+export function toDate(string) {
+  return new Date(parseISOString(string))
+}
+
+export function validateDate(dateString:string):Date {
+  // Use a regular expression to parse the input date string into its individual parts (date and time)
+  const dateTimeParts = dateString.match(/^(\d{4})?-?(\d{1,2})?-?(\d{1,2})?(T(\d{2})?:?(\d{2})?:?(\d{2})?)?$/)
+  if (!dateTimeParts) {
+    throw new Error(`Invalid date format: ${dateString}`)
+  }
+  // Extract the date and time parts from the regular expression match
+  const dateParts = dateTimeParts.slice(1, 4)
+  const timeParts = dateTimeParts.slice(5)
+
+  // Add default zero values for any missing date or time parts
+  for (let i = 0; i < 3; i++) {
+    if (dateParts[i] === undefined) {
+      dateParts[i] = "00"
+    }
+  }
+  for (let i = 0; i < 3; i++) {
+    if (timeParts[i] === undefined) {
+      timeParts[i] = "00"
+    }
+  }
+
+  // Add leading or trailing zeros to the year, month, day, hours, minutes, and seconds values if necessary
+  for (let i = 0; i < 3; i++) {
+    if (dateParts[i].length < 2) {
+      dateParts[i] = `${"0".repeat(2 - dateParts[i].length)}${dateParts[i]}`
+    }
+  }
+  for (let i = 0; i < 3; i++) {
+    if (timeParts[i].length < 2) {
+      timeParts[i] = `${"0".repeat(2 - timeParts[i].length)}${timeParts[i]}`
+    }
+  }
+
+  // Reassemble the date and time parts with the default zero values added
+  const validatedDateTimeString = `${dateParts.join("-")}T${timeParts.join(":")}`
+
+  // Check if the reassembled date and time string is a valid date
+  const date = moment(validatedDateTimeString, "YYYY-MM-DDTHH:mm:ss").toDate()
+
+  return date
+}
+

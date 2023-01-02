@@ -1,7 +1,8 @@
 # boid-worker
 
 ## Prerequisites
-- You will need a Telos Testnet account with 10 TLOS staked to CPU and 1 to NET. https://app.telos.net/testnet/developers
+
+- You will need a Telos Testnet account with 10 TLOS staked to CPU and 1 to NET. <https://app.telos.net/testnet/developers>
 - You need tesnet BOID tokens, earn them by running the testnet app or ask for free tokens from boid devs in social channels.
 
 ## Setup
@@ -54,34 +55,38 @@ The token contract is "token.boid" the symbol is BOID
 
 ### 2. Docker Setup Method
 to build the worker first make your configuration files
+
 ```
 cp example.env.json .env.json
 cp example.ecosystem.config.json ecosystem.config.json
 ```
-Modify `.env.json` with your information about your worker node. 
+
+Modify `.env.json` with your information about your worker node.
 
 Make sure the worker name, authority, key are correct. For the rpc nodes you can specify as many as you like and the scripts will use it.
 
 Modify `ecosystem.config.json` as you see fit, the defaults should be fine but can be optimized if you like. The env LOGLEVEL can be adjusted based on your preference between TRACE DEBUG INFO WARN ERROR
 
 to build the container image do
+
 ```
 docker build . -t boidworker
 ```
 
 once the image is created you can start it with docker-compose
+
 ```
 docker-compose up
 ```
 
 if you want to run it in the background type:
+
 ```
 docker-compose up -d
 ```
 
 You can find the latest verison of docker-compose for ubuntu 22.04 here
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04
-
+<https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04>
 
 ## History
 
@@ -97,7 +102,7 @@ This array is for Hyperion nodes which you can pull history data from, nodes are
 
 When pulling actions from the Hyperion node, how many actions to request at once. Greater than 1000 or less than 100 could cause issues.
 
-`keepHistoryDataDays`:30 
+`keepHistoryDataDays`:30
 
 How many days of history should your node retain. The purpose is to cleanup old data from your node. On testnet it's not recommended to keep more than 30 days of data because abi changes could cause issues. On mainnet a good amount of history to keep might be 6 months to one year.
 
@@ -108,13 +113,15 @@ When injesting data, how long to wait between each loop. The primary purpose is 
 ### Operation
 
 copy the history ecosystem file, customize it as you need and then run it with pm2.
+
 ```sh
 cp ./example.history.ecosystem.config.json ./history.ecosystem.config.json
 pm2 start ./history.ecosystem.config.json
 ```
+
 The file runs `loadSysActions.js` to pull recent history data (runs in a continuous loop) and `cleanOldRecords.js` (runs daily) to cleanup old history data.
 
-The job only pulls the past 24 hours of history data when you first run it, to backfill all history data (up to your configured limit) You need to manually run the `backfillSysActions` script. The script only needs to be run once during initial setup. If you node goes offline for an extended period but still retains the history data in your database then the loadSysActions script will automatically grab all the actions that happened while you were offline.
+The job only pulls the past 24 hours of history data when you first run it, to backfill all history data (up to your configured limit) You need to manually run the `backfillSysActions` script. The script only needs to be run once during initial setup. If you node goes offline for an extended period but still retains the history data in your database then the `loadSysActions` script will automatically grab all the actions that happened while you were offline.
 
 ```sh
 cd dist
@@ -122,8 +129,32 @@ node ./util/backfillSysActions.js
 ```
 
 While this script is running you can browse the database to see data being loaded
-```sh 
+
+```sh
 yarn prisma studio
 ```
 
-When the script finishes that means all history data is loaded into your DB up to your limits. 
+When the script finishes that means all history data is loaded into your DB up to your limits.
+
+### History Advanced
+
+The `backfillSysActions` script loads data backwards and `loadSysActions` loads data forwards. Under normal circumstaces you should have a full history, but in cases where there is holes in your data, like from getting bad data from a hyperion node, or database errors, you can manually pull actions within an arbitrary time range using the `util/fillRangeSysActions` script.
+
+This script is meant to be run manually, it will download all actions in a range and then place them in the DB overwriting any existing records.
+
+#### Syntax
+The first parameter is the name of the action, or "all". The action must be listed in the `lib/injest.ts` `actionMap` object. The second parameter is the start of the range to pull data from, the third parameter is the end of the range.
+
+To pull all actions between 2022-12-20 and 2022-12-30
+
+```sh
+cd dist
+node ./util/fillRangeSysActions.ts all 2022-12-20 2022-12-30
+```
+
+To pull all stake actions between 2022-12-20 and 2022-12-30
+
+```sh
+cd dist
+node ./util/fillRangeSysActions.ts stake 2022-12-20 2022-12-30
+```

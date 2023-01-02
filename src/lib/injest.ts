@@ -42,7 +42,7 @@ export const actionMap:ActionMapType = {
   unstakeDeleg: "unstke.deleg"
 }
 
-const sys:Partial<Record<keyof ActionMapType, any>> = {
+const sys = {
   async withdraw(action:Action<any>) {
     return basicInjest("withdraw", action)
   },
@@ -265,7 +265,7 @@ function upsertData(action:Action<any>) {
   }
 }
 
-async function addRow(table:keyof ActionMapType, action:Action<any>, params:any) {
+export async function addRow(table:keyof ActionMapType, action:Action<any>, params:any) {
   const create = Object.assign(upsertData(action), params)
   const result = await db[table as any].upsert(
     {
