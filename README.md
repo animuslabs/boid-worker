@@ -158,3 +158,10 @@ To pull all stake actions between 2022-12-20 and 2022-12-30
 cd dist
 node ./util/fillRangeSysActions.js stake 2022-12-20 2022-12-30
 ```
+
+### Relayer
+Make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain
+```sh
+cd /home/boid-worker/dist
+pm2 start servers/relayer.js
+```
