@@ -149,12 +149,12 @@ To pull all actions between 2022-12-20 and 2022-12-30
 
 ```sh
 cd dist
-node ./util/fillRangeSysActions.ts all 2022-12-20 2022-12-30
+node ./util/fillRangeSysActions.js all 2022-12-20 2022-12-30
 ```
 
 To pull all stake actions between 2022-12-20 and 2022-12-30
 
 ```sh
 cd dist
-node ./util/fillRangeSysActions.ts stake 2022-12-20 2022-12-30
+node ./util/fillRangeSysActions.js stake 2022-12-20 2022-12-30
 ```
