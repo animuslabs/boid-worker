@@ -40,7 +40,9 @@ export const actions = route
       log.info("cache:", cache.store.keyCount())
       let rows:Record<string, any> = {}
       let where:any = {
-        timeStamp: { gte: input.start ? parseISOString(input.start) : new Date(Date.now() - ms("180d ")) },
+        timeStamp: {
+          gte: input.start ? parseISOString(input.start) : new Date(Date.now() - ms("180d"))
+        },
         AND: {
           timeStamp: { lte: input.end ? parseISOString(input.end) : new Date() }
         }
@@ -80,7 +82,7 @@ export const actions = route
           const params = {
             where, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           }
-          console.log(JSON.stringify(params, null, 2))
+          // console.log(JSON.stringify(params, null, 2))
 
           results = await db[table as any].findMany(params)
         }
@@ -98,6 +100,7 @@ export const actions = route
       return results
     } catch (error:any) {
       log.error(error)
+      log.error("INPUT ERROR:", input)
       return error.toString()
     }
   })
