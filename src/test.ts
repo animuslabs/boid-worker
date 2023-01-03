@@ -21,7 +21,7 @@ import { CID } from "multiformats"
 // }).catch(console.error)
 // console.log(result)
 
-const hexString = "122080472668E450CE9DF5DE0CEB390E9A5D57F50FE42A2DEDF06215022216781022"
+const hexString = "1220977DB9EA97E36E5EA7DA565B519D08CD7A3B5FD33F22E5374DD9F5AFCE869739"
 
 function hexStringToUint8Array(hexString:string):Uint8Array {
   const data = hexString.match(/.{1,2}/g)
