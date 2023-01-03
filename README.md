@@ -168,7 +168,8 @@ node ./util/fillRangeSysActions.js stake 2022-12-20 2022-12-30
 ```
 
 ## Relayer
-Make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain
+To run a relayer you need to have a local running IPFS node and have it setup in .env.json file in the proxy section.
+In addition make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain
 
 ```sh
 cd /home/boid-worker/dist
