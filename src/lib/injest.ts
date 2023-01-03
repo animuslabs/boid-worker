@@ -106,7 +106,7 @@ const sys = {
       const data = action.act.data.data || action.act.data
       const params = {
         boid_id: data.boid_id,
-        ipfs_meta: data.social_ipfs_json || data.ipfs_meta.toString()
+        ipfs_meta: data.social_ipfs_json || data.ipfs_meta
       }
       await addRow("accountEdit", action, params)
     } catch (error) {

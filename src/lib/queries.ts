@@ -8,8 +8,7 @@ import prisma from "lib/db"
 import { finalRound, getReportId, roundData } from "lib/utils"
 import log from "lib/logger"
 import { API, NameType, UInt64 } from "@greymass/eosio"
-
-let cache = cacheManager.caching({ store: "memory", max: 100, ttl: 300/*seconds*/ })
+let cache = await cacheManager.caching("memory", { max: 100, ttl: 300/*seconds*/ })
 
 function getUser(id:string, cb:() =>{}) {
 

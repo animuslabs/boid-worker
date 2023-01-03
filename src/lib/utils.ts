@@ -198,3 +198,6 @@ export function validateDate(dateString:string):Date {
   return date
 }
 
+export function removeDuplicates(arr:any[]) {
+  return Array.from(new Set(arr))
+}

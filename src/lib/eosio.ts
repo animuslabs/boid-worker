@@ -4,11 +4,11 @@ import ms from "ms"
 import { rand, shuffle, sleep } from "./utils"
 import env from "./env"
 import logger from "lib/logger"
-import cacheManager from "cache-manager"
+import { caching } from "cache-manager"
 const log = logger.getLogger("eosio")
 let client:APIClient
 let provider:APIProvider
-let cache = cacheManager.caching({ store: "memory", max: 100, ttl: 10/*seconds*/ })
+
 export const rpcs:{ endpoint:URL, rpc:typeof client.v1.chain }[] = env.endpoints.map(el => {
   provider = new FetchProvider(el.toString(), { fetch })
   client = new APIClient({ provider })
@@ -140,8 +140,10 @@ export async function getFullTable< T extends ABISerializableConstructor>(params
   return rows as InstanceType<T>[]
 }
 
-export function getInfo():Promise<API.v1.GetInfoResponse> {
-  return cache.wrap("getinfo", () => safeDo("get_info"))
+let infoCache:any
+export async function getInfo():Promise<API.v1.GetInfoResponse> {
+  if (!infoCache) infoCache = await safeDo("get_info")
+  return infoCache
 }
 
 export async function getAccount(name:Name):Promise<API.v1.AccountObject> {

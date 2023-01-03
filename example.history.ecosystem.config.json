@@ -31,6 +31,22 @@
       "args": [
         "--color"
       ]
+    },
+    {
+      "name": "boid-worker-history-server",
+      "cwd": "./dist",
+      "script": "./servers/history.js",
+      "autorestart": true,
+      "env": {
+        "NODE_ENV": "production",
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
     }
   ]
 }
