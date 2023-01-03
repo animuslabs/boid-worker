@@ -110,6 +110,10 @@ How many days of history should your node retain. The purpose is to cleanup old 
 
 When injesting data, how long to wait between each loop. The primary purpose is to keep from getting automatically rate-limited by hyperion nodes.
 
+`port`:8018
+
+When running the History API server, this is the internal port the history server will expose. You can use your own firewall or the built in proxy config to expose the server externally.
+
 ### Operation
 
 copy the history ecosystem file, customize it as you need and then run it with pm2.
@@ -119,9 +123,13 @@ cp ./example.history.ecosystem.config.json ./history.ecosystem.config.json
 pm2 start ./history.ecosystem.config.json
 ```
 
-The file runs `loadSysActions.js` to pull recent history data (runs in a continuous loop) and `cleanOldRecords.js` (runs daily) to cleanup old history data.
+The file runs three services by default:
 
-The job only pulls the past 24 hours of history data when you first run it, to backfill all history data (up to your configured limit) You need to manually run the `backfillSysActions` script. The script only needs to be run once during initial setup. If you node goes offline for an extended period but still retains the history data in your database then the `loadSysActions` script will automatically grab all the actions that happened while you were offline.
+- `loadSysActions.js`: Pulls recent history data (runs in a continuous loop).
+- `cleanOldRecords.js`: Runs daily to cleanup old history data.
+- `history.js`:the history api, enables users to query your history data, configure the port to expose externally
+
+The `loadsysActions` job only pulls the past 24 hours of history data when you first run it, to backfill all history data (up to your configured limit) You need to manually run the `backfillSysActions` script. The script only needs to be run once during initial setup. If you node goes offline for an extended period but still retains the history data in your database then the `loadSysActions` script will automatically grab all the actions that happened while you were offline until it is back in sync.
 
 ```sh
 cd dist
@@ -159,8 +167,9 @@ cd dist
 node ./util/fillRangeSysActions.js stake 2022-12-20 2022-12-30
 ```
 
-### Relayer
+## Relayer
 Make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain
+
 ```sh
 cd /home/boid-worker/dist
 pm2 start servers/relayer.js
