@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+  "apps": [
+    {
+      "name": "boid-relayer",
+      "cwd": "./dist",
+      "script": "./servers/relay.js",
+      "autorestart": true,
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boid-ipfs",
+      "cwd": "./dist",
+      "script": "./servers/ipfsNode.js",
+      "autorestart": true,
+      "env": {
+        "IPFS_MONITORING": "true",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps --trace-warnings"
+      },
+      "args": [
+        "--color"
+      ]
+    }
+  ]
+}
