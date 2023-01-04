@@ -8,7 +8,7 @@ import { parseISOString, removeDuplicates, toObject } from "lib/utils"
 import { caching } from "cache-manager"
 const log = Logger.getLogger("history-api")
 
-let cache = await caching("memory", { max: 10000, ttl: ms("12h") })
+let cache = await caching("memory", { max: 100, ttl: ms("12s") })
 
 export const actions = route
   .input(z.object({

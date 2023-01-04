@@ -8,6 +8,7 @@ import { caching } from "cache-manager"
 const log = logger.getLogger("eosio")
 let client:APIClient
 let provider:APIProvider
+let cache = await caching("memory", { max: 100, ttl: ms("12s") })
 
 export const rpcs:{ endpoint:URL, rpc:typeof client.v1.chain }[] = env.endpoints.map(el => {
   provider = new FetchProvider(el.toString(), { fetch })
@@ -142,8 +143,13 @@ export async function getFullTable< T extends ABISerializableConstructor>(params
 
 let infoCache:any
 export async function getInfo():Promise<API.v1.GetInfoResponse> {
-  if (!infoCache) infoCache = await safeDo("get_info")
-  return infoCache
+  const result = await cache.get("get_info")
+  if (result) return result as API.v1.GetInfoResponse
+  else {
+    const info = await safeDo("get_info")
+    cache.set("get_info", info)
+    return info
+  }
 }
 
 export async function getAccount(name:Name):Promise<API.v1.AccountObject> {

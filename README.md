@@ -151,7 +151,7 @@ The `backfillSysActions` script loads data backwards and `loadSysActions` loads 
 This script is meant to be run manually, it will download all actions in a range and then place them in the DB overwriting any existing records.
 
 #### Syntax
-The first parameter is the name of the action, or "all". The action must be listed in the `lib/injest.ts` `actionMap` object. The second parameter is the start of the range to pull data from, the third parameter is the end of the range.
+The first parameter is the name of the action, or "all". The action must be listed in the `lib/injest.ts` `actionMap` object. The second para-meter is the start of the range to pull data from, the third parameter is the end of the range.
 
 To pull all actions between 2022-12-20 and 2022-12-30
 
