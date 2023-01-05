@@ -1,8 +1,9 @@
 import config from "lib/env"
 import Logger from "lib/logger"
-import { Action, GetActions, JsonRpc } from "@proton/hyperion"
+import { Action, GetActions, GetDeltas, JsonRpc, V2_GET_DELTAS } from "@proton/hyperion"
 import { parseISOString, pickRand, sleep } from "lib/utils"
 import ms from "ms"
+import ax from "axios"
 const log = Logger.getLogger("hyp")
 if (!config.history?.hyperion || config.history.hyperion.length == 0) throw (new Error("must configure at least one hyperion endpoint in .env.json"))
 export const hypClients = config.history.hyperion.map(el => new JsonRpc(el))
@@ -21,6 +22,30 @@ export async function getActions(params:any, account = sysContract, retry = 0):P
   } catch (error:any) {
     log.error(hyp.endpoint, "retry:", retry, error.toString())
     return getActions(params, account, retry++)
+  }
+}
+
+export async function getDeltas(params:any, account = sysContract, retry = 0):Promise<null | GetDeltas<any>> {
+  if (retry > 5) {
+    log.error("too many hyperion errors: " + JSON.stringify(params, params))
+    return null
+  }
+  const hyp = pickRand(hypClients)
+  try {
+    log.info("trying get_deltas using endpoint:", hyp.endpoint)
+    const url = hyp.endpoint + V2_GET_DELTAS
+    log.info(url)
+    const options = {
+      method: "GET",
+      url,
+      params
+    }
+    log.info(options)
+    const result = await ax.request<GetDeltas<any>>(options)
+    return result.data
+  } catch (error:any) {
+    log.error(hyp.endpoint, "retry:", retry, error.toString())
+    return getDeltas(params, account, retry++)
   }
 }
 

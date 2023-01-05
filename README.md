@@ -150,6 +150,11 @@ The `backfillSysActions` script loads data backwards and `loadSysActions` loads 
 
 This script is meant to be run manually, it will download all actions in a range and then place them in the DB overwriting any existing records.
 
+### History Deltas
+For debugging and additional insight you may opt to index state delta changes. Normal history node operation should not need to run this.
+`jobs/history/loadStateDeltas.ts` to load deltas forwards
+`util/backfillDeltas.ts` to load data backwards, when your configured `keepHistoryDataDays` is reached the script will stop.
+
 #### Syntax
 The first parameter is the name of the action, or "all". The action must be listed in the `lib/injest.ts` `actionMap` object. The second para-meter is the start of the range to pull data from, the third parameter is the end of the range.
 

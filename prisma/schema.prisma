@@ -397,3 +397,16 @@ model Withdraw {
   @@index([boid_id, timeStamp])
   @@index([timeStamp])
 }
+
+model AccountsDelta {
+  id String @unique
+  timeStamp DateTime
+  boid_id String
+  balance BigInt
+  selfStaked BigInt
+  power BigInt
+  nftBalance BigInt
+  teamCumulativeContribution BigInt
+  receivedDelegatedStake BigInt
+  nonce Int
+}

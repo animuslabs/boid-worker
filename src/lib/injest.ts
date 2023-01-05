@@ -1,15 +1,24 @@
-import { Action } from "@proton/hyperion"
-import { AccountAdd, UnstakeInit } from "./types/boid.system"
+import { Action, GetDeltas } from "@proton/hyperion"
+import { Account, AccountAdd, UnstakeInit } from "./types/boid.system"
 import db from "lib/db"
 import { parseISOString } from "./utils"
+import config from "lib/env"
+import { getActions, hypClients } from "lib/hyp"
+import ms from "ms"
 import Logger from "lib/logger"
 const log = Logger.getLogger("injest")
+const sysContract = config.contracts.system.toString()
 
-const add = new AccountAdd({})
-const json = add.toJSON()
+
 
 type DBKeys = keyof Partial<typeof db>
 export type ActionMapType = Partial<Record<DBKeys, string>>
+
+export function getTableFromAction(actionName:string):string {
+  const val = Object.entries(actionMap).find(([key, value]) => value == actionName)
+  if (!val) throw (new Error("invalid action name"))
+  else return val[0]
+}
 
 export const actionMap:ActionMapType = {
   accountAdd: "account.add",
@@ -40,12 +49,6 @@ export const actionMap:ActionMapType = {
   unstakeEnd: "unstake.end",
   withdraw: "withdraw",
   unstakeDeleg: "unstke.deleg"
-}
-
-export function getTableFromAction(actionName:string):string {
-  const val = Object.entries(actionMap).find(([key, value]) => value == actionName)
-  if (!val) throw (new Error("invalid action name"))
-  else return val[0]
 }
 
 const sys = {
@@ -280,6 +283,48 @@ export async function addRow(table:keyof ActionMapType, action:Action<any>, para
       update: create
     })
   // log.info(result)
+}
+
+
+let skip:any = {
+
+}
+export async function getRecentActions(action:string, table:string) {
+  const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "desc" } })
+  // const existing = await db.logPwrAdd.findFirst({ orderBy: { timeStamp: "desc" } })
+  let after = new Date(Date.now() - ms("24h")).toISOString()
+  if (existing) {
+    after = existing.timeStamp.toISOString()
+    if (after == skip[table]) {
+      const milli = existing.timeStamp.getUTCMilliseconds()
+      existing.timeStamp.setUTCMilliseconds(milli + 1)
+      after = existing.timeStamp.toISOString()
+    }
+  }
+  // const afterSeq = existing?.timeStamp.toISOString()
+  const params:any = {
+    "act.name": action,
+    "act.account": sysContract,
+    limit: config.history?.injestChunkSize || 500,
+    sort: "asc"
+  }
+  if (after) params.after = after
+  // if (afterSeq) params.filter = "global_sequence=" + existing.sequence
+  log.info(params)
+  const result = await getActions(params)
+  if (!result) return
+  log.info("results", result.actions.length)
+  log.info("query results total:", result.total.value)
+  log.info("actions returned:", result.actions.length)
+  if (result.actions.length > 0) {
+    log.info("first seq", result.actions[0].global_sequence, result.actions[0]["@timestamp"])
+    log.info("last seq", result.actions[result.actions.length - 1].global_sequence, result.actions[result.actions.length - 1]["@timestamp"])
+  }
+
+  for (const act of result.actions) {
+    await sys[table](act)
+  }
+  if (result.actions.length > 0 && result.actions.length < (config.history?.injestChunkSize || 500)) skip[table] = after
 }
 
 export default { sys }
