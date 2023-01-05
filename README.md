@@ -137,7 +137,7 @@ node ./util/backfillSysActions.js
 ```
 
 While this script is running you can browse the database to see data being loaded
-
+This requires localhost access to port 5001 , so not an option on VPS
 ```sh
 yarn prisma studio
 ```
@@ -169,9 +169,14 @@ node ./util/fillRangeSysActions.js stake 2022-12-20 2022-12-30
 
 ## Relayer
 To run a relayer you need to have a local running IPFS node and have it setup in .env.json file in the proxy section.
+We recommend using Kubo's ipfs , its a single golang binary you need to install in /usr/local/bin , you can find systemd scripts for it in the config folder
+https://github.com/ipfs/kubo/releases/download/v0.17.0/kubo_v0.17.0_linux-amd64.tar.gz
+Warning: DO NOT EXPOSE the RPC port (e.g. 5002) of ipfs to the internet !!
+
 In addition make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain
 
 ```sh
-cd /home/boid-worker/dist
-pm2 start servers/relayer.js
+cp ./example.relayer.ecosystem.config.json ./relayer.ecosystem.config.json
+pm2 start ./relayer.ecosystem.config.json
 ```
+
