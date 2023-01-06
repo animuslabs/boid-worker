@@ -56,9 +56,10 @@ The token contract is "token.boid" the symbol is BOID
 ### 2. Docker Setup Method
 to build the worker first make your configuration files
 
-```
+```sh
 cp example.env.json .env.json
 cp example.ecosystem.config.json ecosystem.config.json
+
 ```
 
 Modify `.env.json` with your information about your worker node.
@@ -69,20 +70,26 @@ Modify `ecosystem.config.json` as you see fit, the defaults should be fine but c
 
 to build the container image do
 
-```
+```sh
+
 docker build . -t boidworker
+
 ```
 
 once the image is created you can start it with docker-compose
 
-```
+```sh
+
 docker-compose up
+
 ```
 
 if you want to run it in the background type:
 
-```
+```sh
+
 docker-compose up -d
+
 ```
 
 You can find the latest verison of docker-compose for ubuntu 22.04 here
@@ -138,6 +145,7 @@ node ./util/backfillSysActions.js
 
 While this script is running you can browse the database to see data being loaded
 This requires localhost access to port 5001 , so not an option on VPS
+
 ```sh
 yarn prisma studio
 ```
@@ -156,7 +164,7 @@ For debugging and additional insight you may opt to index state delta changes. N
 `util/backfillDeltas.ts` to load data backwards, when your configured `keepHistoryDataDays` is reached the script will stop.
 
 #### Syntax
-The first parameter is the name of the action, or "all". The action must be listed in the `lib/injest.ts` `actionMap` object. The second para-meter is the start of the range to pull data from, the third parameter is the end of the range.
+The first parameter is the name of the action, or "all". The action must be listed in the `lib/injest.ts` `actionMap` object. The second parameter is the start of the range to pull data from, the third parameter is the end of the range.
 
 To pull all actions between 2022-12-20 and 2022-12-30
 
@@ -173,10 +181,11 @@ node ./util/fillRangeSysActions.js stake 2022-12-20 2022-12-30
 ```
 
 ## Relayer
-To run a relayer you need to have a local running IPFS node and have it setup in .env.json file in the proxy section.
+To run a relayer you need to have a local running IPFS node with port 5001 (the admin port) available and configured in the ipfs section of the .env.json file. Additoionally it's higly suggested you expose the ipfs public gateway (8080) port so that users could use it in the Boid application. The ipfs gatway can be entered into the proxy section of the config if you are using the built in proxy server or you could use your own firewall solution.
+
 We recommend using Kubo's ipfs , its a single golang binary you need to install in /usr/local/bin , you can find systemd scripts for it in the config folder
-https://github.com/ipfs/kubo/releases/download/v0.17.0/kubo_v0.17.0_linux-amd64.tar.gz
-Warning: DO NOT EXPOSE the RPC port (e.g. 5002) of ipfs to the internet !!
+<https://github.com/ipfs/kubo/releases/download/v0.17.0/kubo_v0.17.0_linux-amd64.tar.gz>
+Warning: DO NOT EXPOSE the RPC port (e.g. 5001) of ipfs to the internet !!
 
 In addition make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain
 
@@ -184,4 +193,3 @@ In addition make sure to have relayer port setup in .env.json and firewall confi
 cp ./example.relayer.ecosystem.config.json ./relayer.ecosystem.config.json
 pm2 start ./relayer.ecosystem.config.json
 ```
-

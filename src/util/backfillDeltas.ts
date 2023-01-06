@@ -10,9 +10,6 @@ async function init() {
   for (const table of Object.keys(deltas)) {
     await loadDeltas("backwards", table as any)
   }
-  log.info("waiting for next cycle...")
-  await sleep(ms(config.history?.injestLoopDelaySec + "s" || "10s"))
-  return init()
 }
 init().catch(log.error)
 
