@@ -1,7 +1,7 @@
 import fs from "fs-extra"
 import db, { Prisma } from "lib/db"
 import { actionMap } from "lib/injest"
-import { parseISOString } from "lib/utils"
+import { parseISOString, toObject } from "lib/utils"
 
 
 async function init(timeStamp:string) {
@@ -11,14 +11,15 @@ async function init(timeStamp:string) {
   for (let act of Object.keys(actionMap)) {
     let dbTable = act as Prisma.ModelName
     const query = { where: { timeStamp: { equals: timeStamp } } }
-    console.log(query)
-
     const response = await db[dbTable].findMany(query)
-    console.log(response)
-
-    if (response) response.forEach(el => results.push(el))
+    if (response) {
+      response.forEach(el => {
+        el.dbTable = act
+        results.push(toObject(el))
+      })
+    }
   }
-  const writeFile = "../actions-" + blockDate.toISOString()
+  const writeFile = "../actions-" + blockDate.toISOString() + ".json"
   fs.writeJsonSync(writeFile, results, { spaces: 2 })
   console.log(results)
   console.log("wrote to file:", writeFile)
