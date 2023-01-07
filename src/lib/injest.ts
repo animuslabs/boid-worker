@@ -310,7 +310,7 @@ export async function getRecentActions(action:string, table:string) {
   }
   if (after) params.after = after
   // if (afterSeq) params.filter = "global_sequence=" + existing.sequence
-  log.info(params)
+  // log.info(params)
   const result = await getActions(params)
   if (!result) return
   log.info("results", result.actions.length)
