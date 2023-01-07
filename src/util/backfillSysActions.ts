@@ -30,8 +30,8 @@ async function getPastActions(action:string, table:string) {
   log.info(params)
   const result = await getActions(params)
   if (!result) return
-  log.info("results", result.actions.length)
-  log.info(result)
+  log.info("results:", result.actions.length)
+  // log.info(result)
   for (const act of result.actions) {
     await injest.sys[table](act)
   }
