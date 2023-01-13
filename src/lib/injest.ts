@@ -291,6 +291,12 @@ let skip:any = {
 }
 export async function getRecentActions(action:string, table:string) {
   const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "desc" } })
+    .catch(async err => {
+      log.error(err)
+      log.error("critical Error, stopping")
+      await db.$disconnect()
+      process.kill(process.pid, "SIGHUP")
+    })
   // const existing = await db.logPwrAdd.findFirst({ orderBy: { timeStamp: "desc" } })
   let after = new Date(Date.now() - ms("24h")).toISOString()
   if (existing) {
