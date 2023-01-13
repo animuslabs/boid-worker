@@ -4,7 +4,7 @@
     {
       "name": "boid-relayer",
       "cwd": "./dist",
-      "script": "./servers/relay.js",
+      "script": "./servers/relayer.js",
       "autorestart": true,
       "args": [
         "--color"
