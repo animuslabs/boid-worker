@@ -193,3 +193,16 @@ In addition make sure to have relayer port setup in .env.json and firewall confi
 cp ./example.relayer.ecosystem.config.json ./relayer.ecosystem.config.json
 pm2 start ./relayer.ecosystem.config.json
 ```
+
+## Pintastic
+To run automatic pinning for all Boid NFTs IPFS Collections you can run the Pintastic service
+
+example.pintastic.ecosystem.config.json
+
+in the index.ts file located in jobs/ipfspinning
+you can edit at what intervals the data will be checked from chains (EOS, WAX, TelosTestnet) and pinned to your local IPFS node/nodes.
+
+In links.ts there is a const IPFSnodes where you can edit your internal node setup.
+In collectionsEOS and collectionsWAX you can add AtomicHub Collections that you may want to pin in addtion to offical Boid ones.
+More than 1 BoidTam Info Pinnnig is still under dev.
+In the const endpoints you can change which API endpoints you want to use for this service.

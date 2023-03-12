@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+  "apps": [
+    {
+      "name": "pintastic",
+      "cwd": "./dist",
+      "script": "./jobs/ipfspinning/index.js",
+      "autorestart": true,
+      "args": [
+        "--color"
+      ]
+    }
+  ]
+}
