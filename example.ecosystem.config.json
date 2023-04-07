@@ -146,9 +146,9 @@
       ]
     },
     {
-      "name": "boid-worker-sys-claimBoidAccounts",
+      "name": "boid-worker-sys-handleBoidAccounts",
       "cwd": "./dist",
-      "script": "./jobs/sys/claimBoidAccounts.js",
+      "script": "./jobs/sys/handleBoidAccounts.js",
       "autorestart": false,
       "cron_restart": "10 */1 * * *",
       "env": {

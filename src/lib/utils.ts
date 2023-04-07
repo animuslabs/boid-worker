@@ -100,7 +100,7 @@ export function toObject(data) {
 }
 
 export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
-  let log = logger.getLogger("shouldFinishReport()")
+  let log = logger.getLogger("shouldFinishReport(): ")
   const config = await tables.pwr.config()
   const global = await tables.pwr.global()
   const round = await currentRound()
