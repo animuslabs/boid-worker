@@ -7,6 +7,8 @@
 
 ## Setup
 There are 2 ways to setup a Boid Worker, barebone in a VM or via a Docker container.
+Before you do anything you need to have a working instance of a postgresdb. Best is to run it in a docker container.
+When you have it up and running go to .env file and edit your details in the DATABASE_URL.
 
 ### 1. Ubuntu 22.04 LTS VM Setup Method
 
@@ -179,6 +181,13 @@ To pull all stake actions between 2022-12-20 and 2022-12-30
 cd dist
 node ./util/fillRangeSysActions.js stake 2022-12-20 2022-12-30
 ```
+## API for Boid Users Power
+To run it use pm2 and example.historyDeltasAPI.ecosystem.config.json file
+```sh
+cp ./example.historyDeltasAPI.ecosystem.config.json ./historyDeltasAPI.ecosystem.config.json
+pm2 start ./historyDeltasAPI.ecosystem.config.json
+```
+In apiSwagger.json file edit your Development server and Production server details for SwaggerUI.
 
 ## Relayer
 To run a relayer you need to have a local running IPFS node with port 5001 (the admin port) available and configured in the ipfs section of the .env.json file. Additoionally it's higly suggested you expose the ipfs public gateway (8080) port so that users could use it in the Boid application. The ipfs gatway can be entered into the proxy section of the config if you are using the built in proxy server or you could use your own firewall solution.

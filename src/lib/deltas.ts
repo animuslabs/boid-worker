@@ -54,6 +54,30 @@ export const deltas = {
     } catch (error) {
       log.error(error)
     }
+  },
+  async global(delta:Delta<any>) {
+    try {
+      const id = deltaID(delta)
+      let data = delta.data
+      // console.log(data)
+
+      const create = {
+        id,
+        total_accounts: parseInt(data.total_accounts),
+        total_power: parseInt(data.total_power),
+        total_liquid_balance: parseInt(data.total_liquid_balance),
+        timeStamp: parseISOString(delta.timestamp),
+        total_stake: parseInt(data.total_stake)
+      }
+      const result = await db.globalDelta.upsert({
+        where: { id },
+        create,
+        update: create
+      })
+      log.info("wrote delta:", result)
+    } catch (error) {
+      log.error(error)
+    }
   }
 }
 

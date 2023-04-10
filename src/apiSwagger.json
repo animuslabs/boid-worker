@@ -1,0 +1,316 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Boid History API",
+      "version": "0.1.0",
+      "description": "A simple Boid History API"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/",
+        "description": "Development server"
+      },
+      {
+        "url": "https://powerapi.animus.is",
+        "description": "Production server"
+      }
+    ],
+    "paths": {
+      "/accounts/deltas": {
+        "get": {
+          "summary": "Retrieve a list of average AccountsDelta Table data per day",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "from",
+              "schema": {
+                "type": "string",
+                "format": "date"
+              },
+              "description": "The start date to filter the account deltas (format YYYY-MM-DD)"
+            },
+            {
+              "in": "query",
+              "name": "to",
+              "schema": {
+                "type": "string",
+                "format": "date"
+              },
+              "description": "The end date to filter the account deltas (format YYYY-MM-DD)"
+            },
+            {
+              "in": "query",
+              "name": "boid_id",
+              "schema": {
+                "type": "string"
+              },
+              "description": "The boidId to filter the account deltas"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of account deltas",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "averagePower": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string"
+                            },
+                            "boid_id": {
+                              "type": "string"
+                            },
+                            "avgPower": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "totalPower": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string"
+                            },
+                            "totPower": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/accounts/mint": {
+        "get": {
+          "summary": "Retrieve a list of account mint totals per day from LogPwrClaim db table",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "from",
+              "schema": {
+                "type": "string",
+                "format": "date"
+              },
+              "description": "The start date to filter the mint totals (format YYYY-MM-DD)"
+            },
+            {
+              "in": "query",
+              "name": "to",
+              "schema": {
+                "type": "string",
+                "format": "date"
+              },
+              "description": "The end date to filter the mint totals (format YYYY-MM-DD)"
+            },
+            {
+              "in": "query",
+              "name": "boid_id",
+              "schema": {
+                "type": "string"
+              },
+              "description": "The boid_id to filter the mint totals"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A list of account mint totals",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "boid_id": {
+                        "type": "string",
+                        "description": "The boid_id used for the query"
+                      },
+                      "perDay": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string",
+                              "description": "The date of the mint total"
+                            },
+                            "total": {
+                              "type": "number",
+                              "description": "The mint total for the date"
+                            }
+                          }
+                        }
+                      },
+                      "total": {
+                        "type": "number",
+                        "description": "The total minted in the queried period"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/global/accounts": {
+        "get": {
+          "summary": "Get AccountsTable db data",
+          "description": "Retrieve account data with optional query parameters",
+          "parameters": [
+            {
+              "name": "from",
+              "in": "query",
+              "description": "Start date to filter account data (format YYYY-MM-DD) (inclusive)",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "format": "date"
+              }
+            },
+            {
+              "name": "to",
+              "in": "query",
+              "description": "End date to filter account data (format YYYY-MM-DD) (inclusive)",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "format": "date"
+              }
+            },
+            {
+              "name": "boid_id",
+              "in": "query",
+              "description": "boid_id to filter account data",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "date": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "boid_id": {
+                          "type": "string"
+                        },
+                        "staked": {
+                          "type": "number"
+                        },
+                        "power": {
+                          "type": "number"
+                        },
+                        "balance": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/global/delta": {
+        "get": {
+          "summary": "Get GlobalDelta db data",
+          "description": "Fetches global delta data based on optional query parameters",
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "from",
+              "in": "query",
+              "description": "Start date for the data range (format YYYY-MM-DD) (inclusive)",
+              "type": "string",
+              "format": "date",
+              "required": false
+            },
+            {
+              "name": "to",
+              "in": "query",
+              "description": "End date for the data range (inclusive)",
+              "type": "string",
+              "format": "date",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "An array of global delta data",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/GlobalDeltaResponse"
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "GlobalDeltaResponse": {
+        "type": "object",
+        "properties": {
+          "timeStamp": {
+            "type": "string",
+            "format": "date",
+            "description": "Timestamp of the global delta data"
+          },
+          "total_accounts": {
+            "type": "string",
+            "description": "Total number of accounts"
+          },
+          "total_power": {
+            "type": "string",
+            "description": "Total power"
+          },
+          "total_liquid_balance": {
+            "type": "string",
+            "description": "Total liquid balance"
+          },
+          "total_stake": {
+            "type": "string",
+            "description": "Total stake"
+          }
+        },
+        "required": [
+          "timeStamp",
+          "total_accounts",
+          "total_power",
+          "total_liquid_balance",
+          "total_stake"
+        ]
+      }
+    }
+  }

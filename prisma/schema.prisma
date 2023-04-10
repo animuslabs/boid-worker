@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -409,4 +409,30 @@ model AccountsDelta {
   teamCumulativeContribution BigInt
   receivedDelegatedStake BigInt
   nonce Int
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model GlobalDelta {
+  id String @unique
+  timeStamp DateTime
+  total_accounts BigInt
+  total_power BigInt
+  total_liquid_balance BigInt
+  total_stake BigInt
+  
+  @@index([timeStamp])
+}
+
+model AccountsTable {
+  id        Int      @id @default(autoincrement())
+  timeStamp DateTime
+  boid_id   String
+  staked    Int
+  power     Int
+  balance   Int
+
+  @@index([boid_id, timeStamp])
+  @@index([timeStamp])
 }

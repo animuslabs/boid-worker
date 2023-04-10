@@ -32,6 +32,9 @@ interface eosioConfig {
     keepHistoryDataDays:number,
     injestLoopDelaySec:number,
     port:number
+  },
+  historyDeltasAPI?:{
+    port:number
   }
 }
 type eosioConfigs = { [k in chains]?:eosioConfig }
@@ -79,6 +82,11 @@ const typed:eosioConfig = {
         keepHistoryDataDays: untyped.history.keepHistoryDataDays,
         injestLoopDelaySec: untyped.history.injestLoopDelaySec,
         port: untyped.history.port
+      }
+    : undefined,
+  historyDeltasAPI: untyped.historyDeltasAPI
+    ? {
+        port: untyped.historyDeltasAPI.port
       }
     : undefined
 }
