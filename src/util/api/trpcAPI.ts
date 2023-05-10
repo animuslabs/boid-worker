@@ -12,7 +12,6 @@ dotenv.config()
 const apiport = process.env.TRPC_API_PORT
 const app = express()
 app.use(express.json())
-app.use(cors())
 const publicProcedure = t.procedure
 
 const inputSchema = z.object({
