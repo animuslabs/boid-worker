@@ -1,9 +1,12 @@
 export interface AccountsDeltaData {
     timeStamp:Date;
     boid_id:string;
+    balance:number;
+    selfStaked:number;
     power:number;
+    receivedDelegatedStake:number;
   }
-  
+
 export interface AveragePowerData {
       date:string;
       boid_id:string;
@@ -19,8 +22,8 @@ export type TotalAveragePowerData = {
 export type DeltasByDateAndBoidId = { [date:string]:{ [boid_id:string]:{ totPower:number; count:number } } }
 
 export interface RequestQueryParams {
-    from?:string;
-    to?:string;
+    from:Date;
+    to:Date;
     boid_id?:string;
   }
 export interface MintTotalByDate {
@@ -28,10 +31,13 @@ export interface MintTotalByDate {
     total:number;
   }
   
-export interface MintData {
-    boid_id:string | undefined
-    perDay:MintTotalByDate[]
-    total:number
+export interface PwrClaimData {
+    timeStamp:Date,
+    boid_id:string,
+    power_before:number,
+    power_after:number,
+    power_decayed:number,
+    mint_total:number
   }
 
 export type GlobalDeltaResponse = {
@@ -43,8 +49,8 @@ export type GlobalDeltaResponse = {
   }
   
 export interface RequestParams {
-    from?:string;
-    to?:string;
+    from:Date;
+    to:Date;
   }
 
 export type AccountResponse = {
@@ -54,3 +60,17 @@ export type AccountResponse = {
     power:number;
     balance:number;
   }
+
+export type FahDataResponse = {
+    time:Date;
+    name:string;
+    score:BigInt;
+  }
+
+export type FahDataResTimeStamp = {
+    timeStamp:Date;
+    boid_id:string;
+    score:BigInt;
+  } 
+
+export type CombinedResponse = AccountResponse & { score:string }

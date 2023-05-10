@@ -187,7 +187,8 @@ To run it use pm2 and example.historyDeltasAPI.ecosystem.config.json file
 cp ./example.historyDeltasAPI.ecosystem.config.json ./historyDeltasAPI.ecosystem.config.json
 pm2 start ./historyDeltasAPI.ecosystem.config.json
 ```
-In apiSwagger.json file edit your Development server and Production server details for SwaggerUI.
+you can edit the port that this API uses in .env file  
+default settings: TRPC_API_PORT=3001
 
 ## Relayer
 To run a relayer you need to have a local running IPFS node with port 5001 (the admin port) available and configured in the ipfs section of the .env.json file. Additoionally it's higly suggested you expose the ipfs public gateway (8080) port so that users could use it in the Boid application. The ipfs gatway can be entered into the proxy section of the config if you are using the built in proxy server or you could use your own firewall solution.

@@ -14,7 +14,7 @@
     {
       "name": "boid-worker-historyDeltasAPI-server",
       "cwd": "./dist",
-      "script": "./util/api/api4Deltas.js",
+      "script": "./util/api/trpcAPI.js",
       "autorestart": true,
       "args": [
         "--color"
