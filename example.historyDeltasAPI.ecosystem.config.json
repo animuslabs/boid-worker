@@ -19,6 +19,16 @@
       "args": [
         "--color"
       ]
+    },
+    {
+      "name": "boid-worker-historyDeltas",
+      "cwd": "./dist",
+      "script": "./jobs/history/loadStateDeltas.js",
+      "autorestart": true,
+      "cron_restart": "0 * * * *",
+      "args": [
+        "--color"
+      ]
     }
   ]
 }
