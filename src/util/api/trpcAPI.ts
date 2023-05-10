@@ -11,6 +11,7 @@ dotenv.config()
 
 const apiport = process.env.TRPC_API_PORT
 const app = express()
+app.use(cors())
 app.use(express.json())
 const publicProcedure = t.procedure
 
