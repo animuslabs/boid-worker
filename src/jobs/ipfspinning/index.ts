@@ -3,7 +3,8 @@ import { pinAllToIpfs } from "./pinCIDs"
 import { IPFSnodes } from "./links"
 import {
   allEOSCollectionsTemplates,
-  allWAXCollectionsTemplates
+  allWAXCollectionsTemplates,
+  allTelosCollectionsTemplates
 } from "./atomicData"
 import { dataFromBoidID } from "./usersBoid"
 import { dataFromTeams } from "./teamsBoid"
@@ -17,6 +18,7 @@ const interval6 = 6 * 60 * 60 * 1000 // 6 hours in milliseconds
 // this is when you don't want to use db and just pin everything to IPFS
 const waxNameCids = allWAXCollectionsTemplates.map(({ name, CID }) => ({ name, CID }))
 const eosNameCids = allEOSCollectionsTemplates.map(({ name, CID }) => ({ name, CID }))
+const telosNameCids = allTelosCollectionsTemplates.map(({ name, CID }) => ({ name, CID }))
 const newDataFromBoidID = dataFromBoidID.map((item:AccMetaCID) => ({ name: item.boid_id, CID: item.ipfs_meta }))
 
 const runPinning = async() => {
@@ -25,6 +27,7 @@ const runPinning = async() => {
     await pinAllToIpfs(dataFromTeams, IPFSnodes)
     await pinAllToIpfs(waxNameCids, IPFSnodes)
     await pinAllToIpfs(eosNameCids, IPFSnodes)
+    await pinAllToIpfs(telosNameCids, IPFSnodes)
     console.log("All data pinned successfully")
   } catch (error) {
     console.error("Failed to pin data to IPFS:", error)

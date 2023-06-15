@@ -11,11 +11,12 @@ import {
 } from "./types"
 import { deserialize, ObjectSchema } from "atomicassets"
 import { ISchema } from "atomicassets/build/Schema"
-import { collectionsEOS, collectionsWAX } from "./links"
+import { collectionsEOS, collectionsWAX, collectionsTelos } from "./links"
 import { JsonRpc } from "eosjs"
 
 const eosRPC = RPCendpoints[0]
 const WAXrpc = RPCendpoints[3]
+const TelosRPC = RPCendpoints[1]
 // Step 1
 // get schemas from atomicassets contract by collection name and return schema name and format
 const getSchemaInfo = async(
@@ -206,3 +207,5 @@ export const allEOSCollectionsTemplates =
 export const allWAXCollectionsTemplates =
   await extractTemplatesInfoForCollections(collectionsWAX, WAXrpc)
 // console.log(allCollectionsTemplates[0]);
+export const allTelosCollectionsTemplates =
+  await extractTemplatesInfoForCollections(collectionsTelos, TelosRPC)

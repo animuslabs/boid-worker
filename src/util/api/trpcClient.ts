@@ -5,7 +5,7 @@ import type { AppRouter } from "./trpcAPI"
 const trpc = createTRPCProxyClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: "http://localhost:3001/api/"
+      url: "http://localhost:3000/api/"
     })
   ]
 })
@@ -22,23 +22,7 @@ const trpc = createTRPCProxyClient<AppRouter>({
 // fetchAllBoidIDs()
 
 
-async function fetchperBoidID(boid_id) {
-  const fromDate = "2023-04-25T00:00:00.000Z"
-  const toDate = "2023-05-01T00:00:00.000Z"
-  
-  try {
-    const queryParameters:any = { from: fromDate, to: toDate }
-    if (boid_id) {
-      queryParameters.boid_id = boid_id
-    }
-    const data = await trpc.GetDeltasBoidID.query(queryParameters)
-    console.log("All Deltas:", data)
-  } catch (error) {
-    console.error("Error fetching data:", error)
-  }
-}  
-
-// async function fetchPwrClaim(boid_id) {
+// async function fetchperBoidID(boid_id) {
 //   const fromDate = "2023-04-25T00:00:00.000Z"
 //   const toDate = "2023-05-01T00:00:00.000Z"
   
@@ -47,16 +31,32 @@ async function fetchperBoidID(boid_id) {
 //     if (boid_id) {
 //       queryParameters.boid_id = boid_id
 //     }
-//     const data = await trpc.GetLogPwrClaim.query(queryParameters)
+//     const data = await trpc.GetDeltasBoidID.query(queryParameters)
 //     console.log("All Deltas:", data)
 //   } catch (error) {
 //     console.error("Error fetching data:", error)
 //   }
-// }
+// }  
+
+async function fetchPwrClaim(boid_id) {
+  const fromDate = "2023-04-25T00:00:00.000Z"
+  const toDate = "2023-05-01T00:00:00.000Z"
+  
+  try {
+    const queryParameters:any = { from: fromDate, to: toDate }
+    if (boid_id) {
+      queryParameters.boid_id = boid_id
+    }
+    const data = await trpc.GetLogPwrClaim.query(queryParameters)
+    console.log("All Deltas:", data)
+  } catch (error) {
+    console.error("Error fetching data:", error)
+  }
+}
 
 // async function fetchCombinedData(boid_id) {
-//   const fromDate = "2023-04-25T00:00:00.000Z"
-//   const toDate = "2023-05-01T00:00:00.000Z"
+//   const fromDate = "2023-05-01T00:00:00.000Z"
+//   const toDate = "2023-05-10T00:00:00.000Z"
   
 //   try {
 //     const queryParameters:any = { from: fromDate, to: toDate }
@@ -71,8 +71,8 @@ async function fetchperBoidID(boid_id) {
 // }
 
 // async function fetchGlobalDeltas() {
-//   const fromDate = "2023-04-25T00:00:00.000Z"
-//   const toDate = "2023-05-01T00:00:00.000Z"
+//   const fromDate = "2023-05-01T00:00:00.000Z"
+//   const toDate = "2023-05-10T00:00:00.000Z"
   
 //   try {
 //     const queryParameters:any = { from: fromDate, to: toDate }
@@ -87,8 +87,8 @@ async function fetchperBoidID(boid_id) {
 // }
 
 const boid_id = "seth.voice"
-fetchperBoidID(boid_id)
+// fetchperBoidID(boid_id)
 // fetchperBoidID("")
-// fetchPwrClaim(boid_id)
+fetchPwrClaim(boid_id)
 // fetchCombinedData(boid_id)
 // fetchGlobalDeltas()
