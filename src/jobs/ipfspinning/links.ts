@@ -27,5 +27,5 @@ export const collectionsWAX = [
   "boid4science", "alienavatars"
 ]
 export const collectionsTelos = [
-  "nft.boid"
+  "nft.boid", "artsworkshop"
 ]
