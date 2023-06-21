@@ -144,11 +144,19 @@ function extractTemplateInfo(
   const result:TemplatesInfo[] = []
 
   if ("name" in immutable_serialized_data) {
-    const { name, img, img_back, video } = immutable_serialized_data
+    const { name, img, img2, img_back, video } = immutable_serialized_data
     if (img) {
       result.push({
         name: `Template-${template_id}_${name}_${schema_name}`,
         CID: img,
+        datatype: "img"
+      })
+    }
+
+    if (img2) {
+      result.push({
+        name: `Template-${template_id}_${name}_${schema_name}__img2`,
+        CID: img2,
         datatype: "img"
       })
     }
