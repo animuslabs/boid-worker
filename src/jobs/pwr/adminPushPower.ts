@@ -13,6 +13,7 @@ async function init() {
     const reportingRound = await getRoundData((await currentRound()) - 1)
     const previousRound = await getRoundData((await currentRound()) - 2)
     log.info("generating reports for round: ", reportingRound)
+    return
     const allBoidUsers = await db.getAllBoidUsers()
     const boidIds = allBoidUsers.map(el => el.boidId.toString())
     log.info(boidIds)
@@ -24,7 +25,7 @@ async function init() {
       log.debug("checking for fah data for", boidId)
       queryTimer = new Timer().start()
       const lastRecord = await db.getLastFahRecordofRound(boidId, reportingRound)
-      if (!lastRecord) continue
+      if (lastRecord === null) continue
       const previousRecord = await db.getLastFahRecordofRound(boidId, previousRound)
       if (!previousRecord) continue
       log.debug("found fah data for ", boidId)

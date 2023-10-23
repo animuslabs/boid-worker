@@ -7,3 +7,4 @@ node_modules
 dist
 greenlock.d
 yarn-error.log
+.env*
