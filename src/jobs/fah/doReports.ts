@@ -1,12 +1,15 @@
-import { Name } from "@greymass/eosio"
+import { Action, AnyAction, Authority, Name, UInt64 } from "@greymass/eosio"
 import { ActionPusher } from "lib/actionPusher"
-import { pwrActions } from "lib/actions"
-import env from "lib/env"
+import edgedb from "lib/db"
 import log from "lib/logger"
-import { db, getPwrReport } from "lib/queries"
+import { tables, db, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
-import { Finishreport, PwrReport, PwrReportAction } from "lib/types/power.boid.types"
 import { currentRound, getReportId, getRoundData, shouldFinishReport } from "lib/utils"
+import env from "lib/env"
+import { Finishreport, PwrReport, PwrReportAction, PwrReportRow } from "lib/types/power.boid.types"
+import { pickRpc, safeDo } from "lib/eosio"
+import { info } from "console"
+import { pwrActions } from "lib/actions"
 
 async function init() {
   try {

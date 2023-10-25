@@ -1,19 +1,19 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    // "declaration": true,
+    "declaration": true,
     "noImplicitThis": true,
-    "target": "ES2022",
-    "module": "ESNext",
+    "target": "ES2020",
+    "module": "esnext",
     "moduleResolution": "Node",
     "useDefineForClassFields": false, // breaks eosio-core
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "alwaysStrict": true,
     "noUnusedLocals": false,
     "noImplicitReturns": true,
     "allowUnreachableCode": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false,
     "strictFunctionTypes": true,
     "strict": true,
     "resolveJsonModule": true,
@@ -26,26 +26,21 @@
     "types": [
       "node"
     ],
-    "lib": [
-      "ESNext",
-      "ESNext.AsyncIterable"
-    ],
     "allowJs": false,
     "checkJs": false,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "skipDefaultLibCheck": true,
     "outDir": "dist",
     "sourceMap": true
   },
   "exclude": [
     "node_modules",
-    "dist/**/*",
-    "./.eslintrc.json"
+    "dist/**/*"
   ],
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "../apiSwagger.json"
   ]
 }
