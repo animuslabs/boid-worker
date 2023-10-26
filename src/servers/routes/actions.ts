@@ -29,7 +29,7 @@ export const pushActions = route
         // console.log(action)
         const action = Action.from(data.input.actions[0] as any, await getAbi(data.input.actions[0].account))
         const editData = action.decodeData(AccountEdit)
-        const cid = CID.decode(editData.ipfs_meta.array)
+        const cid = CID.decode(editData.meta.array)
         console.log("CID:", cid.toString())
         const acctMeta = data.input.additional?.accountMeta
         if (!acctMeta) throw new Error("missing account metadata")

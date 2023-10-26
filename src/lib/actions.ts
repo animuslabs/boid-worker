@@ -1,6 +1,6 @@
 import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64 } from "@greymass/eosio"
 import env from "lib/env"
-import { AccountBuy, Auth, InviteRm, PowerAdd, PowerClaim, PwrmodRm, StatsClean } from "lib/types/boid.system"
+import { AccountBuy, Auth, InviteRm, PowerAdd, PowerClaim, BoosterRm } from "lib/types/boid.system"
 import { Commitsclean, Finishreport, Handleostat, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, RoundCommit, Slashabsent, Statsclean } from "lib/types/power.boid.types"
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
 const pwrAcct = env.contracts.power
@@ -14,7 +14,6 @@ export const pwrActions = {
   roundStats: () => createAct("roundstats"),
   slashAbsent: (data:Slashabsent) => createAct("slashabsent", data),
   finishReport: (data:{boid_id_scope:NameType, pwrreport_ids:UInt64[]}) => createAct("finishreport", Finishreport.from(data)),
-  statsClean: () => createAct("statsclean"),
   reportsClean: (data:{scope:NameType}) => createAct("reportsclean", Reportsclean.from(data)),
   oracleStatsClean: (data:{ scope:NameType }) => createAct("ostatsclean", Ostatsclean.from(data)),
   roundCommitClean: (data:{ scope:NameType }) => createAct("commitsclean", Commitsclean.from(data)),
@@ -26,7 +25,7 @@ export const sysActions = {
   buyAccount: (data:{ sponsor:NameType, boid_id:NameType, key:string }) => createAct("account.buy", AccountBuy.from(Object.assign(data, { owners: [] })), env.contracts.system),
   claim: (data:{ boid_id:NameType }) => createAct("power.claim", PowerClaim.from(data), env.contracts.system),
   inviteRm: (data:{ sponsor_boid_id:NameType, invite_code:number | string | UInt64 }) => createAct("invite.rm", InviteRm.from(data), env.contracts.system),
-  pwrModRm: (data:{boid_id:NameType, pwrmod_index:Int32Type[]}) => createAct("pwrmod.rm", PwrmodRm.from(data), env.contracts.system),
+  pwrModRm: (data:{boid_id:NameType, pwrmod_index:Int32Type[]}) => createAct("booster.rm", BoosterRm.from(data), env.contracts.system),
   pwrAdd: (data:{ boid_id:NameType, power:UInt16Type }) => createAct("power.add", PowerAdd.from(data), env.contracts.system)
 }
 

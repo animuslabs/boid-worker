@@ -13,7 +13,6 @@ import {
   PublicKey,
   Signature,
   Struct,
-  TimePoint,
   UInt16,
   UInt32,
   UInt64,
@@ -40,8 +39,8 @@ export class AccountStake extends Struct {
     @Struct.field(UInt16) received_delegated_stake!:UInt16
 }
 
-@Struct.type("AccountPowerMod")
-export class AccountPowerMod extends Struct {
+@Struct.type("AccountBooster")
+export class AccountBooster extends Struct {
     @Struct.field(UInt8) pwr_multiplier!:UInt8
     @Struct.field(UInt16) pwr_add_per_round!:UInt16
     @Struct.field(UInt16) expires_round!:UInt16
@@ -51,13 +50,15 @@ export class AccountPowerMod extends Struct {
 @Struct.type("AccountPower")
 export class AccountPower extends Struct {
     @Struct.field(UInt16) last_claimed_round!:UInt16
-    @Struct.field(UInt16) rating!:UInt16
-    @Struct.field(AccountPowerMod, { array: true }) mods!:AccountPowerMod[]
+    @Struct.field(UInt16) last_added_round!:UInt16
+    @Struct.field(UInt32) rating!:UInt32
+    @Struct.field(UInt16, { array: true }) history!:UInt16[]
+    @Struct.field(AccountBooster, { array: true }) mods!:AccountBooster[]
 }
 
 @Struct.type("AccountTeam")
 export class AccountTeam extends Struct {
-    @Struct.field(UInt16) team_id!:UInt16
+    @Struct.field(UInt8) team_id!:UInt8
     @Struct.field(UInt16) last_edit_round!:UInt16
     @Struct.field(UInt8) team_tax_mult!:UInt8
     @Struct.field(UInt32) team_cumulative_contribution!:UInt32
@@ -82,6 +83,12 @@ export class AccountCreate extends Struct {
     @Struct.field(Name) boid_id!:Name
     @Struct.field(PublicKey, { array: true }) keys!:PublicKey[]
     @Struct.field(Name, { array: true }) owners!:Name[]
+}
+
+@Struct.type("AcctMeta")
+export class AcctMeta extends Struct {
+    @Struct.field(Name) boid_id!:Name
+    @Struct.field(Bytes) meta!:Bytes
 }
 
 @Struct.type("PermissionLevel")
@@ -113,10 +120,19 @@ export class AtomicFormat extends Struct {
     @Struct.field("string") type!:string
 }
 
-// @Struct.type("Auth")
-// export class Auth extends Struct {
-//     @Struct.field(Name) boid_id_auth!:Name
-// }
+@Struct.type("Auth")
+export class AuthRow extends Struct {
+    @Struct.field(Name) boid_id_auth!:Name
+}
+
+@Struct.type("Booster")
+export class Booster extends Struct {
+    @Struct.field(UInt8) mod_id!:UInt8
+    @Struct.field(UInt8) pwr_multiplier!:UInt8
+    @Struct.field(UInt16) pwr_add_per_round!:UInt16
+    @Struct.field(UInt16) expire_after_elapsed_rounds!:UInt16
+    @Struct.field(UInt32) aggregate_pwr_capacity!:UInt32
+}
 
 @Struct.type("ConfigAccount")
 export class ConfigAccount extends Struct {
@@ -124,8 +140,7 @@ export class ConfigAccount extends Struct {
     @Struct.field(UInt32) premium_purchase_price!:UInt32
     @Struct.field(UInt8) max_premium_prefix!:UInt8
     @Struct.field(UInt8) max_owners!:UInt8
-    @Struct.field(UInt8) max_sponsors!:UInt8
-    @Struct.field(UInt8) max_pwrmods!:UInt8
+    @Struct.field(UInt8) max_boosters!:UInt8
     @Struct.field(Name, { array: true }) suffix_whitelist!:Name[]
     @Struct.field(UInt32) remove_sponsor_price!:UInt32
     @Struct.field(UInt8) sponsor_max_invite_codes!:UInt8
@@ -134,20 +149,17 @@ export class ConfigAccount extends Struct {
 
 @Struct.type("ConfigPower")
 export class ConfigPower extends Struct {
-    @Struct.field(UInt16) round_decay_constant!:UInt16
-    @Struct.field(Float32) round_decay_mult!:Float32
     @Struct.field(Float32) sponsor_tax_mult!:Float32
     @Struct.field(Float32) powered_stake_mult!:Float32
-    @Struct.field(Float32) powered_stake_pwr!:Float32
     @Struct.field(UInt16) claim_maximum_elapsed_rounds!:UInt16
     @Struct.field(UInt16) soft_max_pwr_add!:UInt16
+    @Struct.field(UInt8) history_slots_length!:UInt8
 }
 
 @Struct.type("ConfigMint")
 export class ConfigMint extends Struct {
     @Struct.field(Float32) round_powered_stake_mult!:Float32
     @Struct.field(Float32) round_power_mult!:Float32
-    @Struct.field(Float32) dev_fund_tax_mult!:Float32
 }
 
 @Struct.type("ConfigTeam")
@@ -168,7 +180,7 @@ export class ConfigStake extends Struct {
 
 @Struct.type("ConfigTime")
 export class ConfigTime extends Struct {
-    @Struct.field(TimePoint) rounds_start!:TimePoint
+    @Struct.field(UInt32) rounds_start_sec_since_epoch!:UInt32
     @Struct.field(UInt32) round_length_sec!:UInt32
 }
 
@@ -187,15 +199,6 @@ export class ConfigNft extends Struct {
     @Struct.field(Name, { array: true }) whitelist_collections!:Name[]
 }
 
-@Struct.type("ConfigAutoAdjust")
-export class ConfigAutoAdjust extends Struct {
-    @Struct.field(UInt32) target_inflation_per_round!:UInt32
-    @Struct.field(Float32) power_mult_max_adjust!:Float32
-    @Struct.field(Float32) powered_stake_mult_max_adjust!:Float32
-    @Struct.field(UInt16) adjustment_interval_rounds!:UInt16
-    @Struct.field(UInt16) max_check_rounds!:UInt16
-}
-
 @Struct.type("Config")
 export class Config extends Struct {
     @Struct.field(ConfigAccount) account!:ConfigAccount
@@ -206,11 +209,10 @@ export class Config extends Struct {
     @Struct.field(ConfigTime) time!:ConfigTime
     @Struct.field(ConfigAuth) auth!:ConfigAuth
     @Struct.field(ConfigNft) nft!:ConfigNft
-    @Struct.field(ConfigAutoAdjust) auto!:ConfigAutoAdjust
     @Struct.field("bool") paused!:boolean
     @Struct.field("bool") allow_deposits!:boolean
     @Struct.field("bool") allow_withdrawals!:boolean
-    @Struct.field(Name) recovery_account!:Name
+    @Struct.field(Name) recoveryAccount!:Name
 }
 
 @Struct.type("ExtendedSymbol")
@@ -222,10 +224,7 @@ export class ExtendedSymbol extends Struct {
 @Struct.type("Global")
 export class Global extends Struct {
     @Struct.field(Name) chain_name!:Name
-    @Struct.field(UInt64) total_accounts!:UInt64
     @Struct.field(UInt64) total_power!:UInt64
-    @Struct.field(UInt64) total_liquid_balance!:UInt64
-    @Struct.field(UInt64) total_stake!:UInt64
     @Struct.field(UInt16) last_inflation_adjust_round!:UInt16
 }
 
@@ -238,11 +237,12 @@ export class Invite extends Struct {
 
 @Struct.type("MintLog")
 export class MintLog extends Struct {
-    @Struct.field(UInt32) account!:UInt32
-    @Struct.field(UInt32) team!:UInt32
-    @Struct.field(UInt32) team_owner!:UInt32
-    @Struct.field(UInt32) overstake!:UInt32
-    @Struct.field(UInt32) fundstake!:UInt32
+    @Struct.field(UInt32) power_mint!:UInt32
+    @Struct.field(UInt32) powered_stake_mint!:UInt32
+    @Struct.field(UInt32) account_earned!:UInt32
+    @Struct.field(UInt32) team_cut!:UInt32
+    @Struct.field(UInt32) team_owner_earned!:UInt32
+    @Struct.field(UInt32) overstake_mint!:UInt32
     @Struct.field(UInt32) total!:UInt32
 }
 
@@ -256,12 +256,6 @@ export class NFT extends Struct {
 export class NFTMint extends Struct {
     @Struct.field(Name) mint_receiver_boid_id!:Name
     @Struct.field(UInt16) mint_quantity_remaining!:UInt16
-}
-
-@Struct.type("NFTdetails")
-export class NFTdetails extends Struct {
-    @Struct.field(Name) collection!:Name
-    @Struct.field(UInt32) template_id!:UInt32
 }
 
 @Struct.type("NftAction")
@@ -287,7 +281,7 @@ export class NftMint extends Struct {
 
 @Struct.type("OfferRequirements")
 export class OfferRequirements extends Struct {
-    @Struct.field(UInt16, { array: true }) team_id!:UInt16[]
+    @Struct.field(Bytes) team_id!:Bytes
     @Struct.field(UInt16) min_power!:UInt16
     @Struct.field(UInt32) min_balance!:UInt32
     @Struct.field(UInt32) min_stake!:UInt32
@@ -329,20 +323,10 @@ export class Offer extends Struct {
 
 @Struct.type("PowerClaimLog")
 export class PowerClaimLog extends Struct {
-    @Struct.field(UInt16) before!:UInt16
-    @Struct.field(UInt16) after!:UInt16
-    @Struct.field(UInt16) from_mods!:UInt16
-    @Struct.field(UInt16) decayed!:UInt16
-    @Struct.field(UInt16) rounds!:UInt16
-}
-
-@Struct.type("PwrMod")
-export class PwrMod extends Struct {
-    @Struct.field(UInt8) mod_id!:UInt8
-    @Struct.field(UInt8) pwr_multiplier!:UInt8
-    @Struct.field(UInt16) pwr_add_per_round!:UInt16
-    @Struct.field(UInt16) expire_after_elapsed_rounds!:UInt16
-    @Struct.field(UInt32) aggregate_pwr_capacity!:UInt32
+    @Struct.field(UInt32) before!:UInt32
+    @Struct.field(UInt32) after!:UInt32
+    @Struct.field(UInt32) from_boosters!:UInt32
+    @Struct.field(UInt16) elapsed_rounds!:UInt16
 }
 
 @Struct.type("Sponsor")
@@ -355,21 +339,13 @@ export class Sponsor extends Struct {
     @Struct.field(UInt32) upgrades_total_earned!:UInt32
 }
 
-@Struct.type("StakeRow")
-export class StakeRow extends Struct {
+@Struct.type("Stake")
+export class DelegStake extends Struct {
     @Struct.field(UInt64) stake_id!:UInt64
     @Struct.field(Name) from_boid_id!:Name
     @Struct.field(Name) to_boid_id!:Name
     @Struct.field(UInt16) stake_quantity!:UInt16
     @Struct.field(UInt16) locked_until_round!:UInt16
-}
-
-@Struct.type("Stats")
-export class Stats extends Struct {
-    @Struct.field(UInt16) round!:UInt16
-    @Struct.field(UInt32) power_added!:UInt32
-    @Struct.field(UInt32) boid_generated!:UInt32
-    @Struct.field(UInt32) accounts_created!:UInt32
 }
 
 @Struct.type("Team")
@@ -382,12 +358,10 @@ export class Team extends Struct {
     @Struct.field(UInt8) min_pwr_tax_mult!:UInt8
     @Struct.field(UInt8) owner_cut_mult!:UInt8
     @Struct.field("string") url_safe_name!:string
-    @Struct.field(Bytes) info_json_ipfs!:Bytes
-    @Struct.field(UInt32) power!:UInt32
+    @Struct.field(UInt64) power!:UInt64
     @Struct.field(UInt32) members!:UInt32
     @Struct.field(UInt16) last_edit_round!:UInt16
-    @Struct.field("bool") accepting_new_members!:boolean
-    @Struct.field(NFTdetails, { array: true }) membership_nft!:NFTdetails[]
+    @Struct.field(Bytes) meta!:Bytes
 }
 
 @Struct.type("account.add")
@@ -403,20 +377,31 @@ export class AccountBuy extends Struct {
     @Struct.field(Name) payer_boid_id!:Name
     @Struct.field(AccountCreate) new_account!:AccountCreate
 }
-@Struct.type("AcctMeta")
-export class AcctMeta extends Struct {
-    @Struct.field(Name) boid_id!:Name
-    @Struct.field(Bytes) ipfs_meta!:Bytes
-}
+
 @Struct.type("account.edit")
 export class AccountEdit extends Struct {
     @Struct.field(Name) boid_id!:Name
-    @Struct.field(Bytes) ipfs_meta!:Bytes
+    @Struct.field(Bytes) meta!:Bytes
 }
 
 @Struct.type("account.free")
 export class AccountFree extends Struct {
     @Struct.field(Name) boid_id!:Name
+}
+
+@Struct.type("account.mod")
+export class AccountMod extends Struct {
+    @Struct.field(Name) boid_id!:Name
+    @Struct.field(UInt16) received_delegated_stake!:UInt16
+}
+
+@Struct.type("account.rm")
+export class AccountRm extends Struct {
+    @Struct.field(Name) boid_id!:Name
+}
+
+@Struct.type("accounts.clr")
+export class AccountsClr extends Struct {
 }
 
 @Struct.type("auth")
@@ -434,6 +419,10 @@ export class AuthAddkey extends Struct {
     @Struct.field(PublicKey) key!:PublicKey
 }
 
+@Struct.type("auth.clear")
+export class AuthClear extends Struct {
+}
+
 @Struct.type("auth.init")
 export class AuthInit extends Struct {
 }
@@ -442,6 +431,23 @@ export class AuthInit extends Struct {
 export class AuthRmkey extends Struct {
     @Struct.field(Name) boid_id!:Name
     @Struct.field(Int32) keyIndex!:Int32
+}
+
+@Struct.type("booster.add")
+export class BoosterAdd extends Struct {
+    @Struct.field(Name) boid_id!:Name
+    @Struct.field(UInt8) mod_id!:UInt8
+}
+
+@Struct.type("booster.new")
+export class BoosterNew extends Struct {
+    @Struct.field(Booster) mod!:Booster
+}
+
+@Struct.type("booster.rm")
+export class BoosterRm extends Struct {
+    @Struct.field(Name) boid_id!:Name
+    @Struct.field(Int32, { array: true }) booster_index!:Int32[]
 }
 
 @Struct.type("config.clear")
@@ -482,6 +488,12 @@ export class InviteAdd extends Struct {
     @Struct.field(PublicKey) key!:PublicKey
 }
 
+@Struct.type("invite.buy")
+export class InviteBuy extends Struct {
+    @Struct.field(Name) boid_id!:Name
+    @Struct.field(UInt16) quantity!:UInt16
+}
+
 @Struct.type("invite.claim")
 export class InviteClaim extends Struct {
     @Struct.field(Name) sponsor_boid_id!:Name
@@ -508,8 +520,13 @@ export class Logpwradd extends Struct {
 
 @Struct.type("logpwrclaim")
 export class Logpwrclaim extends Struct {
+    @Struct.field(Name) boid_id!:Name
     @Struct.field(PowerClaimLog) power!:PowerClaimLog
     @Struct.field(MintLog) mint!:MintLog
+}
+
+@Struct.type("meta.clean")
+export class MetaClean extends Struct {
 }
 
 @Struct.type("mint")
@@ -560,6 +577,15 @@ export class OfferClaim extends Struct {
     @Struct.field(UInt64, { array: true }) required_nft_action_ids!:UInt64[]
 }
 
+@Struct.type("offer.clean")
+export class OfferClean extends Struct {
+}
+
+@Struct.type("offer.rm")
+export class OfferRm extends Struct {
+    @Struct.field(UInt64) offer_id!:UInt64
+}
+
 @Struct.type("owner.add")
 export class OwnerAdd extends Struct {
     @Struct.field(Name) boid_id!:Name
@@ -583,21 +609,19 @@ export class PowerClaim extends Struct {
     @Struct.field(Name) boid_id!:Name
 }
 
-@Struct.type("pwrmod.add")
-export class PwrmodAdd extends Struct {
-    @Struct.field(Name) boid_id!:Name
-    @Struct.field(UInt8) mod_id!:UInt8
+@Struct.type("rmdelegstake")
+export class Rmdelegstake extends Struct {
+    @Struct.field(UInt64) stake_id!:UInt64
 }
 
-@Struct.type("pwrmod.new")
-export class PwrmodNew extends Struct {
-    @Struct.field(PwrMod) mod!:PwrMod
+@Struct.type("sponsor.rm")
+export class SponsorRm extends Struct {
+    @Struct.field(Name) sponsor_boid_id!:Name
 }
 
-@Struct.type("pwrmod.rm")
-export class PwrmodRm extends Struct {
-    @Struct.field(Name) boid_id!:Name
-    @Struct.field(Int32, { array: true }) pwrmod_index!:Int32[]
+@Struct.type("sponsor.set")
+export class SponsorSet extends Struct {
+    @Struct.field(Sponsor) row!:Sponsor
 }
 
 @Struct.type("stake")
@@ -614,14 +638,10 @@ export class StakeDeleg extends Struct {
     @Struct.field(UInt16) lock_until_round!:UInt16
 }
 
-@Struct.type("stats.clean")
-export class StatsClean extends Struct {
-}
-
 @Struct.type("team.change")
 export class TeamChange extends Struct {
     @Struct.field(Name) boid_id!:Name
-    @Struct.field(UInt16) new_team_id!:UInt16
+    @Struct.field(UInt8) new_team_id!:UInt8
     @Struct.field(UInt8) new_pwr_tax_mult!:UInt8
 }
 
@@ -631,7 +651,6 @@ export class TeamCreate extends Struct {
     @Struct.field(UInt8) min_pwr_tax_mult!:UInt8
     @Struct.field(UInt8) owner_cut_mult!:UInt8
     @Struct.field("string") url_safe_name!:string
-    @Struct.field(Bytes) info_json_ipfs!:Bytes
 }
 
 @Struct.type("team.edit")
@@ -642,12 +661,24 @@ export class TeamEdit extends Struct {
     @Struct.field(UInt8) min_pwr_tax_mult!:UInt8
     @Struct.field(UInt8) owner_cut_mult!:UInt8
     @Struct.field("string") url_safe_name!:string
-    @Struct.field(Bytes) info_json_ipfs!:Bytes
+    @Struct.field(Bytes) meta!:Bytes
 }
 
 @Struct.type("team.rm")
 export class TeamRm extends Struct {
-    @Struct.field(UInt16) team_id!:UInt16
+    @Struct.field(UInt8) team_id!:UInt8
+}
+
+@Struct.type("team.setmem")
+export class TeamSetmem extends Struct {
+    @Struct.field(UInt8) team_id!:UInt8
+    @Struct.field(UInt32) new_members!:UInt32
+}
+
+@Struct.type("team.setpwr")
+export class TeamSetpwr extends Struct {
+    @Struct.field(UInt8) team_id!:UInt8
+    @Struct.field(UInt32) new_power!:UInt32
 }
 
 @Struct.type("team.taxrate")

@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && tsc-alias -f",
-    "dev": "nodemon -w ./src -e .ts --exec \"yarn build || exit 1\"",
-    "db:migrate": "edgedb migration create && edgedb migrate && edgeql-js",
+    "dev": "tsc-watch --onSuccess 'tsc-alias -f'",
     "db:reset": "prisma db push --force-reset",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src --ext .ts --fix",
@@ -37,8 +36,8 @@
     "@greymass/eosio": "^0.6.3",
     "@prisma/client": "^4.8.0",
     "@proton/hyperion": "^3.4.0",
-    "@trpc/client": "^10.21.1",
-    "@trpc/server": "^10.21.1",
+    "@trpc/client": "^10.42.0",
+    "@trpc/server": "^10.42.0",
     "@types/cache-manager": "^4.0.2",
     "@types/express": "^4.17.17",
     "@types/isomorphic-fetch": "^0.0.36",
@@ -70,6 +69,7 @@
     "swagger-ui-express": "^4.6.2",
     "tozod": "^3.0.0",
     "trpc-openapi": "^1.1.0",
+    "tsc-watch": "^6.0.4",
     "uint8arraylist": "2.4.3",
     "ws": "^8.9.0",
     "zod": "^3.20.2"
