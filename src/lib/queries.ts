@@ -126,7 +126,7 @@ export const tables = {
   }
 }
 
-export const db = {
+export const dbQuery = {
   getAllBoidUsers() {
     return prisma.boidAccount.findMany()
   },

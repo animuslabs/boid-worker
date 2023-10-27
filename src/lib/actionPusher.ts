@@ -24,7 +24,7 @@ export class ActionPusher {
     this.queue.push(act)
   }
 
-  timer:NodeJS.Timer
+  timer:NodeJS.Timeout
   queue:Action[] = []
 
   private async pushTrx() {

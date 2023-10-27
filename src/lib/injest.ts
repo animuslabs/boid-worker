@@ -276,6 +276,7 @@ function upsertData(action:Action<any>) {
 
 export async function addRow(table:keyof ActionMapType, action:Action<any>, params:any) {
   const create = Object.assign(upsertData(action), params)
+  //@ts-ignore
   const result = await db[table as any].upsert(
     {
       where: { sequence: action.global_sequence },
@@ -290,6 +291,7 @@ let skip:any = {
 
 }
 export async function getRecentActions(action:string, table:string) {
+  //@ts-ignore
   const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "desc" } })
     .catch(async err => {
       log.error(err)

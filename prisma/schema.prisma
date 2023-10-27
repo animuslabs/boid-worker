@@ -18,6 +18,19 @@ model FahData {
   name  String
   score BigInt
   wus   BigInt
+
+  @@index([time])
+}
+
+model AdminReport {
+  boid_id   String
+  round     Int
+  protocol  Int
+  power     Int
+  trxId     String   @unique
+  timeStamp DateTime @updatedAt
+
+  @@index([boid_id, round, protocol])
 }
 
 model BoidAccount {
@@ -399,29 +412,29 @@ model Withdraw {
 }
 
 model AccountsDelta {
-  id String @unique
-  timeStamp DateTime
-  boid_id String
-  balance BigInt
-  selfStaked BigInt
-  power BigInt
-  nftBalance BigInt
+  id                         String   @unique
+  timeStamp                  DateTime
+  boid_id                    String
+  balance                    BigInt
+  selfStaked                 BigInt
+  power                      BigInt
+  nftBalance                 BigInt
   teamCumulativeContribution BigInt
-  receivedDelegatedStake BigInt
-  nonce Int
+  receivedDelegatedStake     BigInt
+  nonce                      Int
 
   @@index([boid_id, timeStamp])
   @@index([timeStamp])
 }
 
 model GlobalDelta {
-  id String @unique
-  timeStamp DateTime
-  total_accounts BigInt
-  total_power BigInt
+  id                   String   @unique
+  timeStamp            DateTime
+  total_accounts       BigInt
+  total_power          BigInt
   total_liquid_balance BigInt
-  total_stake BigInt
-  
+  total_stake          BigInt
+
   @@index([timeStamp])
 }
 

@@ -2,7 +2,7 @@ import { Action, AnyAction, Authority, Name, UInt64 } from "@greymass/eosio"
 import { ActionPusher } from "lib/actionPusher"
 import edgedb from "lib/db"
 import log from "lib/logger"
-import { tables, db, getPwrReport } from "lib/queries"
+import { tables, dbQuery, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
 import { currentRound, getReportId, getRoundData, shouldFinishReport } from "lib/utils"
 import env from "lib/env"
@@ -16,7 +16,7 @@ async function init() {
     const reportingRound = await getRoundData((await currentRound()) - 1)
     const previousRound = await getRoundData((await currentRound()) - 2)
     log.info("generating reports for round: ", reportingRound)
-    const allBoidUsers = await db.getAllBoidUsers()
+    const allBoidUsers = await dbQuery.getAllBoidUsers()
     const boidIds = allBoidUsers.map(el => el.boidId.toString())
     log.info(boidIds)
     let queryTimer
@@ -26,9 +26,9 @@ async function init() {
     for (const boidId of boidIds) {
       log.debug("checking for fah data for", boidId)
       queryTimer = new Timer().start()
-      const lastRecord = await db.getLastFahRecordofRound(boidId, reportingRound)
+      const lastRecord = await dbQuery.getLastFahRecordofRound(boidId, reportingRound)
       if (!lastRecord) continue
-      const previousRecord = await db.getLastFahRecordofRound(boidId, previousRound)
+      const previousRecord = await dbQuery.getLastFahRecordofRound(boidId, previousRound)
       if (!previousRecord) continue
       log.debug("found fah data for ", boidId)
       const units = lastRecord.score - previousRecord.score

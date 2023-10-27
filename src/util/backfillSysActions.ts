@@ -9,6 +9,7 @@ const sysContract = config.contracts.system.toString()
 const log = Logger.getLogger("backfillSysActions")
 
 async function getPastActions(action:string, table:string) {
+  //@ts-ignore
   const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "asc" } })
   const before:Date = existing?.timeStamp || new Date()
   log.info("before:", before)

@@ -31,7 +31,7 @@ export const actions = route
         log.info("returning cached data")
         return exists
       }
-      log.info("cache:", cache.store.keyCount())
+      // log.info("cache:", cache.store.keyCount())
       let rows:Record<string, any> = {}
       let where:any = {
         timeStamp: {
@@ -53,6 +53,7 @@ export const actions = route
           customWhere.to_boid_id = input.filter.boid_id
           customWhere.OR = {}
           customWhere.OR.from_boid_id = input.filter.boid_id
+          //@ts-ignore
           results = await db[table as any].findMany({
             where: customWhere, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           })
@@ -60,6 +61,7 @@ export const actions = route
           let customWhere = JSON.parse(JSON.stringify(where))
           delete customWhere.boid_id
           customWhere.sponsor_boid_id = input.filter.boid_id
+          //@ts-ignore
           results = await db[table as any].findMany({
             where: customWhere, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           })
@@ -69,6 +71,7 @@ export const actions = route
           customWhere.to_boid_id = input.filter.boid_id
           customWhere.OR = {}
           customWhere.OR.from_boid_id = input.filter.boid_id
+          //@ts-ignore
           results = await db[table as any].findMany({
             where: customWhere, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           })
@@ -77,7 +80,7 @@ export const actions = route
             where, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           }
           // console.log(JSON.stringify(params, null, 2))
-
+          //@ts-ignore
           results = await db[table as any].findMany(params)
         }
         results.forEach(el => {

@@ -87,6 +87,7 @@ let skip:any = {
 }
 export async function loadDeltas(direction:"forwards"|"backwards", tableName:keyof typeof deltas, code = sysContract, scope = sysContract) {
   const dbTable = tableName + "Delta"
+  //@ts-ignore
   const existing = await db[dbTable as any].findFirst({ orderBy: { timeStamp: direction == "forwards" ? "desc" : "asc" } })
   let after:Date
   if (direction == "forwards") after = new Date(Date.now() - ms("48h"))

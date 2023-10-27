@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc && tsc-alias -f",
     "dev": "tsc-watch --onSuccess 'tsc-alias -f'",
+    "db:up": "prisma db push",
     "db:reset": "prisma db push --force-reset",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src --ext .ts --fix",
@@ -28,13 +29,13 @@
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^2.0.19",
-    "prisma": "^4.8.0",
+    "prisma": "^5.5.2",
     "tsc-alias": "^1.7.0",
     "typescript": "*"
   },
   "dependencies": {
     "@greymass/eosio": "^0.6.3",
-    "@prisma/client": "^4.8.0",
+    "@prisma/client": "^5.5.2",
     "@proton/hyperion": "^3.4.0",
     "@trpc/client": "^10.42.0",
     "@trpc/server": "^10.42.0",
