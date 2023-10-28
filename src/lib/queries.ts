@@ -130,10 +130,13 @@ export const dbQuery = {
   getAllBoidUsers() {
     return prisma.boidAccount.findMany()
   },
-  getLastFahRecordofRound(boidId:string, roundData:roundData) {
-    return prisma.fahData.findFirst({
+  async getLastFahRecordofRound(boidId:string, roundData:roundData) {
+    log.debug(boidId, "getLastFahRecordofRound", roundData)
+    const result = await prisma.fahData.findFirst({
       orderBy: { time: "desc" },
       where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId }
     })
+    log.debug(result)
+    return result
   }
 }

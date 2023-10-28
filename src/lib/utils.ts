@@ -67,7 +67,7 @@ export function evalTypedEOSIOList(list:any[]):any[] {
 
 export async function currentRound() {
   const config = await tables.sys.config()
-  return (Date.now() - config.time.rounds_start_sec_since_epoch.toNumber()) / (config.time.round_length_sec.toNumber() * 1000)
+  return (Date.now() - config.time.rounds_start_sec_since_epoch.toNumber() * 1000) / (config.time.round_length_sec.toNumber() * 1000)
 }
 export async function finalRound() {
   const config = await tables.pwr.config()
@@ -83,9 +83,10 @@ export interface roundData {
 export async function getRoundData(round:number) {
   round = Math.floor(round)
   const config = await tables.sys.config()
-  const roundLength = config.time.round_length_sec.multiplying(1000).toNumber()
-  const roundsStarted = config.time.rounds_start_sec_since_epoch.toNumber()
+  const roundLength = config.time.round_length_sec.toNumber() * 1000
+  const roundsStarted = config.time.rounds_start_sec_since_epoch.toNumber() * 1000
   log.debug("round Length ms:", roundLength)
+  log.debug("rounds started ms:", roundsStarted)
   const start = new Date((roundLength * round) + roundsStarted)
   const end = new Date(start.getTime() + roundLength)
   return { round, start, end }

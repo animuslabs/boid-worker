@@ -20,8 +20,8 @@ async function init() {
     const boidIds = allBoidUsers.map(el => el.boidId.toString())
     log.info("found boid ids:", boidIds.length)
     let queryTimer
-
     for (const boidId of boidIds) {
+      // if (boidId != "seth.voice") continue
       log.debug("checking for fah data for", boidId)
       const reported = await db.adminReport.findFirst({ where: { boid_id: boidId, protocol: 0, round: reportingRound.round } })
       if (reported) {
@@ -35,6 +35,8 @@ async function init() {
       if (!previousRecord) continue
       log.debug("found fah data for ", boidId)
       const units = lastRecord.score - previousRecord.score
+      console.log("units", units)
+
       if (units < 1) continue
 
       log.debug("queries finished in ms", queryTimer.stop().elapsed)
