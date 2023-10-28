@@ -39,8 +39,8 @@ const trpc = createTRPCProxyClient<AppRouter>({
 // }  
 
 async function fetchPwrClaim(boid_id) {
-  const fromDate = "2023-04-25T00:00:00.000Z"
-  const toDate = "2023-05-01T00:00:00.000Z"
+  const fromDate = "2023-10-25T00:00:00.000Z"
+  const toDate = "2023-10-28T00:00:00.000Z"
   
   try {
     const queryParameters:any = { from: fromDate, to: toDate }

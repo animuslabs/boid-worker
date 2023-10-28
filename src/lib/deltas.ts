@@ -63,11 +63,11 @@ export const deltas = {
 
       const create = {
         id,
-        total_accounts: parseInt(data.total_accounts),
-        total_power: parseInt(data.total_power),
-        total_liquid_balance: parseInt(data.total_liquid_balance),
         timeStamp: parseISOString(delta.timestamp),
-        total_stake: parseInt(data.total_stake)
+        chain_name: data.chain_name,
+        total_power: parseInt(data.total_power),
+        last_inflation_adjust_round: parseInt(data.last_inflation_adjust_round)      
+        
       }
       const result = await db.globalDelta.upsert({
         where: { id },

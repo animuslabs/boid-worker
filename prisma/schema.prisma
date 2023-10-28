@@ -430,10 +430,9 @@ model AccountsDelta {
 model GlobalDelta {
   id                   String   @unique
   timeStamp            DateTime
-  total_accounts       BigInt
+  chain_name           String
   total_power          BigInt
-  total_liquid_balance BigInt
-  total_stake          BigInt
+  last_inflation_adjust_round BigInt
 
   @@index([timeStamp])
 }
