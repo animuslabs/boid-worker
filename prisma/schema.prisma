@@ -194,15 +194,15 @@ model LogPwrClaim {
   boid_id         String
   power_before    Int
   power_after     Int
-  power_from_mods Int
-  power_decayed   Int
-  power_rounds    Int
+  power_from_boosters Int
+  power_elapsed_rounds    Int
 
-  mint_account    Int
-  mint_team       Int
-  mint_team_owner Int
-  mint_overstake  Int
-  mint_fundstake  Int
+  mint_power_mint    Int
+  mint_powered_stake_mint       Int
+  mint_account_earned Int
+  mint_team_cut  Int
+  mint_team_owner_earned  Int
+  mint_overstake_mint  Int
   mint_total      Int
 
   @@index([boid_id, timeStamp])

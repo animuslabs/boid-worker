@@ -57,8 +57,9 @@ export async function getLogPwrClaimData(queryParams:RequestQueryParams):Promise
       boid_id: true,
       power_before: true,
       power_after: true,
-      power_decayed: true,
-      mint_total: true
+      power_from_boosters: true,
+      mint_total: true,
+      mint_overstake_mint: true
     }
   })
   return logPwrClaim.map((data) => ({
@@ -66,8 +67,9 @@ export async function getLogPwrClaimData(queryParams:RequestQueryParams):Promise
     boid_id: data.boid_id,
     power_before: Number(data.power_before),
     power_after: Number(data.power_after),
-    power_decayed: Number(data.power_decayed),
-    mint_total: Number(data.mint_total)
+    power_from_boosters: Number(data.power_from_boosters),
+    mint_total: Number(data.mint_total),
+    mint_overstake_mint: Number(data.mint_overstake_mint)
   }))
 }
 
@@ -78,7 +80,7 @@ export async function getGlobalDeltaData(queryParams:RequestParams):Promise<Glob
     const from = Math.floor(new Date(queryParams.from).getTime() / 1000)
     const to = Math.floor(new Date(queryParams.to).getTime() / 1000) 
     const globalDeltas = await db.$queryRaw<GlobalDeltaResponse[]>`
-    SELECT gd.id, gd."timeStamp", gd.total_accounts, gd.total_power, gd.total_liquid_balance, gd.total_stake
+    SELECT gd.id, gd."timeStamp", gd.total_power
     FROM public."GlobalDelta" gd
     JOIN (
       SELECT date_trunc('day', "timeStamp") AS day, MAX("timeStamp") AS max_time
@@ -90,10 +92,7 @@ export async function getGlobalDeltaData(queryParams:RequestParams):Promise<Glob
   ` 
     const result:GlobalDeltaResponse[] = globalDeltas.map((delta) => ({
       timeStamp: delta.timeStamp,
-      total_accounts: delta.total_accounts.toString(),
-      total_power: delta.total_power.toString(),
-      total_liquid_balance: delta.total_liquid_balance.toString(),
-      total_stake: delta.total_stake.toString()
+      total_power: delta.total_power.toString()
     }))
 
     console.log("Result length:", result.length)

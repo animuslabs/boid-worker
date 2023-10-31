@@ -161,15 +161,15 @@ const sys = {
 
         power_before: data.power.before,
         power_after: data.power.after,
-        power_from_mods: data.power.from_mods,
-        power_decayed: data.power.decayed,
-        power_rounds: data.power.rounds,
+        power_from_boosters: data.power.from_boosters,
+        power_elapsed_rounds: data.power.elapsed_rounds,
 
-        mint_account: data.mint.account,
-        mint_team: data.mint.team,
-        mint_team_owner: data.mint.team_owner,
-        mint_overstake: data.mint.overstake,
-        mint_fundstake: data.mint.fundstake,
+        mint_power_mint: data.mint.power_mint,
+        mint_powered_stake_mint: data.mint.powered_stake_mint,
+        mint_account_earned: data.mint.account_earned,
+        mint_team_cut: data.mint.team_cut,
+        mint_team_owner_earned: data.mint.team_owner_earned,
+        mint_overstake_mint: data.mint.overstake_mint,
         mint_total: data.mint.total
       }
       await addRow("logPwrClaim", action, params)

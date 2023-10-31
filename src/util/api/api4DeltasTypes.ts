@@ -36,16 +36,14 @@ export interface PwrClaimData {
     boid_id:string,
     power_before:number,
     power_after:number,
-    power_decayed:number,
-    mint_total:number
+    power_from_boosters:number,
+    mint_total:number,
+    mint_overstake_mint:number,
   }
 
 export type GlobalDeltaResponse = {
     timeStamp:Date;
-    total_accounts:string;
     total_power:string;
-    total_liquid_balance:string;
-    total_stake:string;
   }
   
 export interface RequestParams {
