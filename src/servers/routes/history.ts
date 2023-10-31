@@ -51,10 +51,9 @@ export const actions = route
           let customWhere = JSON.parse(JSON.stringify(where))
           delete customWhere.boid_id
           customWhere.to_boid_id = input.filter.boid_id
-          customWhere.OR = {}
-          customWhere.OR.from_boid_id = input.filter.boid_id
-          //@ts-ignore
-          results = await db[table as any].findMany({
+          customWhere.OR = [{}]
+          customWhere.OR[0].from_boid_id = input.filter.boid_id
+          results = await db.internalXfer.findMany({
             where: customWhere, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           })
         } else if (table == "inviteClaim" && input.filter?.boid_id) {
@@ -62,17 +61,17 @@ export const actions = route
           delete customWhere.boid_id
           customWhere.sponsor_boid_id = input.filter.boid_id
           //@ts-ignore
-          results = await db[table as any].findMany({
+          results = await db.inviteClaim.findMany({
             where: customWhere, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           })
         } else if (table == "stakeDeleg" && input.filter?.boid_id) {
           let customWhere = JSON.parse(JSON.stringify(where))
           delete customWhere.boid_id
           customWhere.to_boid_id = input.filter.boid_id
-          customWhere.OR = {}
-          customWhere.OR.from_boid_id = input.filter.boid_id
+          customWhere.OR = [{}]
+          customWhere.OR[0].from_boid_id = input.filter.boid_id
           //@ts-ignore
-          results = await db[table as any].findMany({
+          results = await db.stakeDeleg.findMany({
             where: customWhere, skip: input.skip, take: input.limit ? input.limit : 10, orderBy: { sequence: sort }
           })
         } else {

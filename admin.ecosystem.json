@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+  "apps": [
+    {
+      "name": "boid-worker-fah-adminDoReports",
+      "cwd": "./dist",
+      "script": "./jobs/fah/adminDoReports.js",
+      "autorestart": false,
+      "cron_restart": "*/5 * * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    }
+  ]
+}
