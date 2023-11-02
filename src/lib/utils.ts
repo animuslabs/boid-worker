@@ -100,6 +100,10 @@ export function toObject(data) {
   ))
 }
 
+export function toInt(num:BigInt):number {
+  return parseInt(num.toString())
+}
+
 export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
   let log = logger.getLogger("shouldFinishReport(): ")
   const config = await tables.pwr.config()

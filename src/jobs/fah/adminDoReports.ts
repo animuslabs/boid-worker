@@ -8,7 +8,7 @@ import log from "lib/logger"
 import { dbQuery, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
 import { Finishreport, PwrReport, PwrReportAction } from "lib/types/power.boid.types"
-import { currentRound, getReportId, getRoundData, shouldFinishReport } from "lib/utils"
+import { currentRound, getReportId, getRoundData, shouldFinishReport, toInt, toObject } from "lib/utils"
 
 async function init() {
   try {
@@ -35,18 +35,15 @@ async function init() {
       if (!previousRecord) continue
       log.debug("found fah data for ", boidId)
       const units = lastRecord.score - previousRecord.score
-      console.log("units", units)
 
       if (units < 1) continue
-
+      log.info("lastRecord:", lastRecord)
+      log.info("previousRecord:", previousRecord)
       log.debug("queries finished in ms", queryTimer.stop().elapsed)
       log.debug("found valid reports for", boidId)
-      log.debug("reporting round last report:", lastRecord)
-      log.debug("previous round last report:", previousRecord)
       log.info(boidId, "earned", units, "FaH credits during round ", reportingRound.round)
-
-
-      const power = parseInt(units.toString()) * 0.01
+      const power = toInt(units * BigInt(0.001))
+      log.info("reporting power of ", power.toString())
       const addPower = sysActions.pwrAdd({ boid_id: boidId, power })
       const result = await sendAction(addPower)
       if (!result || result.receipts.length === 0) {
