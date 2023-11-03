@@ -6,7 +6,7 @@
       "cwd": "./dist",
       "script": "./jobs/fah/adminDoReports.js",
       "autorestart": false,
-      "cron_restart": "*/5 * * * *",
+      "cron_restart": "*/25 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",

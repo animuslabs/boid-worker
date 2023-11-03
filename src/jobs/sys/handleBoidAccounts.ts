@@ -58,4 +58,6 @@ async function init() {
     console.error(error.toString())
   }
 }
-init().catch(console.error)
+await init().catch(console.error)
+process.exit(0)
+

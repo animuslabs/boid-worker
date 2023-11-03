@@ -17,4 +17,6 @@ async function init() {
     log.info("deleted:", result.count)
   }
 }
-init().catch(log.error)
+await init().catch(log.error)
+process.exit(0)
+

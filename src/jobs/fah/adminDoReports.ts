@@ -42,7 +42,7 @@ async function init() {
       log.debug("queries finished in ms", queryTimer.stop().elapsed)
       log.debug("found valid reports for", boidId)
       log.info(boidId, "earned", units, "FaH credits during round ", reportingRound.round)
-      const power = toInt(units * BigInt(0.001))
+      const power = parseInt((toInt(units) * 0.001).toFixed(0))
       log.info("reporting power of ", power.toString())
       const addPower = sysActions.pwrAdd({ boid_id: boidId, power })
       const result = await sendAction(addPower)
@@ -51,9 +51,9 @@ async function init() {
         log.warn("result:", result)
         continue
       } else {
-        log.debug("added power for", boidId, power)
         const trxId = result.receipts[0].receipt.id
         await db.adminReport.create({ data: { boid_id: boidId, protocol: 0, round: reportingRound.round, trxId, power } })
+        log.info("added power for, saved report to db", boidId, power)
       }
     }
   } catch (error:any) {
@@ -61,4 +61,5 @@ async function init() {
     log.debug(error)
   }
 }
-init()
+await init()
+process.exit(0)

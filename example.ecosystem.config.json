@@ -6,7 +6,7 @@
       "cwd": "./dist",
       "script": "./jobs/fah/saveTeamMembers.js",
       "autorestart": false,
-      "cron_restart": "*/5 * * * *",
+      "cron_restart": "*/15 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
@@ -22,7 +22,7 @@
       "cwd": "./dist",
       "script": "./jobs/fah/doReports.js",
       "autorestart": false,
-      "cron_restart": "*/5 * * * *",
+      "cron_restart": "*/15 * * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",

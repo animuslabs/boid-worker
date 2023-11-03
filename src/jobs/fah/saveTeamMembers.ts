@@ -31,7 +31,9 @@ async function init() {
   log.info("finished writing fah members to DB")
   if (log.getLevel() < 2) log.debug("DB write time ms:", dbTimer.stop().elapsed)
 }
-init().catch(err => {
+await init().catch(err => {
   log.error(err.toString())
   log.debug(err)
 })
+process.exit(0)
+

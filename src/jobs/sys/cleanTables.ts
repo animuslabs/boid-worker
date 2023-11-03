@@ -30,4 +30,6 @@ async function init() {
   await cleanInvites(config, round)
   pusher.stop()
 }
-init().catch(log.error)
+await init().catch(log.error)
+process.exit(0)
+

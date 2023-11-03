@@ -15,5 +15,6 @@ async function init() {
   await sleep(ms(config.history?.injestLoopDelaySec + "s" || "10s"))
   return init()
 }
-init().catch(log.error)
+await init().catch(log.error)
+process.exit(0)
 
