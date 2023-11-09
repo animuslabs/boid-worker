@@ -58,8 +58,13 @@ export async function getLogPwrClaimData(queryParams:RequestQueryParams):Promise
       power_before: true,
       power_after: true,
       power_from_boosters: true,
+      mint_account_earned: true,
       mint_total: true,
-      mint_overstake_mint: true
+      mint_overstake_mint: true,
+      mint_power_mint: true,
+      mint_powered_stake_mint: true,
+      mint_team_cut: true,
+      mint_team_owner_earned: true
     }
   })
   return logPwrClaim.map((data) => ({
@@ -68,8 +73,13 @@ export async function getLogPwrClaimData(queryParams:RequestQueryParams):Promise
     power_before: Number(data.power_before),
     power_after: Number(data.power_after),
     power_from_boosters: Number(data.power_from_boosters),
+    mint_account_earned: Number(data.mint_account_earned),
     mint_total: Number(data.mint_total),
-    mint_overstake_mint: Number(data.mint_overstake_mint)
+    mint_overstake_mint: Number(data.mint_overstake_mint),
+    mint_power_mint: Number(data.mint_power_mint),
+    mint_powered_stake_mint: Number(data.mint_powered_stake_mint),
+    mint_team_cut: Number(data.mint_team_cut),
+    mint_team_owner_earned: Number(data.mint_team_owner_earned)
   }))
 }
 

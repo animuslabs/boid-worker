@@ -32,13 +32,18 @@ export interface MintTotalByDate {
   }
   
 export interface PwrClaimData {
-    timeStamp:Date,
-    boid_id:string,
-    power_before:number,
-    power_after:number,
-    power_from_boosters:number,
-    mint_total:number,
-    mint_overstake_mint:number,
+    timeStamp:Date;
+    boid_id:string;
+    power_before:number;
+    power_after:number;
+    power_from_boosters:number;
+    mint_total:number;
+    mint_account_earned:number;
+    mint_overstake_mint:number;
+    mint_power_mint:number;
+    mint_powered_stake_mint:number;
+    mint_team_cut:number;
+    mint_team_owner_earned:number;
   }
 
 export type GlobalDeltaResponse = {
