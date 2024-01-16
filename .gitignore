@@ -9,3 +9,5 @@ greenlock.d
 yarn-error.log
 .env*
 sync.sh
+
+.env

@@ -105,7 +105,7 @@ export class Action extends Struct {
     @Struct.field(Bytes) data!:Bytes
 }
 
-@Variant.type("AtomicValue", [Int8, Int16, Int32, Int64, UInt8, UInt16, UInt32, UInt64, Float32, Float64, { type: Int8, array: true }, { type: Int16, array: true }, { type: Int32, array: true }, { type: Int64, array: true }, Bytes, { type: UInt16, array: true }, { type: UInt32, array: true }, { type: UInt64, array: true }, { type: Float32, array: true }, { type: Float64, array: true }])
+@Variant.type("AtomicValue", [Int8, Int16, Int32, Int64, UInt8, UInt16, UInt32, UInt64, Float32, Float64])
 class AtomicValue extends Variant {}
 
 @Struct.type("AtomicAttribute")
@@ -120,14 +120,14 @@ export class AtomicFormat extends Struct {
     @Struct.field("string") type!:string
 }
 
-@Struct.type("Auth")
+@Struct.type("AuthRow")
 export class AuthRow extends Struct {
     @Struct.field(Name) boid_id_auth!:Name
 }
 
 @Struct.type("Booster")
 export class Booster extends Struct {
-    @Struct.field(UInt8) mod_id!:UInt8
+    @Struct.field(UInt8) booster_id!:UInt8
     @Struct.field(UInt8) pwr_multiplier!:UInt8
     @Struct.field(UInt16) pwr_add_per_round!:UInt16
     @Struct.field(UInt16) expire_after_elapsed_rounds!:UInt16
@@ -302,7 +302,7 @@ export class OfferRewards extends Struct {
     @Struct.field(UInt32) balance_deposit!:UInt32
     @Struct.field(UInt16) delegated_stake!:UInt16
     @Struct.field(UInt16) stake_locked_additional_rounds!:UInt16
-    @Struct.field(Bytes) activate_powermod_ids!:Bytes
+    @Struct.field(Bytes) activate_booster_ids!:Bytes
 }
 
 @Struct.type("OfferLimits")
@@ -339,7 +339,7 @@ export class Sponsor extends Struct {
     @Struct.field(UInt32) upgrades_total_earned!:UInt32
 }
 
-@Struct.type("Stake")
+@Struct.type("DelegStake")
 export class DelegStake extends Struct {
     @Struct.field(UInt64) stake_id!:UInt64
     @Struct.field(Name) from_boid_id!:Name
@@ -436,12 +436,12 @@ export class AuthRmkey extends Struct {
 @Struct.type("booster.add")
 export class BoosterAdd extends Struct {
     @Struct.field(Name) boid_id!:Name
-    @Struct.field(UInt8) mod_id!:UInt8
+    @Struct.field(UInt8) booster_id!:UInt8
 }
 
 @Struct.type("booster.new")
 export class BoosterNew extends Struct {
-    @Struct.field(Booster) mod!:Booster
+    @Struct.field(Booster) booster!:Booster
 }
 
 @Struct.type("booster.rm")
