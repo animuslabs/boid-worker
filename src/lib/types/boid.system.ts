@@ -51,7 +51,7 @@ export class AccountBooster extends Struct {
 export class AccountPower extends Struct {
     @Struct.field(UInt16) last_claimed_round!:UInt16
     @Struct.field(UInt16) last_added_round!:UInt16
-    @Struct.field(UInt32) rating!:UInt32
+    @Struct.field(UInt16) rating!:UInt16
     @Struct.field(UInt16, { array: true }) history!:UInt16[]
     @Struct.field(AccountBooster, { array: true }) mods!:AccountBooster[]
 }
