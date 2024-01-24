@@ -105,16 +105,7 @@ const sys = {
     }
   },
   async accountEdit(action:Action<any>) {
-    try {
-      const data = action.act.data.data || action.act.data
-      const params = {
-        boid_id: data.boid_id,
-        ipfs_meta: data.social_ipfs_json || data.ipfs_meta
-      }
-      await addRow("accountEdit", action, params)
-    } catch (error) {
-      log.error(error)
-    }
+    return basicInjest("accountEdit", action)
   },
   async accountFree(action:Action<any>) {
     return basicInjest("accountFree", action)

@@ -6,9 +6,7 @@ import {
   allWAXCollectionsTemplates,
   allTelosCollectionsTemplates
 } from "./atomicData"
-import { dataFromBoidID } from "./usersBoid"
 import { dataFromTeams } from "./teamsBoid"
-import { AccMetaCID } from "./types"
 
 // Schedule the function to run every x hours
 const interval3 = 3 * 60 * 60 * 1000 // 3 hours in milliseconds
@@ -19,11 +17,9 @@ const interval6 = 6 * 60 * 60 * 1000 // 6 hours in milliseconds
 const waxNameCids = allWAXCollectionsTemplates.map(({ name, CID }) => ({ name, CID }))
 const eosNameCids = allEOSCollectionsTemplates.map(({ name, CID }) => ({ name, CID }))
 const telosNameCids = allTelosCollectionsTemplates.map(({ name, CID }) => ({ name, CID }))
-const newDataFromBoidID = dataFromBoidID.map((item:AccMetaCID) => ({ name: item.boid_id, CID: item.ipfs_meta }))
 
 const runPinning = async() => {
   try {
-    await pinAllToIpfs(newDataFromBoidID, IPFSnodes)
     await pinAllToIpfs(dataFromTeams, IPFSnodes)
     await pinAllToIpfs(waxNameCids, IPFSnodes)
     await pinAllToIpfs(eosNameCids, IPFSnodes)
@@ -50,10 +46,6 @@ setInterval(async() => {
 //     // this creates records in the db by taking them from the array from the allWAXCollectionsTemplates function (WAX collections)
 //     for (const obj of allWAXCollectionsTemplates) {
 //       await createPinned(obj.name, obj.CID, obj.datatype)
-//     }
-//     // // this creates records in the db by taking them from the array from the boid_id_data function (boid id's and their metadata)
-//     for (const obj of dataFromBoidID) {
-//       await createPinned(obj.boid_id, obj.ipfs_meta, "JSON")
 //     }
 //     // // this creates records in the db by taking them from the array from the getTeamData function (team id's and their metadata)
 //     for (const obj of dataFromTeams) {
@@ -83,10 +75,6 @@ setInterval(async() => {
 // // this creates records in the db by taking them from the array from the allWAXCollectionsTemplates function (WAX collections)
 // for (const obj of allWAXCollectionsTemplates) {
 //   await createPinned(obj.name, obj.CID, obj.datatype);
-// }
-// // // this creates records in the db by taking them from the array from the boid_id_data function (boid id's and their metadata)
-// for (const obj of dataFromBoidID) {
-//   await createPinned(obj.boid_id, obj.ipfs_meta, "JSON");
 // }
 // // // this creates records in the db by taking them from the array from the getTeamData function (team id's and their metadata)
 // for (const obj of dataFromTeams) {

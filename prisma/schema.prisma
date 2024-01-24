@@ -73,7 +73,7 @@ model AccountEdit {
   timeStamp DateTime
 
   boid_id   String
-  ipfs_meta String
+  meta   String
 
   @@index([boid_id, timeStamp])
   @@index([timeStamp])

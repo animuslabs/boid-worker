@@ -51,10 +51,6 @@ export interface DeserializedTemplateData extends MyTemplateData {
 
 
 export type DoubleStringArray = string[][];
-export type AccMetaCID = {
-  boid_id:string,
-  ipfs_meta:string
-};
 
 export type TeamDataRes = {
   team_id:number;
