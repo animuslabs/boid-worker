@@ -81,7 +81,7 @@ replace YOUR_DOCKER_IP with your host ipaddress
 
 Note: this cannot be 127.0.0.1 or localhost as docker containers have no access to that.
 
-to build the container image do
+to build the container image and initialize the postgresql Database run the following command: 
 
 ```sh
 
