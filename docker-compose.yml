@@ -1,11 +1,25 @@
 version: '3'
 services:
+  postgres:
+    container_name: postgres
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    environment:
+        POSTGRES_USER: boidadmin # The PostgreSQL user (useful to connect to the database)
+        POSTGRES_PASSWORD: 'boidisthebest' # The PostgreSQL password (useful to connect to the database)
+        POSTGRES_DB: boid # The PostgreSQL default database (automatically created at first launch)
+    volumes:
+      - ./data/:/var/lib/postgresql/data/
+    networks:
+      - public
   boidworker:
     image: boidworker
     restart: always
     volumes:
      - "./.env.json:/data/.env.json:ro"
      - "./ecosystem.config.json:/data/ecosystem.config.json:ro"
+     #- "./prisma:/data/prisma/"
     networks:
       - public
     logging:

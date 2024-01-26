@@ -2,8 +2,7 @@
 
 ## Prerequisites
 
-- You will need a Telos Testnet account with 10 TLOS staked to CPU and 1 to NET. <https://app.telos.net/testnet/developers>
-- You need tesnet BOID tokens, earn them by running the testnet app or ask for free tokens from boid devs in social channels.
+- You will need a Telos  account with 10 TLOS staked to CPU and 1 to NET. <https://app.telos.net/testnet/developers>
 
 ## Setup
 There are 2 ways to setup a Boid Worker, barebone in a VM or via a Docker container.
@@ -70,6 +69,18 @@ Make sure the worker name, authority, key are correct. For the rpc nodes you can
 
 Modify `ecosystem.config.json` as you see fit, the defaults should be fine but can be optimized if you like. The env LOGLEVEL can be adjusted based on your preference between TRACE DEBUG INFO WARN ERROR
 
+Then lets start the postgresql docker container first
+
+``` sh
+docker-compose up -d postgres
+```
+
+cp .example.env.docker to .env.docker
+
+replace YOUR_DOCKER_IP with your host ipaddress
+
+Note: this cannot be 127.0.0.1 or localhost as docker containers have no access to that.
+
 to build the container image do
 
 ```sh
@@ -82,7 +93,7 @@ once the image is created you can start it with docker-compose
 
 ```sh
 
-docker-compose up
+docker-compose up 
 
 ```
 

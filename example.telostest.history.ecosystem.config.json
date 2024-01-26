@@ -7,7 +7,7 @@
       "script": "./jobs/history/loadSysActions.js",
       "autorestart": true,
       "env": {
-        "CHAIN": "telos",
+        "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
         "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
@@ -23,7 +23,7 @@
       "autorestart": false,
       "cron_restart": "0 0 * * *",
       "env": {
-        "CHAIN": "telos",
+        "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
         "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
@@ -39,7 +39,7 @@
       "autorestart": true,
       "env": {
         "NODE_ENV": "production",
-        "CHAIN": "telos",
+        "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
         "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"

@@ -8,7 +8,7 @@
       "autorestart": false,
       "cron_restart": "*/25 * * * *",
       "env": {
-        "CHAIN": "telosTest",
+        "CHAIN": "telos",
         "LOGLEVEL": "DEBUG",
         "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
