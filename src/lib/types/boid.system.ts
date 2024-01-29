@@ -53,7 +53,7 @@ export class AccountPower extends Struct {
     @Struct.field(UInt16) last_added_round!:UInt16
     @Struct.field(UInt16) rating!:UInt16
     @Struct.field(UInt16, { array: true }) history!:UInt16[]
-    @Struct.field(AccountBooster, { array: true }) mods!:AccountBooster[]
+    @Struct.field(AccountBooster, { array: true }) boosters!:AccountBooster[]
 }
 
 @Struct.type("AccountTeam")
@@ -512,7 +512,7 @@ export class InviteRm extends Struct {
 export class Logpwradd extends Struct {
     @Struct.field(Name) boid_id!:Name
     @Struct.field(UInt16) received!:UInt16
-    @Struct.field(UInt16) from_mult_mods!:UInt16
+    @Struct.field(UInt16) from_mult_boosters!:UInt16
     @Struct.field(UInt16) diverted_to_sponsor!:UInt16
     @Struct.field(UInt16) power_increased!:UInt16
     @Struct.field(Name) orign!:Name
@@ -661,6 +661,11 @@ export class TeamEdit extends Struct {
     @Struct.field(UInt8) min_pwr_tax_mult!:UInt8
     @Struct.field(UInt8) owner_cut_mult!:UInt8
     @Struct.field("string") url_safe_name!:string
+}
+
+@Struct.type("team.setmeta")
+export class TeamSetmeta extends Struct {
+    @Struct.field(UInt8) team_id!:UInt8
     @Struct.field(Bytes) meta!:Bytes
 }
 

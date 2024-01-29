@@ -11,7 +11,7 @@ import { sysActions } from "lib/actions"
 // remove expired pwrmods
 function handleExpired(account:Account, pusher:ActionPusher, round:number):number {
   let pwrModsCleared = 0
-  const mods = account.power.mods
+  const mods = account.power.boosters
   if (mods.length > 0) {
     let expiredIndexes:number[] = []
     mods.forEach((el, i) => {
@@ -30,8 +30,8 @@ function claimAccount(account:Account, config:Config, pusher:ActionPusher, round
   let claimed = 0
   if (account.boid_id.toString() == "boid") return 0
   const elapsed = round - account.power.last_claimed_round.toNumber()
-  if (elapsed < config.power.claim_maximum_elapsed_rounds.toNumber() / 5) return 0 // if config is set to 10 rounds, only claim if 2 rounds have passed
-  const hasModPwr = account.power.mods.find(el => el.pwr_add_per_round.toNumber() > 0 && el.aggregate_pwr_remaining.toNumber() > 0 && el.expires_round.toNumber() > round)
+  if (elapsed === 0) return 0
+  const hasModPwr = account.power.boosters.find(el => el.pwr_add_per_round.toNumber() > 0 && el.aggregate_pwr_remaining.toNumber() > 0 && el.expires_round.toNumber() > round)
   if (account.power.rating.toNumber() == 0 && !hasModPwr) return 0
   claimed++
   pusher.add(sysActions.claim({ boid_id: account.boid_id }))
