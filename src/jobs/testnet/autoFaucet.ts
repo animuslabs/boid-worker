@@ -2,7 +2,7 @@
 import env from "lib/env"
 import { doAction, getFullTable } from "lib/eosio"
 import { Account, PowerAdd } from "lib/types/boid.system"
-import { Asset, Name, PermissionLevel, Struct } from "@greymass/eosio"
+import { Asset, Name, PermissionLevel, Struct } from "@wharfkit/antelope"
 
 @Struct.type("transfer")
 export class Transfer extends Struct {

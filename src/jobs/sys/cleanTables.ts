@@ -1,4 +1,4 @@
-import { Action } from "@greymass/eosio"
+import { Action } from "@wharfkit/antelope"
 import { ActionPusher } from "lib/actionPusher"
 import { actions } from "lib/actions"
 import logger from "lib/logger"

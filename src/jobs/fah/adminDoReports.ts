@@ -1,4 +1,4 @@
-import { Name } from "@greymass/eosio"
+import { Name } from "@wharfkit/antelope"
 import { ActionPusher } from "lib/actionPusher"
 import { pwrActions, sysActions } from "lib/actions"
 import db from "lib/db"

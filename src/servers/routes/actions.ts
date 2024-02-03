@@ -1,4 +1,4 @@
-import { Action } from "@greymass/eosio"
+import { Action } from "@wharfkit/antelope"
 import { doAction, getAbi } from "lib/eosio"
 import { ipfsClient, jsonToBytes } from "lib/ipfs"
 import { AccountEdit, Auth } from "lib/types/boid.system"

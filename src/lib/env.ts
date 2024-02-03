@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import fs from "fs-extra"
-import { Name, NameType, PrivateKey } from "@greymass/eosio"
+import { Name, NameType, PrivateKey } from "@wharfkit/antelope"
 import { Options } from "ipfs-http-client"
 dotenv.config()
 

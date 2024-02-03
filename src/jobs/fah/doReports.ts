@@ -1,4 +1,4 @@
-import { Action, AnyAction, Authority, Name, UInt64 } from "@greymass/eosio"
+import { Action, AnyAction, Authority, Name, UInt64 } from "@wharfkit/antelope"
 import { ActionPusher } from "lib/actionPusher"
 import edgedb from "lib/db"
 import log from "lib/logger"

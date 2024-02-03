@@ -1,4 +1,4 @@
-import { ABI, Name, Serializer, UInt64 } from "@greymass/eosio"
+import { ABI, Name, Serializer, UInt64 } from "@wharfkit/antelope"
 import { safeDo, getAccount } from "./eosio"
 import { tables } from "./queries"
 import moment from "moment"

@@ -1,4 +1,4 @@
-import { UInt16 } from "@greymass/eosio"
+import { UInt16 } from "@wharfkit/antelope"
 import { ActionPusher } from "lib/actionPusher"
 import { pwrActions } from "lib/actions"
 import logger from "lib/logger"

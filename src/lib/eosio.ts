@@ -1,4 +1,4 @@
-import { API, APIClient, APIProvider, FetchProvider, Name, Action, Transaction, ActionFields, Authority, PermissionLevel, SignedTransaction, PrivateKey, NameType, AnyAction, ABI, ABISerializableConstructor } from "@greymass/eosio"
+import { API, APIClient, APIProvider, FetchProvider, Name, Action, Transaction, ActionFields, Authority, PermissionLevel, SignedTransaction, PrivateKey, NameType, AnyAction, ABI, ABISerializableConstructor } from "@wharfkit/antelope"
 import fetch from "node-fetch"
 import ms from "ms"
 import { rand, shuffle, sleep } from "./utils"
@@ -72,6 +72,7 @@ export async function safeDo(cb:string, params?:any, retry?:number):Promise<any 
     const doit = async() => {
       try {
         const result = (await rpc.rpc[cb](params))
+        // log.debug("Returned:", cb, result)
         return result
       } catch (error:any) {
         const errorMsg = error.toString() as string
@@ -120,6 +121,8 @@ export async function getAllScopes(params:API.v1.GetTableByScopeParams) {
   return rows.map(el => el.scope) as Name[]
 }
 export async function sendAction(act:Action) {
+  // const authorization = [PermissionLevel.from({ actor: env.worker.account, permission: env.worker.permission })]
+
   return doAction(act.name, act.data, act.account)
 }
 export async function getFullTable< T extends ABISerializableConstructor>(params:GetTableParams, type?:T):Promise<InstanceType<T>[]> {
@@ -144,9 +147,12 @@ export async function getFullTable< T extends ABISerializableConstructor>(params
 let infoCache:any
 export async function getInfo():Promise<API.v1.GetInfoResponse> {
   const result = await cache.get("get_info")
+  // log.debug("getinfo:", result)
   if (result) return result as API.v1.GetInfoResponse
   else {
+    log.info("got info")
     const info = await safeDo("get_info")
+    // log.info("got info", info)
     cache.set("get_info", info)
     return info
   }
@@ -164,7 +170,9 @@ export async function getAccount(name:Name):Promise<API.v1.AccountObject> {
 export async function doAction(name:NameType, data:{ [key:string]:any } = {}, contract:NameType = env.contracts.power, authorization?:PermissionLevel[], keys?:PrivateKey[], retry?:number):Promise<DoActionResponse | null> {
   if (!data) data = {}
   if (!authorization) authorization = [PermissionLevel.from({ actor: env.worker.account, permission: env.worker.permission })]
-  const info = await getInfo()
+  log.debug("Do action:", name.toString(), JSON.stringify(data, null, 2))
+  const info:any = await getInfo().catch(error => log.error("doAction:getInfo error", error))
+  // log.debug("got info:", info.toJSON())
   const header = info.getTransactionHeader()
   let action:Action
   try {

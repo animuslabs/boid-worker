@@ -1,4 +1,4 @@
-import { Action, Transaction } from "@greymass/eosio"
+import { Action, Transaction } from "@wharfkit/antelope"
 import { doAction, sendAction } from "lib/eosio"
 import env from "lib/env"
 import logger from "lib/logger"
@@ -27,8 +27,8 @@ export class ActionPusher {
   timer:NodeJS.Timeout
   queue:Action[] = []
 
-  private async pushTrx() {
-    // log.debug("queue:", this)
+  async pushTrx() {
+    log.debug("queue:", this.queue.length)
     const act = this.queue.shift()
     if (!act) return
     const result = await sendAction(act)

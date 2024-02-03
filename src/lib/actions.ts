@@ -1,4 +1,4 @@
-import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64 } from "@greymass/eosio"
+import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64 } from "@wharfkit/antelope"
 import env from "lib/env"
 import { AccountBuy, Auth, InviteRm, PowerAdd, PowerClaim, BoosterRm } from "lib/types/boid.system"
 import { Commitsclean, Finishreport, Handleostat, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, RoundCommit, Slashabsent, Statsclean } from "lib/types/power.boid.types"
