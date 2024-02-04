@@ -32,8 +32,8 @@ async function claimAccount(account:Account, config:Config, round:number) {
   if (elapsed < 1) return
   const hasModPwr = account.power.boosters.find(el => el.pwr_add_per_round.toNumber() > 0 && el.aggregate_pwr_remaining.toNumber() > 0 && el.expires_round.toNumber() > round)
   if (account.power.rating.toNumber() == 0 && !hasModPwr) return
-  log.debug("elapsed:", elapsed)
-  log.info("Claiming:", account.boid_id.toString(), round, account.power.last_claimed_round.toNumber())
+  log.info("elapsed:", elapsed)
+  log.info("Claiming:", account.boid_id.toString(), account.power.last_claimed_round.toNumber())
   await doAction("power.claim", { boid_id: account.boid_id }, env.contracts.system)
 }
 
