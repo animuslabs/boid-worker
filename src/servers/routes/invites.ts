@@ -1,8 +1,6 @@
 
 import { doAction, sendAction } from "lib/eosio"
-
-import { AccountCreate, InviteClaim } from "lib/types/boid.system"
-
+import { Types } from "lib/types/boid-contract-structure"
 import { z } from "zod"
 import { route } from "../trpc"
 import env from "lib/env"
@@ -22,6 +20,6 @@ export const claimInvite = route
   )
   .mutation(async({ input, ctx }) => {
     console.log({ input, ctx })
-    const result = await doAction("invite.claim", InviteClaim.from(input), env.contracts.system)
+    const result = await doAction("invite.claim", Types.inviteclaim.from(input), env.contracts.system)
     return result
   })

@@ -1,7 +1,7 @@
 import { Action } from "@wharfkit/antelope"
 import { doAction, getAbi } from "lib/eosio"
 import { ipfsClient, jsonToBytes } from "lib/ipfs"
-import { AccountEdit, Auth } from "lib/types/boid.system"
+import { Types } from "lib/types/boid-contract-structure"
 import { CID } from "multiformats/cid"
 import { z } from "zod"
 import { route } from "../trpc"
@@ -41,7 +41,7 @@ export const pushActions = route
     //   console.log("Pinned CID:", pinned.toString())
     //   if (!pinned.equals(cid)) throw new Error("account metadata mismatch")
     // }
-    const result = await doAction("auth", Auth.from(data.input), "boid")
+    const result = await doAction("auth", Types.Auth.from(data.input), "boid")
     console.log(result)
     return { result, receipt: result?.receipts[0] }
   })

@@ -1,4 +1,4 @@
-import { Account, Config } from "../../lib/types/boid.system"
+import { Types } from "lib/types/boid-contract-structure"
 import { doAction, getFullTable } from "../../lib/eosio"
 import db from "lib/db"
 import log from "lib/logger"
@@ -26,7 +26,7 @@ import { sysActions } from "lib/actions"
 // }
 
 // claim if account needs to be claimed
-async function claimAccount(account:Account, config:Config, round:number) {
+async function claimAccount(account:Types.Account, config:Types.Config, round:number) {
   if (account.boid_id.toString() == "boid") return
   const elapsed = round - account.power.last_claimed_round.toNumber()
   if (elapsed < 1) return
@@ -39,7 +39,7 @@ async function claimAccount(account:Account, config:Config, round:number) {
 
 async function init() {
   try {
-    const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Account)
+    const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Types.Account)
     log.info("Got all Boid accounts:", allAccounts.length)
     const round = await currentRound()
     log.info("Current round:", round.toFixed())

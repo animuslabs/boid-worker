@@ -1,5 +1,5 @@
 import { getAllScopes, getFullTable, pickRpc, safeDo } from "./eosio"
-import * as sys from "./types/boid.system"
+import * as sys from "lib/types/boid-contract-structure"
 import * as pwr from "./types/power.boid.types"
 import env from "./env"
 import cacheManager from "cache-manager"
@@ -14,8 +14,8 @@ function getUser(id:string, cb:() =>{}) {
 
 }
 
-export async function getSysConf():Promise<sys.Config> {
-  const config = await getFullTable({ tableName: "config", contract: env.contracts.system }, sys.Config)
+export async function getSysConf():Promise<sys.Types.Config> {
+  const config = await getFullTable({ tableName: "config", contract: env.contracts.system }, sys.Types.Config)
   if (!config[0]) throw (new Error("system contract not initialized "))
   return config[0]
 }
@@ -104,8 +104,8 @@ export async function getStatRow(round:number):Promise<pwr.Stat | null> {
   else return existing.rows[0]
 }
 
-export async function getInvites(scope:NameType):Promise<sys.Invite[]> {
-  const existing = await pickRpc().rpc.get_table_rows({ code: env.contracts.system, table: "invites", limit: 100, scope, type: sys.Invite })
+export async function getInvites(scope:NameType):Promise<sys.Types.Invite[]> {
+  const existing = await pickRpc().rpc.get_table_rows({ code: env.contracts.system, table: "invites", limit: 100, scope, type: sys.Types.Invite })
   return existing.rows
 }
 export async function getInviteScopes() {

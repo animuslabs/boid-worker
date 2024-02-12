@@ -1,7 +1,7 @@
 
 import env from "lib/env"
 import { doAction, getFullTable } from "lib/eosio"
-import { Account, PowerAdd } from "lib/types/boid.system"
+import { Types } from "lib/types/boid-contract-structure"
 import { Asset, Name, PermissionLevel, Struct } from "@wharfkit/antelope"
 
 @Struct.type("transfer")
@@ -13,9 +13,9 @@ export class Transfer extends Struct {
 }
 
 async function init() {
-  const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Account)
+  const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Types.Account)
   for (const acct of allAccounts) {
-    await doAction("power.add", PowerAdd.from({ boid_id: acct.boid_id, power: "15" }), env.contracts.system, [PermissionLevel.from("boid@active")])
+    await doAction("power.add", Types.poweradd.from({ boid_id: acct.boid_id, power: "15" }), env.contracts.system, [PermissionLevel.from("boid@active")])
     const transfer = Transfer.from({
       from: "token.boid",
       to: env.contracts.system,

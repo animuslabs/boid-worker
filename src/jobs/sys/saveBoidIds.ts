@@ -1,4 +1,4 @@
-import { Account } from "../../lib/types/boid.system"
+import { Types } from "lib/types/boid-contract-structure"
 import { getFullTable } from "../../lib/eosio"
 import db from "lib/db"
 import log from "lib/logger"
@@ -6,7 +6,7 @@ import env from "lib/env"
 
 async function init() {
   try {
-    const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Account)
+    const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Types.Account)
     log.info("Got all Boid accounts:", allAccounts.length)
     const accountNames = allAccounts.map(el => el.boid_id.toString())
     let inserted = 0

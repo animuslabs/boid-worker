@@ -3,12 +3,12 @@ import { ActionPusher } from "lib/actionPusher"
 import { actions } from "lib/actions"
 import logger from "lib/logger"
 import { getInviteScopes, getOldestOracleStat, getOldestReport, getOldestRoundCommit, getOracleStatsScopes, getReportScopes, getRoundCommitScopes, getStatRow, tables } from "lib/queries"
-import { Config } from "lib/types/boid.system"
+import { Types } from "lib/types/boid-contract-structure"
 import { currentRound } from "lib/utils"
 const log = logger.getLogger("pwr-cleanTables")
 const pusher = new ActionPusher()
 
-async function cleanInvites(config:Config, round:number) {
+async function cleanInvites(config:Types.Config, round:number) {
   const expireRounds = config.account.invite_code_expire_rounds
   const scopes = await getInviteScopes()
   for (const scope of scopes) {

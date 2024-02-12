@@ -1,9 +1,9 @@
 import env from "./../lib/env"
 import { getFullTable } from "../lib/eosio"
-import { Account } from "./../lib/types/boid.system"
+import { Types } from "lib/types/boid-contract-structure"
 import db from "lib/db"
 
-const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Account)
+const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Types.Account)
 const selectedAccounts = allAccounts.map(account => ({
   boid_id: account.boid_id.toString(),
   staked: account.stake.self_staked.toNumber() + account.stake.received_delegated_stake.toNumber(),
