@@ -43,7 +43,7 @@ function getTable<T extends keyof ContractTables>(
 }
 
 
-export function account(acctName:string) {
+export function account(acctName:string):Types.Account {
   const accountsTable = getTable(contract, "accounts")
   return Types.Account.from(accountsTable.getTableRow(Name.from(acctName).value.toString()))
 }
@@ -171,7 +171,6 @@ export function addRounds(numRounds = 0, roundLength:number) {
   const timePoint = TimePoint.fromMilliseconds(roundLength * 1000 * numRounds)
   chain.addTime(timePoint as any)
 }
-
 
 export function currentRound() {
   return Math.floor((chain.timestamp.toMilliseconds() - roundStartTime.toMilliseconds()) / (defaultConfig.time.round_length_sec * 1000))

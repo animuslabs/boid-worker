@@ -6,6 +6,8 @@ import express from "express"
 import { z } from "zod"
 import { getAllAccountsDeltas, getBoidIDs, getLogPwrClaimData, getCombinedData, getGlobalDeltaData } from "./api4DeltasFunctions"
 import { RequestQueryParams } from "./api4DeltasTypes"
+import { calculator } from "lib/calculator/calculator"
+
 process.env.TZ = "Etc/UTC"
 dotenv.config()
 
@@ -24,6 +26,21 @@ const extInputSchema = inputSchema.extend({
   boid_id: z.string().optional()
 })
 
+const calculatedDataInputSchema = z.object({
+  rounds: z.number(),
+  basePowerPerRound: z.number(),
+  stake: z.number(),
+  power: z.object({
+    sponsor_tax_mult: z.number(),
+    powered_stake_mult: z.number()
+  }),
+  mint: z.object({
+    round_powered_stake_mult: z.number(),
+    round_power_mult: z.number()
+  })
+})
+
+/* *** API Routes *** */
 const appRouter = t.router({
   /* *** Provides a list of all Boid IDs *** */
   BoidIDlist: publicProcedure
@@ -94,6 +111,13 @@ const appRouter = t.router({
       } else {
         throw new Error("Invalid date range or boid_id")
       }
+    }),
+  /* *** GetCalculatedData provides an account object that simulates accounts earnings based on input *** */
+  GetCalculatedData: publicProcedure
+    .input(calculatedDataInputSchema)
+    .query(async({ input }) => {
+      const calculatedData = await calculator(input.rounds, input.basePowerPerRound, input.stake, input)
+      return calculatedData
     })
 })
 

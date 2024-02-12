@@ -1,24 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { init, chain, account, acc, act, tkn, addRounds, defaultConfig } from "lib/calculator/contract-util"
+import { init, account, acc, act, tkn, addRounds, defaultConfig } from "lib/calculator/contract-util"
 import { Config, UserConfig } from "lib/types/calc-types"
-
-//// only for testing
-const userConfig = {
-  power: {
-    sponsor_tax_mult: 0.1,
-    powered_stake_mult: 10
-  },
-  mint: {
-    round_powered_stake_mult: 0.0001,
-    round_power_mult: 1
-  }
-}
-
-const rounds = 10
-const basePowerPerRound = 100
-const stake = 1000000
-//////////////
-
+import { Types } from "lib/types/boid-contract-structure"
 
 async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number, roundLenght:number) {
   // Loop for the specified number of rounds
@@ -65,7 +48,7 @@ function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {
 }
 
 
-async function main(rounds:number, basePowerPerRound:number, stake:number, userConfig:UserConfig) {
+export async function calculator(rounds:number, basePowerPerRound:number, stake:number, userConfig:UserConfig):Promise<Types.Account> {
   const mergedConfig = mergeConfig(defaultConfig, userConfig)
   await init(mergedConfig)
   await act("account.add", { boid_id: acc, owners: [acc], sponsors: [], keys: [] })
@@ -74,17 +57,34 @@ async function main(rounds:number, basePowerPerRound:number, stake:number, userC
   await act("stake", { boid_id: acc, quantity: stake })
   const roundLength = defaultConfig.time.round_length_sec
   await testAcct(acc, rounds, basePowerPerRound, roundLength)
-  console.log("Account: ", account(acc))
-  console.log("console", chain.console)
-  // console.log(account(boid_id))
-  // console.log(chain.actionTraces.map(el => [el.action.toString(), JSON.stringify(el.decodedData, null, 2)]))
-  // console.log(chain.actionTraces.map(el => [el.action.toString()]))
-  return chain.store
+
+  const accData = account(acc)
+  return accData
 }
 
 
+//// only for testing
+// const userConfig = {
+//   power: {
+//     sponsor_tax_mult: 0.1,
+//     powered_stake_mult: 1000
+//   },
+//   mint: {
+//     round_powered_stake_mult: 0.0001,
+//     round_power_mult: 1
+//   }
+// }
 
-main(rounds, basePowerPerRound, stake, userConfig).catch((error) => {
-  console.error("An error occurred during main execution:", error)
-})
+// const rounds = 10
+// const basePowerPerRound = 100
+// const stake = 1000000
+
+
+// calculator(rounds, basePowerPerRound, stake, userConfig).then(
+//   (result) => {
+//     console.log("Result:", result)
+//   }
+// ).catch((error) => {
+//   console.error("An error occurred during main execution:", error)
+// })
 
