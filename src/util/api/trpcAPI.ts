@@ -30,13 +30,15 @@ const calculatedDataInputSchema = z.object({
   rounds: z.number(),
   basePowerPerRound: z.number(),
   stake: z.number(),
-  power: z.object({
-    sponsor_tax_mult: z.number(),
-    powered_stake_mult: z.number()
-  }),
-  mint: z.object({
-    round_powered_stake_mult: z.number(),
-    round_power_mult: z.number()
+  userConfig: z.object({
+    power: z.object({
+      sponsor_tax_mult: z.number(),
+      powered_stake_mult: z.number()
+    }),
+    mint: z.object({
+      round_powered_stake_mult: z.number(),
+      round_power_mult: z.number()
+    })
   })
 })
 
@@ -115,8 +117,8 @@ const appRouter = t.router({
   /* *** GetCalculatedData provides an account object that simulates accounts earnings based on input *** */
   GetCalculatedData: publicProcedure
     .input(calculatedDataInputSchema)
-    .query(async({ input }) => {
-      const calculatedData = await calculator(input.rounds, input.basePowerPerRound, input.stake, input)
+    .query(async(input) => {
+      const calculatedData = await calculator(input.input.rounds, input.input.basePowerPerRound, input.input.stake, input.input.userConfig)
       return calculatedData
     })
 })
