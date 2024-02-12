@@ -72,17 +72,42 @@ async function fetchPwrClaim(boid_id) {
 //   }
 // }
 
-async function fetchGlobalDeltas() {
-  const fromDate = "2023-10-10T00:00:00.000Z"
-  const toDate = "2023-10-31T23:59:59.000Z"
+// async function fetchGlobalDeltas() {
+//   const fromDate = "2023-10-10T00:00:00.000Z"
+//   const toDate = "2023-10-31T23:59:59.000Z"
+  
+//   try {
+//     const queryParameters:any = { from: fromDate, to: toDate }
+//     if (boid_id) {
+//       queryParameters.boid_id = boid_id
+//     }
+//     const data = await trpc.GetGlobalDeltas.query(queryParameters)
+//     console.log("All Deltas:", data)
+//   } catch (error) {
+//     console.error("Error fetching data:", error)
+//   }
+// }
+
+async function fetchCalculatorData() {
+  const rounds = 100
+  const basePowerPerRound = 100
+  const stake = 100
+  const userConfig = {
+    power: {
+      sponsor_tax_mult: 0.1,
+      powered_stake_mult: 0.1
+    },
+    mint: {
+      round_powered_stake_mult: 0.1,
+      round_power_mult: 0.1
+    }
+  }
   
   try {
-    const queryParameters:any = { from: fromDate, to: toDate }
-    if (boid_id) {
-      queryParameters.boid_id = boid_id
-    }
-    const data = await trpc.GetGlobalDeltas.query(queryParameters)
-    console.log("All Deltas:", data)
+    const queryParameters:any = { rounds, basePowerPerRound, stake, userConfig }
+
+    const data = await trpc.GetCalculatedData.query(queryParameters)
+    console.log("Calculator Data:", data)
   } catch (error) {
     console.error("Error fetching data:", error)
   }
@@ -93,4 +118,5 @@ const boid_id = "boidis.cool"
 // fetchperBoidID("")
 // fetchPwrClaim(boid_id)
 // fetchCombinedData(boid_id)
-fetchGlobalDeltas()
+// fetchGlobalDeltas()
+fetchCalculatorData()
