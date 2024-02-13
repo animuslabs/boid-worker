@@ -121,7 +121,7 @@ async function createBoidSystemAccounts(chain:Blockchain) {
       })
     ]
   })
-  
+
   chain.createAccount({
     name: "tknmint.boid",
     enableInline: true,
@@ -162,7 +162,7 @@ export class ChainCalculator {
   roundStartTime:TimePoint
   token:Account
   aa:Account
-  tkn:any  
+  tkn:typeof this.token.actions
   owners = ["boid"]
   boid_id = "testaccount"
   acc = "testacct"
@@ -186,31 +186,30 @@ export class ChainCalculator {
     this.chain.createAccount("sponsorbrok")
     this.chain.createAccount("sponsorrich")
     this.chain.createAccount("noauth")
-  
-    this.act("auth.init")
-    // this.act("config.set", { config })
-    // this.act("global.set", { globalData: { chain_name: Name.from("test"), total_power: UInt64.from(0), last_inflation_adjust_round: UInt16.from(0) } })
-    // this.act("account.add", { boid_id: Name.from("sponsoracct"), owners: ["sponsoracct"], sponsors: [], keys: [] })
-    // this.act("account.add", { boid_id: Name.from("sponsorbrok"), owners: ["sponsorbrok"], sponsors: [], keys: [] })
-    // this.act("account.add", { boid_id: Name.from("sponsorrich"), owners: ["sponsorrich"], sponsors: [], keys: [] })
-    // this.act("account.add", { boid_id: Name.from("teamownr"), owners: ["recover.boid"], sponsors: [], keys: [] })
-    // this.act("team.create", { owner: Name.from("teamownr"), min_pwr_tax_mult: 10, owner_cut_mult: 4, url_safe_name: "teamteam", info_json_ipfs: "" })
-    // // return
-    // this.depositTokens()
-    // this.act("global.chain", { chain_name: "localtestnet" })
-    // this.chain.createAccount(this.acc)
+
+    await this.act("auth.init")
+    await this.act("config.set", { config })
+    await this.act("global.set", { globalData: { chain_name: Name.from("test"), total_power: UInt64.from(0), last_inflation_adjust_round: UInt16.from(0) } })
+    await this.act("account.add", { boid_id: Name.from("sponsoracct"), owners: ["sponsoracct"], sponsors: [], keys: [] })
+    await this.act("account.add", { boid_id: Name.from("sponsorbrok"), owners: ["sponsorbrok"], sponsors: [], keys: [] })
+    await this.act("account.add", { boid_id: Name.from("sponsorrich"), owners: ["sponsorrich"], sponsors: [], keys: [] })
+    await this.act("account.add", { boid_id: Name.from("teamownr"), owners: ["recover.boid"], sponsors: [], keys: [] })
+    await this.act("team.create", { owner: Name.from("teamownr"), min_pwr_tax_mult: 10, owner_cut_mult: 4, url_safe_name: "teamteam", info_json_ipfs: "" })
+    await this.depositTokens()
+    await this.act("global.chain", { chain_name: "localtestnet" })
+    this.chain.createAccount(this.acc)
   }
 
-  depositTokens() {
+  async depositTokens() {
     const issuer = Name.from("token.boid")
     const maximum_supply = "25000000000.0000 BOID"
-    this.tkn.create!({ issuer, maximum_supply }).send()
-    this.tkn.issue!({ to: issuer, quantity: maximum_supply, memo: "" }).send()
-    this.setupAccountOwner()
-    this.tkn.transfer!({ from: issuer, to: Name.from("tknmint.boid"), quantity: "100000000.0000 BOID", memo: "" }).send("token.boid@active")
+    await this.tkn.create!({ issuer, maximum_supply }).send()
+    await this.tkn.issue!({ to: issuer, quantity: maximum_supply, memo: "" }).send()
+    await this.setupAccountOwner()
+    await this.tkn.transfer!({ from: issuer, to: Name.from("tknmint.boid"), quantity: "100000000.0000 BOID", memo: "" }).send("token.boid@active")
   }
 
-  
+
 
   teamContribution(account:{ team:{ team_tax_mult:number } }, team:{ min_pwr_tax_mult:number }, totalPayout:number):number {
     return Math.floor(totalPayout * (Math.max(account.team.team_tax_mult, team.min_pwr_tax_mult) / 200))
@@ -230,7 +229,7 @@ export class ChainCalculator {
     return Math.floor((this.chain.timestamp.toMilliseconds() - this.roundStartTime.toMilliseconds()) / (this.configStart.time.round_length_sec * 1000))
   }
 
-  act(name:string, params = {}, permission = "boid@active") {
+  async act(name:string, params = {}, permission = "boid@active") {
     const action = this.contract.actions[name]
     // Check if the action is a function before attempting to call it
     if (typeof action !== "function") {
@@ -238,12 +237,12 @@ export class ChainCalculator {
     }
     return action(params).send(permission)
   }
-  
-  setupAccountOwner() {
+
+  async setupAccountOwner() {
     this.chain.createAccount("newowner")
-    this.act("account.add", { boid_id: "boid", owners: ["boid"], sponsors: [], keys: [] })
-    this.act("account.add", { boid_id: this.boid_id, owners: ["recover.boid"], sponsors: ["sponsoracct"], keys: [] })
-    this.act("owner.add", { boid_id: this.boid_id, owner: Name.from("newowner") }, "recover.boid@active")
+    await this.act("account.add", { boid_id: "boid", owners: ["boid"], sponsors: [], keys: [] })
+    await this.act("account.add", { boid_id: this.boid_id, owners: ["recover.boid"], sponsors: ["sponsoracct"], keys: [] })
+    await this.act("owner.add", { boid_id: this.boid_id, owner: Name.from("newowner") }, "recover.boid@active")
   }
 
   accounts() {

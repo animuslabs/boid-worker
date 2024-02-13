@@ -8,6 +8,11 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "warnOnUnsupportedTypeScriptVersion": false,
+    "project": [
+      "./tsconfig.json"
+    ],
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
@@ -15,10 +20,14 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "@typescript-eslint/no-floating-promises": [
+      "error"
+    ],
+    "prefer-promise-reject-errors": "error",
+    "promise/param-names": "off",
     "no-trailing-spaces": "off",
     "no-multiple-empty-lines": "off",
     "no-return-assign": "off",
-    "promise/param-names": "off",
     "spaced-comment": "off",
     "key-spacing": [
       "error",

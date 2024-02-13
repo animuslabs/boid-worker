@@ -34,16 +34,16 @@ async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number,
   // Loop for the specified number of rounds
   for (let round = 0; round < rounds; round++) {
     console.log("Round before add:", chainCalc.currentRound())
-    
-    chainCalc.addRounds(5, roundLenght) // Advance one round
-    chainCalc.act("thisround").catch(console.error)
-    console.log("Round after add:", chainCalc.currentRound())
+
+    chainCalc.addRounds(1, roundLenght) // Advance one round
+    // chainCalc.act("thisround").catch(console.error)
+    // console.log("Round after add:", chainCalc.currentRound())
     // Calculate fluctuation: a random percentage between -20% and +20%
     const fluctuationPercent = (Math.random() * 40 - 20) / 100
     const powerToAdd = Math.round(basePowerPerRound + basePowerPerRound * fluctuationPercent)
 
-    chainCalc.act("power.add", { boid_id, power: powerToAdd }) // Add fluctuating power for the round
-    
+    await chainCalc.act("power.add", { boid_id, power: powerToAdd }) // Add fluctuating power for the round
+
     // Claim power after adding for all rounds
     // await act("power.claim", { boid_id })
   }
@@ -53,16 +53,16 @@ export async function calculator(rounds:number, basePowerPerRound:number, stake:
   const mergedConfig = mergeConfig(defaultConfig, userConfig)
   const chainCalc = new ChainCalculator(defaultConfig)
   await chainCalc.init(defaultConfig)
-  // chainCalc.act("account.add", { boid_id: chainCalc.acc, owners: [chainCalc.acc], sponsors: [], keys: [] })
-  // chainCalc.tkn.transfer!({ from: "tknmint.boid", to: chainCalc.acc, quantity: `${stake.toFixed(4)} BOID`, memo: "" }).send("tknmint.boid")
-  // chainCalc.tkn.transfer!({ from: chainCalc.acc, to: "boid", quantity: `${stake.toFixed(4)} BOID`, memo: "deposit boid_id=testacct" }).send(chainCalc.acc)
-  // chainCalc.act("stake", { boid_id: chainCalc.acc, quantity: stake })
-  // const roundLength = defaultConfig.time.round_length_sec
-  // await testAcct(chainCalc.acc, rounds, basePowerPerRound, roundLength, chainCalc)
+  await chainCalc.act("account.add", { boid_id: chainCalc.acc, owners: [chainCalc.acc], sponsors: [], keys: [] })
+  await chainCalc.tkn.transfer({ from: "tknmint.boid", to: chainCalc.acc, quantity: `${stake.toFixed(4)} BOID`, memo: "" }).send("tknmint.boid")
+  await chainCalc.tkn.transfer({ from: chainCalc.acc, to: "boid", quantity: `${stake.toFixed(4)} BOID`, memo: "deposit boid_id=testacct" }).send(chainCalc.acc)
+  await chainCalc.act("stake", { boid_id: chainCalc.acc, quantity: stake })
+  const roundLength = defaultConfig.time.round_length_sec
+  await testAcct(chainCalc.acc, rounds, basePowerPerRound, roundLength, chainCalc)
   // chainCalc.act("thisround").catch(console.error)
-  // const accData = chainCalc.account(chainCalc.acc)
-  // console.log("Round:", chainCalc.currentRound())
-  // return accData
+  const accData = chainCalc.account(chainCalc.acc)
+  console.log("Round:", chainCalc.currentRound())
+  return accData
 }
 
 // :Promise<Types.Account>
