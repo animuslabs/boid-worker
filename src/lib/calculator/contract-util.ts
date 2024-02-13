@@ -6,9 +6,9 @@ import { Config, ContractTables, TableView } from "lib/types/calc-types"
 
 export const chain = new Blockchain()
 
-export const contract = chain.createContract("boid", "src/lib/calculator/contract/boid-core/boid.contract")
-export const token = chain.createContract("token.boid", "src/lib/calculator/contract/token/token.contract")
-export const aa = chain.createContract("atomicassets", "src/lib/calculator/contract/atomicassets/atomicassets")
+export const contract = chain.createContract("boid", "../src/lib/calculator/contract/boid-core/boid.contract")
+export const token = chain.createContract("token.boid", "../src/lib/calculator/contract/token/token.contract")
+export const aa = chain.createContract("atomicassets", "../src/lib/calculator/contract/atomicassets/atomicassets")
 
 
 export const owners = ["boid"]

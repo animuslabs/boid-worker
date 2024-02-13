@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { init, account, acc, act, tkn, addRounds, defaultConfig } from "lib/calculator/contract-util"
+import { chain, init, account, acc, act, tkn, addRounds, defaultConfig } from "lib/calculator/contract-util"
 import { Config, UserConfig } from "lib/types/calc-types"
 import { Types } from "lib/types/boid-contract-structure"
+import { sleep } from "lib/utils"
 
 async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number, roundLenght:number) {
   // Loop for the specified number of rounds
@@ -50,6 +51,7 @@ function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {
 
 export async function calculator(rounds:number, basePowerPerRound:number, stake:number, userConfig:UserConfig):Promise<Types.Account> {
   const mergedConfig = mergeConfig(defaultConfig, userConfig)
+  chain.resetTables()
   await init(mergedConfig)
   await act("account.add", { boid_id: acc, owners: [acc], sponsors: [], keys: [] })
   await tkn.transfer!({ from: "tknmint.boid", to: acc, quantity: `${stake.toFixed(4)} BOID`, memo: "" }).send("tknmint.boid")
@@ -59,7 +61,9 @@ export async function calculator(rounds:number, basePowerPerRound:number, stake:
   await testAcct(acc, rounds, basePowerPerRound, roundLength)
 
   const accData = account(acc)
+  
   return accData
+  process.exit(0)
 }
 
 
@@ -87,4 +91,11 @@ export async function calculator(rounds:number, basePowerPerRound:number, stake:
 // ).catch((error) => {
 //   console.error("An error occurred during main execution:", error)
 // })
-
+// await sleep(1000)
+// calculator(rounds, basePowerPerRound, stake, userConfig).then(
+//   (result) => {
+//     console.log("Result:", result)
+//   }
+// ).catch((error) => {
+//   console.error("An error occurred during main execution:", error)
+// })
