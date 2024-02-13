@@ -1,26 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Authority, Name, PermissionLevel, PermissionLevelWeight, TimePoint, UInt16, UInt32 } from "@wharfkit/antelope"
-import { AccountPermission, Blockchain } from "@proton/vert"
+import { Authority, Name, PermissionLevel, PermissionLevelWeight, TimePoint, UInt16, UInt32, UInt64 } from "@wharfkit/antelope"
+import { Account, AccountPermission, Blockchain } from "@proton/vert"
 import { Types } from "lib/types/boid-contract-structure"
 import { Config, ContractTables, TableView } from "lib/types/calc-types"
-
-export const chain = new Blockchain()
-
-export const contract = chain.createContract("boid", "../src/lib/calculator/contract/boid-core/boid.contract")
-export const token = chain.createContract("token.boid", "../src/lib/calculator/contract/token/token.contract")
-export const aa = chain.createContract("atomicassets", "../src/lib/calculator/contract/atomicassets/atomicassets")
-
-
-export const owners = ["boid"]
-export const boid_id = "testaccount"
-export const acc = "testacct"
-
-export function accounts() {
-  if (!contract.tables || typeof contract.tables.accounts !== "function") {
-    throw new Error("Contract tables or accounts table function is not available.")
-  }
-  return contract.tables.accounts().getTableRows()
-}
 
 function getTable<T extends keyof ContractTables>(
   contractInstance:{ tables:{ [key:string]:any } }, // Add contractInstance parameter
@@ -42,65 +24,6 @@ function getTable<T extends keyof ContractTables>(
   }
 }
 
-
-export function account(acctName:string):Types.Account {
-  const accountsTable = getTable(contract, "accounts")
-  return Types.Account.from(accountsTable.getTableRow(Name.from(acctName).value.toString()))
-}
-export function stakes():Types.Stake[] {
-  return getTable(contract, "stakes").getTableRows().map((row:any) => Types.Stake.from(row))
-}
-export function sponsors() {
-  return getTable(contract, "sponsors").getTableRows().map((row:any) => Types.Sponsor.from(row))
-}
-
-export function sponsor(acctName:string) {
-  return getTable(contract, "sponsors").getTableRow(Name.from(acctName).value.toString()).map((row:any) => Types.Sponsor.from(row))
-}
-
-export function teams() {
-  return getTable(contract, "teams").getTableRows()
-}
-
-export function boosters() {
-  return getTable(contract, "boosters").getTableRows()
-}
-
-export function offers() {
-  return getTable(contract, "offers").getTableRows().map((row:any) => Types.Offer.from(row))
-}
-
-export function global() {
-  return getTable(contract, "global").getTableRows().map((row:any) => Types.Global.from(row))
-}
-
-export function config() {
-  return getTable(contract, "config").getTableRows()[0]
-}
-
-export function stats() {
-  return getTable(contract, "stats").getTableRows()
-}
-export function nfts(scope:string) {
-  return getTable(contract, "nfts", scope).getTableRows()
-}
-export function assets(scope:string) {
-  const scopeString = Name.from(scope).value.toString()
-  const assetsTable = getTable(aa, "assets", scopeString)
-  return assetsTable.getTableRows()
-}
-export function auth() {
-  return getTable(contract, "auth").getTableRows()?.[0]
-}
-export function invites(scope:string) {
-  return getTable(contract, "invites", scope).getTableRows()
-}
-export function invite(scope:string, invite_id:string) {
-  const scopeString = Name.from(scope).value.toString()
-  // Using getTable for consistent access and error handling
-  const invitesTable = getTable(contract, "invites", scopeString)
-  return invitesTable.getTableRow(invite_id)
-}
 export const defaultConfig:Config = {
   paused: false,
   account: {
@@ -156,44 +79,6 @@ export const defaultConfig:Config = {
   allow_withdrawals: true,
   recoveryAccount: "recover.boid"
 }
-export const roundStartTime = TimePoint.fromMilliseconds(defaultConfig.time.rounds_start_sec_since_epoch * 1000)
-
-export function teamContribution(account:{ team:{ team_tax_mult:number } }, team:{ min_pwr_tax_mult:number }, totalPayout:number):number {
-  return Math.floor(totalPayout * (Math.max(account.team.team_tax_mult, team.min_pwr_tax_mult) / 200))
-}
-
-export function teamOwnerCut(team:Types.Team, teamContribution:number) {
-  let ownerCut = teamContribution * (team.owner_cut_mult.toNumber() / 200)
-  return Math.floor(ownerCut)
-}
-
-export function addRounds(numRounds = 0, roundLength:number) {
-  const timePoint = TimePoint.fromMilliseconds(roundLength * 1000 * numRounds)
-  chain.addTime(timePoint as any)
-}
-
-export function currentRound() {
-  return Math.floor((chain.timestamp.toMilliseconds() - roundStartTime.toMilliseconds()) / (defaultConfig.time.round_length_sec * 1000))
-}
-
-export const tkn = token.actions
-const acti = contract.actions
-
-export async function setupAccountOwner() {
-  chain.createAccount("newowner")
-  await acti["account.add"]!({ boid_id: "boid", owners: ["boid"], sponsors: [], keys: [] }).send()
-  await acti["account.add"]!({ boid_id, owners: ["recover.boid"], sponsors: ["sponsoracct"], keys: [] }).send()
-  await acti["owner.add"]!({ boid_id, owner: Name.from("newowner") }).send("recover.boid@active")
-}
-
-async function depositTokens() {
-  const issuer = Name.from("token.boid")
-  const maximum_supply = "25000000000.0000 BOID"
-  await tkn.create!({ issuer, maximum_supply }).send()
-  await tkn.issue!({ to: issuer, quantity: maximum_supply, memo: "" }).send()
-  await setupAccountOwner()
-  await tkn.transfer!({ from: issuer, to: Name.from("tknmint.boid"), quantity: "100000000.0000 BOID", memo: "" }).send("token.boid@active")
-}
 
 async function wait(ms:number) {
   return new Promise(resolve => {
@@ -201,7 +86,7 @@ async function wait(ms:number) {
   })
 }
 
-async function createBoidSystemAccounts() {
+async function createBoidSystemAccounts(chain:Blockchain) {
   chain.createAccount("recover.boid")
   chain.createAccount("burn.boid")
   chain.createAccount({
@@ -271,36 +156,163 @@ async function createBoidSystemAccounts() {
   })
 }
 
-export async function init(config:Config) {
-  await wait(1) // this is just here because the proton library has a race condition 0_0
-  await createBoidSystemAccounts()
-  // @ts-ignore
-  chain.setTime(roundStartTime)
-  chain.createAccount("sponsoracct")
-  chain.createAccount("sponsorbrok")
-  chain.createAccount("sponsorrich")
-  chain.createAccount("noauth")
-
-  await act("auth.init", { })
-  await act("config.set", { config })
-  await act("global.set", { globalData: { chain_name: "test", total_power: 0, last_inflation_adjust_round: 0 } })
-  await act("account.add", { boid_id: Name.from("sponsoracct"), owners: ["sponsoracct"], sponsors: [], keys: [] })
-  await act("account.add", { boid_id: Name.from("sponsorbrok"), owners: ["sponsorbrok"], sponsors: [], keys: [] })
-  await act("account.add", { boid_id: Name.from("sponsorrich"), owners: ["sponsorrich"], sponsors: [], keys: [] })
-  await act("account.add", { boid_id: Name.from("teamownr"), owners: ["recover.boid"], sponsors: [], keys: [] })
-  await act("team.create", { owner: Name.from("teamownr"), min_pwr_tax_mult: 10, owner_cut_mult: 4, url_safe_name: "teamteam", info_json_ipfs: "" })
-  // return
-  await depositTokens()
-  await act("global.chain", { chain_name: "localtestnet" })
-  chain.createAccount(acc)
-}
-
-export async function act(name:string, params = {}, permission = "boid@active") {
-  const action = contract.actions[name]
-  // Check if the action is a function before attempting to call it
-  if (typeof action !== "function") {
-    throw new Error(`Action '${name}' is not available on the contract.`)
+export class ChainCalculator {
+  chain:Blockchain
+  contract:Account
+  roundStartTime:TimePoint
+  token:Account
+  aa:Account
+  tkn:any  
+  owners = ["boid"]
+  boid_id = "testaccount"
+  acc = "testacct"
+  configStart = defaultConfig
+  constructor(config:Config) {
+    this.chain = new Blockchain()
+    this.contract = this.chain.createContract("boid", "../src/lib/calculator/contract/boid-core/boid.contract")
+    this.token = this.chain.createContract("token.boid", "../src/lib/calculator/contract/token/token.contract")
+    this.aa = this.chain.createContract("atomicassets", "../src/lib/calculator/contract/atomicassets/atomicassets")
+    this.tkn = this.token.actions
+    this.configStart = config
+    this.roundStartTime = TimePoint.fromMilliseconds(config.time.rounds_start_sec_since_epoch * 1000)
   }
-  return action(params).send(permission)
-}
 
+  async init(config:Config) {
+    await wait(3) // this is just here because the proton library has a race condition 0_0
+    await createBoidSystemAccounts(this.chain)
+    // @ts-ignore
+    this.chain.setTime(this.roundStartTime)
+    this.chain.createAccount("sponsoracct")
+    this.chain.createAccount("sponsorbrok")
+    this.chain.createAccount("sponsorrich")
+    this.chain.createAccount("noauth")
+  
+    this.act("auth.init")
+    // this.act("config.set", { config })
+    // this.act("global.set", { globalData: { chain_name: Name.from("test"), total_power: UInt64.from(0), last_inflation_adjust_round: UInt16.from(0) } })
+    // this.act("account.add", { boid_id: Name.from("sponsoracct"), owners: ["sponsoracct"], sponsors: [], keys: [] })
+    // this.act("account.add", { boid_id: Name.from("sponsorbrok"), owners: ["sponsorbrok"], sponsors: [], keys: [] })
+    // this.act("account.add", { boid_id: Name.from("sponsorrich"), owners: ["sponsorrich"], sponsors: [], keys: [] })
+    // this.act("account.add", { boid_id: Name.from("teamownr"), owners: ["recover.boid"], sponsors: [], keys: [] })
+    // this.act("team.create", { owner: Name.from("teamownr"), min_pwr_tax_mult: 10, owner_cut_mult: 4, url_safe_name: "teamteam", info_json_ipfs: "" })
+    // // return
+    // this.depositTokens()
+    // this.act("global.chain", { chain_name: "localtestnet" })
+    // this.chain.createAccount(this.acc)
+  }
+
+  depositTokens() {
+    const issuer = Name.from("token.boid")
+    const maximum_supply = "25000000000.0000 BOID"
+    this.tkn.create!({ issuer, maximum_supply }).send()
+    this.tkn.issue!({ to: issuer, quantity: maximum_supply, memo: "" }).send()
+    this.setupAccountOwner()
+    this.tkn.transfer!({ from: issuer, to: Name.from("tknmint.boid"), quantity: "100000000.0000 BOID", memo: "" }).send("token.boid@active")
+  }
+
+  
+
+  teamContribution(account:{ team:{ team_tax_mult:number } }, team:{ min_pwr_tax_mult:number }, totalPayout:number):number {
+    return Math.floor(totalPayout * (Math.max(account.team.team_tax_mult, team.min_pwr_tax_mult) / 200))
+  }
+
+  teamOwnerCut(team:Types.Team, teamContribution:number) {
+    let ownerCut = teamContribution * (team.owner_cut_mult.toNumber() / 200)
+    return Math.floor(ownerCut)
+  }
+
+  addRounds(numRounds = 0, roundLength:number) {
+    const timePoint = TimePoint.fromMilliseconds(roundLength * 1000 * numRounds)
+    this.chain.addTime(timePoint as any)
+  }
+
+  currentRound() {
+    return Math.floor((this.chain.timestamp.toMilliseconds() - this.roundStartTime.toMilliseconds()) / (this.configStart.time.round_length_sec * 1000))
+  }
+
+  act(name:string, params = {}, permission = "boid@active") {
+    const action = this.contract.actions[name]
+    // Check if the action is a function before attempting to call it
+    if (typeof action !== "function") {
+      throw new Error(`Action '${name}' is not available on the contract.`)
+    }
+    return action(params).send(permission)
+  }
+  
+  setupAccountOwner() {
+    this.chain.createAccount("newowner")
+    this.act("account.add", { boid_id: "boid", owners: ["boid"], sponsors: [], keys: [] })
+    this.act("account.add", { boid_id: this.boid_id, owners: ["recover.boid"], sponsors: ["sponsoracct"], keys: [] })
+    this.act("owner.add", { boid_id: this.boid_id, owner: Name.from("newowner") }, "recover.boid@active")
+  }
+
+  accounts() {
+    if (!this.contract.tables || typeof this.contract.tables.accounts !== "function") {
+      throw new Error("Contract tables or accounts table function is not available.")
+    }
+    return this.contract.tables.accounts().getTableRows()
+  }
+
+  account(acctName:string):Types.Account {
+    const accountsTable = getTable(this.contract, "accounts")
+    return Types.Account.from(accountsTable.getTableRow(Name.from(acctName).value.toString()))
+  }
+
+  stakes():Types.Stake[] {
+    return getTable(this.contract, "stakes").getTableRows().map((row:any) => Types.Stake.from(row))
+  }
+
+  sponsors() {
+    return getTable(this.contract, "sponsors").getTableRows().map((row:any) => Types.Sponsor.from(row))
+  }
+
+  sponsor(acctName:string) {
+    return getTable(this.contract, "sponsors").getTableRow(Name.from(acctName).value.toString()).map((row:any) => Types.Sponsor.from(row))
+  }
+
+  teams() {
+    return getTable(this.contract, "teams").getTableRows()
+  }
+
+  boosters() {
+    return getTable(this.contract, "boosters").getTableRows()
+  }
+
+  offers() {
+    return getTable(this.contract, "offers").getTableRows().map((row:any) => Types.Offer.from(row))
+  }
+
+  global() {
+    return getTable(this.contract, "global").getTableRows().map((row:any) => Types.Global.from(row))
+  }
+
+  config() {
+    return getTable(this.contract, "config").getTableRows()[0]
+  }
+
+  stats() {
+    return getTable(this.contract, "stats").getTableRows()
+  }
+
+  nfts(scope:string) {
+    return getTable(this.contract, "nfts", scope).getTableRows()
+  }
+
+  assets(scope:string) {
+    const assetsTable = getTable(this.aa, "assets", scope)
+    return assetsTable.getTableRows()
+  }
+
+  auth() {
+    return getTable(this.contract, "auth").getTableRows()?.[0]
+  }
+
+  invites(scope:string) {
+    return getTable(this.contract, "invites", scope).getTableRows()
+  }
+
+  invite(scope:string, invite_id:string) {
+    const invitesTable = getTable(this.contract, "invites", scope)
+    return invitesTable.getTableRow(invite_id)
+  }
+}
