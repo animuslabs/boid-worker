@@ -1181,6 +1181,7 @@ export interface TableTypes {
     teams:Types.Team
 }
 export type RowType<T> = T extends keyof TableTypes ? TableTypes[T] : any
+export type TableNames = keyof TableTypes
 export namespace ActionParams {
     export namespace Type {
         export interface AccountCreate {
@@ -1581,7 +1582,6 @@ export namespace ActionParams {
         to:NameType
     }
 }
-
 export interface ActionNameParams {
     "account.add":ActionParams.accountadd
     "account.buy":ActionParams.accountbuy
@@ -1637,10 +1637,7 @@ export interface ActionNameParams {
     "unstke.deleg":ActionParams.unstkedeleg
     withdraw:ActionParams.withdraw
 }
-
 export type ActionNames = keyof ActionNameParams
-export type TableNames = keyof TableTypes
-
 export class Contract extends BaseContract {
   constructor(args:PartialBy<ContractArgs, "abi" | "account">) {
     super({

@@ -2,23 +2,25 @@
 import { chain, init, account, acc, act, tkn, addRounds, defaultConfig } from "lib/calculator/contract-util"
 import { Config, UserConfig } from "lib/types/calc-types"
 import { Types } from "lib/types/boid-contract-structure"
-import { sleep } from "lib/utils"
+import { currentRound, sleep } from "lib/utils"
 
 async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number, roundLenght:number) {
   // Loop for the specified number of rounds
   for (let round = 0; round < rounds; round++) {
+    console.log("Round before add:", await currentRound())
     addRounds(1, roundLenght) // Advance one round
-
+    console.log("Round after add:", await currentRound())
     // Calculate fluctuation: a random percentage between -20% and +20%
     const fluctuationPercent = (Math.random() * 40 - 20) / 100
     const powerToAdd = Math.round(basePowerPerRound + basePowerPerRound * fluctuationPercent)
 
     await act("power.add", { boid_id, power: powerToAdd }) // Add fluctuating power for the round
     // console.log(`Round ${round + 1}: Added ${powerToAdd} power to ${boid_id}`)
-  }
 
-  // Claim power after adding for all rounds
-  await act("power.claim", { boid_id })
+    
+    // Claim power after adding for all rounds
+    // await act("power.claim", { boid_id })
+  }
 }
 
 function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {
@@ -61,41 +63,36 @@ export async function calculator(rounds:number, basePowerPerRound:number, stake:
   await testAcct(acc, rounds, basePowerPerRound, roundLength)
 
   const accData = account(acc)
-  
+  console.log("Round:", await currentRound())
   return accData
   process.exit(0)
 }
 
 
 //// only for testing
-// const userConfig = {
-//   power: {
-//     sponsor_tax_mult: 0.1,
-//     powered_stake_mult: 1000
-//   },
-//   mint: {
-//     round_powered_stake_mult: 0.0001,
-//     round_power_mult: 1
-//   }
-// }
+const userConfig = {
+  power: {
+    sponsor_tax_mult: 0.1,
+    powered_stake_mult: 1000
+  },
+  mint: {
+    round_powered_stake_mult: 0.0001,
+    round_power_mult: 1
+  }
+}
 
-// const rounds = 10
-// const basePowerPerRound = 100
-// const stake = 1000000
+const rounds = 500
+const basePowerPerRound = 100
+const stake = 1000000
 
 
-// calculator(rounds, basePowerPerRound, stake, userConfig).then(
-//   (result) => {
-//     console.log("Result:", result)
-//   }
-// ).catch((error) => {
-//   console.error("An error occurred during main execution:", error)
-// })
-// await sleep(1000)
-// calculator(rounds, basePowerPerRound, stake, userConfig).then(
-//   (result) => {
-//     console.log("Result:", result)
-//   }
-// ).catch((error) => {
-//   console.error("An error occurred during main execution:", error)
-// })
+calculator(rounds, basePowerPerRound, stake, userConfig).then(
+  (result) => {
+    // console.log("Result:", result)
+    console.log("Total power:", result.power.rating.toNumber())
+    console.log("Total stake:", result.stake.self_staked.toNumber())
+    console.log
+  }
+).catch((error) => {
+  console.error("An error occurred during main execution:", error)
+})

@@ -41,7 +41,7 @@ export const pushActions = route
     //   console.log("Pinned CID:", pinned.toString())
     //   if (!pinned.equals(cid)) throw new Error("account metadata mismatch")
     // }
-    const result = await doAction("auth", Types.Auth.from(data.input), "boid")
+    const result = await doAction("auth", Types.auth.from(data.input), "boid")
     console.log(result)
     return { result, receipt: result?.receipts[0] }
   })
