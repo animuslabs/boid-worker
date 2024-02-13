@@ -220,9 +220,9 @@ export class ChainCalculator {
     return Math.floor(ownerCut)
   }
 
-  addRounds(numRounds = 0, roundLength:number) {
+  async addRounds(numRounds = 0, roundLength:number) {
     const timePoint = TimePoint.fromMilliseconds(roundLength * 1000 * numRounds)
-    this.chain.addTime(timePoint as any)
+    await this.chain.addTime(timePoint as any)
   }
 
   currentRound() {

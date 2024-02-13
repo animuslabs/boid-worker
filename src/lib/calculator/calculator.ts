@@ -2,6 +2,8 @@
 import { ChainCalculator, defaultConfig } from "lib/calculator/contract-util"
 import { Config, UserConfig } from "lib/types/calc-types"
 import { Types } from "lib/types/boid-contract-structure"
+import { toObject } from "lib/utils"
+import { log } from "console"
 
 function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {
   let mergedConfig:Config = JSON.parse(JSON.stringify(defaultConfig))
@@ -33,9 +35,9 @@ function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {
 async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number, roundLenght:number, chainCalc:ChainCalculator) {
   // Loop for the specified number of rounds
   for (let round = 0; round < rounds; round++) {
-    console.log("Round before add:", chainCalc.currentRound())
+    // console.log("Round before add:", chainCalc.currentRound())
 
-    chainCalc.addRounds(1, roundLenght) // Advance one round
+    await chainCalc.addRounds(1, roundLenght) // Advance one round
     // chainCalc.act("thisround").catch(console.error)
     // console.log("Round after add:", chainCalc.currentRound())
     // Calculate fluctuation: a random percentage between -20% and +20%
@@ -43,16 +45,16 @@ async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number,
     const powerToAdd = Math.round(basePowerPerRound + basePowerPerRound * fluctuationPercent)
 
     await chainCalc.act("power.add", { boid_id, power: powerToAdd }) // Add fluctuating power for the round
-
+    // log(toObject(chainCalc.account(boid_id)))
     // Claim power after adding for all rounds
-    // await act("power.claim", { boid_id })
+    if (round > 1) await chainCalc.act("power.claim", { boid_id })
   }
 }
 
 export async function calculator(rounds:number, basePowerPerRound:number, stake:number, userConfig:UserConfig) {
   const mergedConfig = mergeConfig(defaultConfig, userConfig)
-  const chainCalc = new ChainCalculator(defaultConfig)
-  await chainCalc.init(defaultConfig)
+  const chainCalc = new ChainCalculator(mergedConfig)
+  await chainCalc.init(mergedConfig)
   await chainCalc.act("account.add", { boid_id: chainCalc.acc, owners: [chainCalc.acc], sponsors: [], keys: [] })
   await chainCalc.tkn.transfer({ from: "tknmint.boid", to: chainCalc.acc, quantity: `${stake.toFixed(4)} BOID`, memo: "" }).send("tknmint.boid")
   await chainCalc.tkn.transfer({ from: chainCalc.acc, to: "boid", quantity: `${stake.toFixed(4)} BOID`, memo: "deposit boid_id=testacct" }).send(chainCalc.acc)
@@ -62,7 +64,7 @@ export async function calculator(rounds:number, basePowerPerRound:number, stake:
   // chainCalc.act("thisround").catch(console.error)
   const accData = chainCalc.account(chainCalc.acc)
   console.log("Round:", chainCalc.currentRound())
-  return accData
+  return { accData, chainCalc }
 }
 
 // :Promise<Types.Account>
@@ -78,16 +80,16 @@ const userConfig = {
   }
 }
 
-const rounds = 5
+const rounds = 50
 const basePowerPerRound = 100
 const stake = 1000
 
 
 calculator(rounds, basePowerPerRound, stake, userConfig).then(
   (result) => {
-    // console.log("Result:", result)
-    // console.log("Total power:", result.power.rating.toNumber())
-    // console.log("Total stake:", result.stake.self_staked.toNumber())
+    console.log("Result:", toObject(result.accData))
+    console.log("Total power:", result.accData.power.rating.toNumber())
+    console.log("Total stake:", result.accData.stake.self_staked.toNumber())
   }
 ).catch((error) => {
   console.error("An error occurred during main execution:", error)
