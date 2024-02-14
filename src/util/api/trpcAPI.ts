@@ -6,7 +6,7 @@ import express from "express"
 import { z } from "zod"
 import { getAllAccountsDeltas, getBoidIDs, getLogPwrClaimData, getCombinedData, getGlobalDeltaData } from "./api4DeltasFunctions"
 import { RequestQueryParams } from "./api4DeltasTypes"
-import { calculator } from "lib/calculator/calculator"
+import { accountCalculator } from "lib/calculator/calculator"
 
 process.env.TZ = "Etc/UTC"
 dotenv.config()
@@ -30,6 +30,7 @@ const calculatedDataInputSchema = z.object({
   rounds: z.number(),
   basePowerPerRound: z.number(),
   stake: z.number(),
+  liveSim: z.boolean(),
   userConfig: z.object({
     power: z.object({
       sponsor_tax_mult: z.number(),
@@ -118,7 +119,7 @@ const appRouter = t.router({
   GetCalculatedData: publicProcedure
     .input(calculatedDataInputSchema)
     .query(async(input) => {
-      const calculatedData = await calculator(input.input.rounds, input.input.basePowerPerRound, input.input.stake, input.input.userConfig)
+      const calculatedData = await accountCalculator(input.input.rounds, input.input.basePowerPerRound, input.input.stake, input.input.userConfig, input.input.liveSim)
       return calculatedData
     })
 })

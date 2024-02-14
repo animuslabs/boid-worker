@@ -2,8 +2,6 @@
 import { ChainCalculator, defaultConfig } from "lib/calculator/contract-util"
 import { Config, UserConfig } from "lib/types/calc-types"
 import { Types } from "lib/types/boid-contract-structure"
-import { toObject } from "lib/utils"
-import { log } from "console"
 
 function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {
   let mergedConfig:Config = JSON.parse(JSON.stringify(defaultConfig))
@@ -32,17 +30,16 @@ function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {
   return mergedConfig
 }
 
-async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number, roundLenght:number, chainCalc:ChainCalculator) {
+async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number, roundLenght:number, chainCalc:ChainCalculator, liveSim:boolean = false) {
   // Loop for the specified number of rounds
   for (let round = 0; round < rounds; round++) {
-    // console.log("Round before add:", chainCalc.currentRound())
-
     await chainCalc.addRounds(1, roundLenght) // Advance one round
-    // chainCalc.act("thisround").catch(console.error)
-    // console.log("Round after add:", chainCalc.currentRound())
+    let powerToAdd = basePowerPerRound
     // Calculate fluctuation: a random percentage between -20% and +20%
-    const fluctuationPercent = (Math.random() * 40 - 20) / 100
-    const powerToAdd = Math.round(basePowerPerRound + basePowerPerRound * fluctuationPercent)
+    if (liveSim == true) {    
+      const fluctuationPercent = (Math.random() * 40 - 20) / 100
+      powerToAdd = Math.round(basePowerPerRound + basePowerPerRound * fluctuationPercent) 
+    }
 
     await chainCalc.act("power.add", { boid_id, power: powerToAdd }) // Add fluctuating power for the round
     // log(toObject(chainCalc.account(boid_id)))
@@ -51,7 +48,7 @@ async function testAcct(boid_id:string, rounds:number, basePowerPerRound:number,
   }
 }
 
-export async function calculator(rounds:number, basePowerPerRound:number, stake:number, userConfig:UserConfig) {
+async function calculator(rounds:number, basePowerPerRound:number, stake:number, userConfig:UserConfig, liveSim:boolean) {
   const mergedConfig = mergeConfig(defaultConfig, userConfig)
   const chainCalc = new ChainCalculator(mergedConfig)
   await chainCalc.init(mergedConfig)
@@ -60,37 +57,39 @@ export async function calculator(rounds:number, basePowerPerRound:number, stake:
   await chainCalc.tkn.transfer({ from: chainCalc.acc, to: "boid", quantity: `${stake.toFixed(4)} BOID`, memo: "deposit boid_id=testacct" }).send(chainCalc.acc)
   await chainCalc.act("stake", { boid_id: chainCalc.acc, quantity: stake })
   const roundLength = defaultConfig.time.round_length_sec
-  await testAcct(chainCalc.acc, rounds, basePowerPerRound, roundLength, chainCalc)
-  // chainCalc.act("thisround").catch(console.error)
-  const accData = chainCalc.account(chainCalc.acc)
-  console.log("Round:", chainCalc.currentRound())
-  return { accData, chainCalc }
+  await testAcct(chainCalc.acc, rounds, basePowerPerRound, roundLength, chainCalc, liveSim)
+  return chainCalc
 }
 
-// :Promise<Types.Account>
-//// only for testing
-const userConfig = {
-  power: {
-    sponsor_tax_mult: 0.1,
-    powered_stake_mult: 1000
-  },
-  mint: {
-    round_powered_stake_mult: 0.0001,
-    round_power_mult: 1
-  }
+export async function accountCalculator(rounds:number, basePowerPerRound:number, stake:number, userConfig:UserConfig, liveSim:boolean):Promise<Types.Account> {
+  const result = await calculator(rounds, basePowerPerRound, stake, userConfig, liveSim)
+  return result.account(result.acc)
 }
 
-const rounds = 50
-const basePowerPerRound = 100
-const stake = 1000
+//-------------------------------------------------------------------------------
+// only for testing
+// const userConfig = {
+//   power: {
+//     sponsor_tax_mult: 0.1,
+//     powered_stake_mult: 1000
+//   },
+//   mint: {
+//     round_powered_stake_mult: 0.0001,
+//     round_power_mult: 1
+//   }
+// }
 
+// const rounds = 500
+// const basePowerPerRound = 1000
+// const stake = 10000
+// const liveSim = true
 
-calculator(rounds, basePowerPerRound, stake, userConfig).then(
-  (result) => {
-    console.log("Result:", toObject(result.accData))
-    console.log("Total power:", result.accData.power.rating.toNumber())
-    console.log("Total stake:", result.accData.stake.self_staked.toNumber())
-  }
-).catch((error) => {
-  console.error("An error occurred during main execution:", error)
-})
+// accountCalculator(rounds, basePowerPerRound, stake, userConfig, liveSim).then(
+//   (result) => {
+//     console.log("Result:", toObject(result))
+//     console.log("Total power:", result.power.rating.toNumber())
+//     console.log("Total stake:", result.stake.self_staked.toNumber())
+//   }
+// ).catch((error) => {
+//   console.error("An error occurred during main execution:", error)
+// })
