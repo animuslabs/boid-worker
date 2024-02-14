@@ -1,7 +1,7 @@
 import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64 } from "@wharfkit/antelope"
 import env from "lib/env"
 import { Types } from "lib/types/boid-contract-structure"
-import { Commitsclean, Finishreport, Handleostat, OracleStat, Ostatsclean, PwrReportAction, Reportsclean, RoundCommit, Slashabsent, Statsclean } from "lib/types/power.boid.types"
+import * as pwr from "lib/types/power.boid.types"
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
 const pwrAcct = env.contracts.power
 
@@ -10,14 +10,14 @@ function createAct(name:string, data:Record<string, any> = {}, account = pwrAcct
 }
 
 export const pwrActions = {
-  pwrReport: (data:PwrReportAction) => createAct("pwrreport", data),
+  pwrReport: (data:pwr.Types.pwrreport) => createAct("pwrreport", data),
   roundStats: () => createAct("roundstats"),
-  slashAbsent: (data:Slashabsent) => createAct("slashabsent", data),
-  finishReport: (data:{boid_id_scope:NameType, pwrreport_ids:UInt64[]}) => createAct("finishreport", Finishreport.from(data)),
-  reportsClean: (data:{scope:NameType}) => createAct("reportsclean", Reportsclean.from(data)),
-  oracleStatsClean: (data:{ scope:NameType }) => createAct("ostatsclean", Ostatsclean.from(data)),
-  roundCommitClean: (data:{ scope:NameType }) => createAct("commitsclean", Commitsclean.from(data)),
-  handleostat: (data:{ oracle:NameType, round:number }) => createAct("handleostat", Handleostat.from(data))
+  finishReport: (data:{boid_id_scope:NameType, pwrreport_id:UInt64}) => createAct("finishreport", pwr.Types.finishreport.from(data)),
+  mergeReports: (data:{boid_id_scope:NameType, pwrreport_ids:UInt64[]}) => createAct("finishreport", pwr.Types.mergereports.from(data)),
+  reportsClean: (data:{scope:NameType}) => createAct("reportsclean", pwr.Types.reportsclean.from(data)),
+  oracleStatsClean: (data:{ scope:NameType }) => createAct("ostatsclean", pwr.Types.ostatsclean.from(data)),
+  roundCommitClean: (data:{ scope:NameType }) => createAct("commitsclean", pwr.Types.commitsclean.from(data)),
+  payoutround: (data:{ oracle:NameType, round:number }) => createAct("payoutround", pwr.Types.payoutround.from(data))
 }
 
 export const sysActions = {

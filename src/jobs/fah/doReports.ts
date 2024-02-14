@@ -6,7 +6,7 @@ import { tables, dbQuery, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
 import { currentRound, getReportId, getRoundData, shouldFinishReport } from "lib/utils"
 import env from "lib/env"
-import { Finishreport, PwrReport, PwrReportAction, PwrReportRow } from "lib/types/power.boid.types"
+import * as pwr from "lib/types/power.boid.types"
 import { pickRpc, safeDo } from "lib/eosio"
 import { info } from "console"
 import { pwrActions } from "lib/actions"
@@ -40,7 +40,7 @@ async function init() {
       log.debug("previous round last report:", previousRecord)
       log.info(boidId, "earned", units, "FaH credits during round ", reportingRound.round)
 
-      const report = PwrReport.from({ protocol_id: 0, round: reportingRound.round, units })
+      const report = pwr.Types.PwrReport.from({ protocol_id: 0, round: reportingRound.round, units })
       const reportId = getReportId(report)
       const existing = await getPwrReport(boidId, reportId)
       let shouldFinish = false
@@ -53,14 +53,14 @@ async function init() {
         const approved = existing.approvals.includes(Name.from(env.worker.account))
         if (approved && shouldFinish) {
           log.info("sending finish action for report:", reportId)
-          const finishAct = pwrActions.finishReport(Finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }))
+          const finishAct = pwrActions.finishReport(pwr.Types.finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }))
           pusher.add(finishAct)
           // continue to next itteration of loop
         }
         continue
       }
       // report doesn't already exist so push the report
-      const action = pwrActions.pwrReport(PwrReportAction.from(
+      const action = pwrActions.pwrReport(pwr.Types.pwrreport.from(
         {
           oracle: env.worker.account,
           boid_id_scope: boidId,
@@ -75,4 +75,4 @@ async function init() {
     log.debug(error)
   }
 }
-init()
+await init()

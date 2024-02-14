@@ -7,7 +7,6 @@ import { doAction, sendAction } from "lib/eosio"
 import log from "lib/logger"
 import { dbQuery, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
-import { Finishreport, PwrReport, PwrReportAction } from "lib/types/power.boid.types"
 import { currentRound, getReportId, getRoundData, shouldFinishReport, toInt, toObject } from "lib/utils"
 
 async function init() {

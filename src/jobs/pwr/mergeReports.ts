@@ -3,7 +3,8 @@ import { ActionPusher } from "lib/actionPusher"
 import { pwrActions } from "lib/actions"
 import logger from "lib/logger"
 import { getReportScopes, tables } from "lib/queries"
-import { Finishreport, PwrReportRow } from "lib/types/power.boid.types"
+// import { Finishreport, PwrReportRow } from "lib/types/power.boid.types"
+import * as pwr from "lib/types/power.boid.types"
 import { finalizedRound, getReportId, shouldMergeReports } from "lib/utils"
 const log = logger.getLogger("mergeReports")
 
@@ -25,7 +26,7 @@ async function init() {
     log.debug("searching", reports.length, "reports for", scope.toString(), "for potential merges")
 
     const protocols:Record<string, number> = {}
-    const rounds:Record<number, Record<number, PwrReportRow[]>> = {}
+    const rounds:Record<number, Record<number, pwr.Types.PwrReportRow[]>> = {}
     // sort the protocols by rounds and protocols
     reports.forEach(el => {
       const proto = el.report.protocol_id.toNumber()
@@ -57,12 +58,12 @@ async function init() {
           log.debug(JSON.parse(JSON.stringify(reports)))
           continue
         }
-        const mergeAction = Finishreport.from({ boid_id_scope: scope, pwrreport_ids: reports.map(el => getReportId(el.report)) })
-        pusher.add(pwrActions.finishReport(mergeAction))
+        const mergeAction = pwr.Types.mergereports.from({ boid_id_scope: scope, pwrreport_ids: reports.map(el => getReportId(el.report)) })
+        pusher.add(pwrActions.mergeReports(mergeAction))
       }
     }
   }
-  pusher.stop()
+  await pusher.stop()
 }
 
 init().catch(log.error)

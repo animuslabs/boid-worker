@@ -7,7 +7,7 @@ import { dirname } from "path"
 import { fileURLToPath } from "url"
 
 import logger from "lib/logger"
-import { PwrReport, PwrReportRow } from "lib/types/power.boid.types"
+import { Types } from "lib/types/power.boid.types"
 import fs from "fs-extra"
 let log = logger.getLogger("utils")
 const __filename = fileURLToPath(import.meta.url)
@@ -30,7 +30,7 @@ export function shuffle<T>(array:T[]) {
   return array
 }
 
-export function getReportId(report:PwrReport) {
+export function getReportId(report:Types.PwrReport) {
   return UInt64.from((BigInt(report.protocol_id.toNumber()) << BigInt(48)) + (BigInt(report.round.toNumber()) << BigInt(32)) + BigInt(report.units.toNumber()))
 }
 
@@ -70,9 +70,8 @@ export async function currentRound() {
   return (Date.now() - config.time.rounds_start_sec_since_epoch.toNumber() * 1000) / (config.time.round_length_sec.toNumber() * 1000)
 }
 export async function finalRound() {
-  const config = await tables.pwr.config()
   const round = await currentRound()
-  return round - (config.reports_finalized_after_rounds.toNumber() + 1)
+  return round - 2
 }
 
 export interface roundData {
@@ -103,13 +102,16 @@ export function toObject(data) {
 export function toInt(num:BigInt):number {
   return parseInt(num.toString())
 }
+function getMinApproval(config:Types.PwrConfig, global:Types.PwrGlobal) {
+  return Math.max(config.consensus.min_weight_pct.value * global.expected_active_weight.value, config.consensus.min_weight.value)
+}
 
-export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
+export async function shouldFinishReport(report:Types.PwrReportRow):Promise<boolean> {
   let log = logger.getLogger("shouldFinishReport(): ")
   const config = await tables.pwr.config()
   const global = await tables.pwr.global()
   const round = await currentRound()
-  const minApproval = Math.max(config.min_consensus_pct.value * global.expected_active_weight.value, config.min_consensus_weight.value)
+  const minApproval = getMinApproval(config, global)
   log.debug("calculated min consensus weight: ", minApproval)
   const rndProgress = round % parseInt(`${round}`)
   log.debug("current round", round)
@@ -128,12 +130,12 @@ export async function shouldFinishReport(report:PwrReportRow):Promise<boolean> {
   if (report.approval_weight.value >= minApproval) return true
   return false
 }
-export async function shouldMergeReports(roundNum:number, reports:PwrReportRow[]):Promise<boolean> {
+export async function shouldMergeReports(roundNum:number, reports:Types.PwrReportRow[]):Promise<boolean> {
   if (reports.length < 2) return false
   const config = await tables.pwr.config()
   const global = await tables.pwr.global()
   const round = await currentRound()
-  const minApproval = Math.max(config.min_consensus_pct.value * global.expected_active_weight.value, config.min_consensus_weight.value)
+  const minApproval = getMinApproval(config, global)
   log.debug("calculated min consensus weight: ", minApproval)
   const cumulativeWeight = reports.reduce((acc:number, el) => acc + el.approval_weight.toNumber(), 0)
   const rndProgress = round % parseInt(`${round}`)
@@ -148,8 +150,7 @@ export function pickRand<T>(arr:T[]):T {
 }
 export async function finalizedRound():Promise<number> {
   const round = await currentRound()
-  const config = await tables.pwr.config()
-  return round - (config.reports_finalized_after_rounds.toNumber() + 1)
+  return round - 2
 }
 
 export function parseISOString(s) {

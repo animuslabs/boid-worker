@@ -18,7 +18,7 @@ async function init() {
 
     finalStats.forEach(el => {
       const statsExist = stats.some(stat => stat.round.toNumber() == el.round.toNumber() + 1)
-      if (statsExist) pusher.add(pwrActions.handleostat({ oracle, round: el.round.toNumber() }))
+      if (statsExist) pusher.add(pwrActions.payoutround({ oracle, round: el.round.toNumber() }))
       else log.info("found oracle stat with missing global stat, can't process", JSON.stringify(el, null, 2))
     })
   }
