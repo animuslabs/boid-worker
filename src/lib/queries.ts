@@ -8,6 +8,7 @@ import prisma from "lib/db"
 import { finalRound, getReportId, roundData } from "lib/utils"
 import log from "lib/logger"
 import { API, NameType, UInt64 } from "@wharfkit/antelope"
+// import { API, NameType, UInt64 } from "@greymass/eosio"
 let cache = await cacheManager.caching("memory", { max: 100, ttl: 300/*seconds*/ })
 
 function getUser(id:string, cb:() =>{}) {
@@ -21,7 +22,7 @@ export async function getSysConf():Promise<sys.Types.Config> {
 }
 
 export async function getPwrConf():Promise<pwr.Types.PwrConfig> {
-  const config = await getFullTable({ tableName: "config", contract: env.contracts.power }, pwr.Types.PwrConfig)
+  const config = await getFullTable({ tableName: "pwrconfig", contract: env.contracts.power }, pwr.Types.PwrConfig)
   if (!config[0]) throw (new Error("power contract not initialized "))
   return config[0]
 }

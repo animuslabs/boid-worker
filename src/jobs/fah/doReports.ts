@@ -69,7 +69,7 @@ async function init() {
       ))
       pusher.add(action)
     }
-    // pusher.stop()
+    void pusher.stop()
   } catch (error:any) {
     log.error(error.toString())
     log.debug(error)

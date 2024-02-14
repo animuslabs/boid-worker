@@ -20,6 +20,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "no-void": "off",
     "@typescript-eslint/no-floating-promises": [
       "error"
     ],

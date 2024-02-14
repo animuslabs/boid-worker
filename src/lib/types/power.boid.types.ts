@@ -746,8 +746,8 @@ export namespace Types {
 }
 export const TableMap = {
   accounts: Types.Account,
-  boidconfig: Types.Config,
-  config: Types.PwrConfig,
+  config: Types.Config,
+  pwrconfig: Types.PwrConfig,
   global: Types.PwrGlobal,
   oracles: Types.Oracle,
   oraclestats: Types.OracleStat,
@@ -758,8 +758,8 @@ export const TableMap = {
 }
 export interface TableTypes {
     accounts:Types.Account
-    boidconfig:Types.Config
-    config:Types.PwrConfig
+    config:Types.Config
+    pwrconfig:Types.PwrConfig
     global:Types.PwrGlobal
     oracles:Types.Oracle
     oraclestats:Types.OracleStat

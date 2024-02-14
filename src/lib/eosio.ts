@@ -1,4 +1,5 @@
 import { API, APIClient, APIProvider, FetchProvider, Name, Action, Transaction, ActionFields, Authority, PermissionLevel, SignedTransaction, PrivateKey, NameType, AnyAction, ABI, ABISerializableConstructor } from "@wharfkit/antelope"
+
 import fetch from "node-fetch"
 import ms from "ms"
 import { rand, shuffle, sleep } from "./utils"
@@ -81,7 +82,7 @@ export async function safeDo(cb:string, params?:any, retry?:number):Promise<any 
           retry = 5
           throw (error)
         } else {
-          errorCounter(url, errorMsg)
+          void errorCounter(url, errorMsg)
           await sleep(ms("8s"))
           throw (error)
         }
@@ -153,7 +154,7 @@ export async function getInfo():Promise<API.v1.GetInfoResponse> {
     log.info("got info")
     const info = await safeDo("get_info")
     // log.info("got info", info)
-    cache.set("get_info", info)
+    await cache.set("get_info", info)
     return info
   }
 }
