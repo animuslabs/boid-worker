@@ -82,11 +82,7 @@ export async function safeDo(cb:string, params?:any, retry?:number):Promise<any 
           retry = 5
           throw (error)
         } else {
-<<<<<<< Updated upstream
           void errorCounter(url, errorMsg)
-=======
-          await errorCounter(url, errorMsg)
->>>>>>> Stashed changes
           await sleep(ms("8s"))
           throw (error)
         }
