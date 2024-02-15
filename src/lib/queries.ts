@@ -140,5 +140,23 @@ export const dbQuery = {
     })
     log.debug("getLastFahRecordofRound result:", result)
     return result
+  },
+  async getLastRosettaRecordofRound(boidId:string, roundData:roundData) {
+    log.debug(boidId, "getLastRosettaRecordofRound", roundData)
+    const result = await prisma.rosettaData.findFirst({
+      orderBy: { time: "desc" },
+      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId + "@boid.com" }
+    })
+    log.debug("getLastRosettaRecordofRound result:", result)
+    return result
+  },
+  async getLastDenisRecordofRound(boidId:string, roundData:roundData) {
+    log.debug(boidId, "getLastDenisRecordofRound", roundData)
+    const result = await prisma.denisData.findFirst({
+      orderBy: { time: "desc" },
+      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId + "@boid.com" }
+    })
+    log.debug("getLastDenisRecordofRound result:", result)
+    return result
   }
 }

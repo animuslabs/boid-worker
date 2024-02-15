@@ -19,7 +19,29 @@ model FahData {
   score BigInt
   wus   BigInt
 
-  @@index([time])
+  @@index([time, name])
+}
+
+model RosettaData {
+  id        String   @id @default(uuid())
+  time      DateTime @default(now())
+  cpid      String
+  rosettaId String
+  name      String
+  credits   BigInt
+
+  @@index([time, name])
+}
+
+model DenisData {
+  id      String   @id @default(uuid())
+  time    DateTime @default(now())
+  cpid    String
+  denisId String
+  name    String
+  credits BigInt
+
+  @@index([time, name])
 }
 
 model AdminReport {
@@ -72,8 +94,8 @@ model AccountEdit {
   trxId     String
   timeStamp DateTime
 
-  boid_id   String
-  meta   String
+  boid_id String
+  meta    String
 
   @@index([boid_id, timeStamp])
   @@index([timeStamp])
@@ -191,19 +213,19 @@ model LogPwrClaim {
   trxId     String
   timeStamp DateTime
 
-  boid_id         String
-  power_before    Int
-  power_after     Int
-  power_from_boosters Int
-  power_elapsed_rounds    Int
+  boid_id              String
+  power_before         Int
+  power_after          Int
+  power_from_boosters  Int
+  power_elapsed_rounds Int
 
-  mint_power_mint    Int
-  mint_powered_stake_mint       Int
-  mint_account_earned Int
-  mint_team_cut  Int
+  mint_power_mint         Int
+  mint_powered_stake_mint Int
+  mint_account_earned     Int
+  mint_team_cut           Int
   mint_team_owner_earned  Int
-  mint_overstake_mint  Int
-  mint_total      Int
+  mint_overstake_mint     Int
+  mint_total              Int
 
   @@index([boid_id, timeStamp])
   @@index([timeStamp])
@@ -428,10 +450,10 @@ model AccountsDelta {
 }
 
 model GlobalDelta {
-  id                   String   @unique
-  timeStamp            DateTime
-  chain_name           String
-  total_power          BigInt
+  id                          String   @unique
+  timeStamp                   DateTime
+  chain_name                  String
+  total_power                 BigInt
   last_inflation_adjust_round BigInt
 
   @@index([timeStamp])

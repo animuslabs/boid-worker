@@ -6,6 +6,7 @@ import { dbQuery, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
 import * as pwr from "lib/types/power.boid.types"
 import { currentRound, getReportId, getRoundData, toObject } from "lib/utils"
+const protocol_id = 1
 
 async function init() {
   try {
@@ -21,20 +22,15 @@ async function init() {
     for (const boidId of boidIds) {
       log.debug("checking for fah data for", boidId)
       queryTimer = new Timer().start()
-      const lastRecord = await dbQuery.getLastFahRecordofRound(boidId, reportingRound)
+      const lastRecord = await dbQuery.getLastRosettaRecordofRound(boidId, reportingRound)
       if (!lastRecord) continue
-      const previousRecord = await dbQuery.getLastFahRecordofRound(boidId, previousRound)
+      const previousRecord = await dbQuery.getLastRosettaRecordofRound(boidId, previousRound)
       if (!previousRecord) continue
       log.debug("found fah data for ", boidId)
-      const units = lastRecord.score - previousRecord.score
+      const units = lastRecord.credits - previousRecord.credits
       if (units < 1) continue
-
-      // log.debug("queries finished in ms", queryTimer.stop().elapsed)
-      // log.debug("found valid reports for", boidId)
-      // log.debug("reporting round last report:", lastRecord)
-      // log.debug("previous round last report:", previousRecord)
-      log.info(boidId, "earned", units, "FaH credits during round ", reportingRound.round)
-      const report = pwr.Types.PwrReport.from({ protocol_id: 0, round: reportingRound.round, units })
+      log.info(boidId, "earned", units, "Rosetta credits during round ", reportingRound.round)
+      const report = pwr.Types.PwrReport.from({ protocol_id, round: reportingRound.round, units })
       const reportId = getReportId(report)
       const existing = await getPwrReport(boidId, reportId)
       log.debug("existing report:", toObject(existing))
