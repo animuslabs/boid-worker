@@ -1,7 +1,7 @@
 import ax from "axios"
 import { parseString } from "xml2js"
 const teamId = 11420
-const queryString = `https://denis.usj.es/denisathome/team_display.php?teamid=${teamId}&xml=1`
+const queryString = `https://denis.usj.es/denisathome/team_email_list.php?teamid=${teamId}&xml=1`
 
 type DenisMember = {
   id:number
@@ -12,7 +12,7 @@ type DenisMember = {
 
 export const denis = {
   async getTeamMembers() {
-    const response = await ax.get(queryString)
+    const response = await ax.get(queryString, { timeout: 15000 })
     let donors:DenisMember[] = []
     parseString(response.data, (err, arg) => {
       if (err) throw new Error(err)
@@ -31,5 +31,5 @@ export const denis = {
   }
 }
 
-const result = await denis.getTeamMembers()
-console.log("top member:", result)
+// const result = await denis.getTeamMembers()
+// console.log("top member:", result)

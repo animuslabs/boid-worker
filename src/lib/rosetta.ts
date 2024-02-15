@@ -12,7 +12,7 @@ type RosettaMember = {
 
 export const rosetta = {
   async getTeamMembers() {
-    const response = await ax.get(queryString)
+    const response = await ax.get(queryString, { timeout: 15000 })
     let donors:RosettaMember[] = []
     parseString(response.data, (err, arg) => {
       if (err) throw new Error(err)
