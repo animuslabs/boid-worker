@@ -28,8 +28,9 @@ async function init() {
   const round = Math.floor(await currentRound())
   log.info("starting cleanTables, current round:", round)
   await cleanInvites(config, round)
-  pusher.stop()
+  await pusher.stop()
 }
 await init().catch(log.error)
 process.exit(0)
+
 

@@ -22,6 +22,8 @@ async function init() {
       else log.info("found oracle stat with missing global stat, can't process", JSON.stringify(el, null, 2))
     })
   }
-  pusher.stop()
+  await pusher.stop()
 }
-init().catch(log.error)
+await init().catch(log.error)
+process.exit(0)
+

@@ -4,7 +4,7 @@ import edgedb from "lib/db"
 import log from "lib/logger"
 import { tables, dbQuery, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
-import { currentRound, getReportId, getRoundData, shouldFinishReport } from "lib/utils"
+import { currentRound, getReportId, getRoundData, shouldFinishReport, toObject } from "lib/utils"
 import env from "lib/env"
 import * as pwr from "lib/types/power.boid.types"
 import { pickRpc, safeDo } from "lib/eosio"
@@ -34,32 +34,22 @@ async function init() {
       const units = lastRecord.score - previousRecord.score
       if (units < 1) continue
 
-      log.debug("queries finished in ms", queryTimer.stop().elapsed)
-      log.debug("found valid reports for", boidId)
-      log.debug("reporting round last report:", lastRecord)
-      log.debug("previous round last report:", previousRecord)
+      // log.debug("queries finished in ms", queryTimer.stop().elapsed)
+      // log.debug("found valid reports for", boidId)
+      // log.debug("reporting round last report:", lastRecord)
+      // log.debug("previous round last report:", previousRecord)
       log.info(boidId, "earned", units, "FaH credits during round ", reportingRound.round)
-
       const report = pwr.Types.PwrReport.from({ protocol_id: 0, round: reportingRound.round, units })
       const reportId = getReportId(report)
       const existing = await getPwrReport(boidId, reportId)
-      let shouldFinish = false
-      log.debug("existing report:", existing)
-
+      log.debug("existing report:", toObject(existing))
       if (existing) {
-        shouldFinish = await shouldFinishReport(existing)
-
-        // make sure we already reported and check if weight threshold has been reached
-        const approved = existing.approvals.includes(Name.from(env.worker.account))
-        if (approved && shouldFinish) {
-          log.info("sending finish action for report:", reportId)
-          const finishAct = pwrActions.finishReport(pwr.Types.finishreport.from({ boid_id_scope: boidId, pwrreport_id: reportId }))
-          pusher.add(finishAct)
-          // continue to next itteration of loop
+        const approved = existing.approvals.map(el => el.toString()).includes(env.worker.account.toString())
+        if (approved) {
+          log.debug("this oracle already on the list of approvals, skiping")
+          continue
         }
-        continue
       }
-      // report doesn't already exist so push the report
       const action = pwrActions.pwrReport(pwr.Types.pwrreport.from(
         {
           oracle: env.worker.account,
@@ -67,6 +57,7 @@ async function init() {
           report
         }
       ))
+      log.info("report not yet reported. Adding new Report:", reportId)
       pusher.add(action)
     }
     void pusher.stop()
@@ -76,3 +67,5 @@ async function init() {
   }
 }
 await init()
+process.exit(0)
+

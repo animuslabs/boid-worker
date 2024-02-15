@@ -6,8 +6,9 @@ import cacheManager from "cache-manager"
 import ax from "axios"
 import prisma from "lib/db"
 import { finalRound, getReportId, roundData } from "lib/utils"
-import log from "lib/logger"
+import Logger from "lib/logger"
 import { API, NameType, UInt64 } from "@wharfkit/antelope"
+const log = Logger.getLogger("queries")
 // import { API, NameType, UInt64 } from "@greymass/eosio"
 let cache = await cacheManager.caching("memory", { max: 100, ttl: 300/*seconds*/ })
 
@@ -137,7 +138,7 @@ export const dbQuery = {
       orderBy: { time: "desc" },
       where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId }
     })
-    log.debug(result)
+    log.debug("getLastFahRecordofRound result:", result)
     return result
   }
 }

@@ -66,4 +66,6 @@ async function init() {
   await pusher.stop()
 }
 
-init().catch(log.error)
+await init().catch(log.error)
+process.exit(0)
+

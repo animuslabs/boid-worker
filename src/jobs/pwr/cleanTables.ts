@@ -90,4 +90,7 @@ async function init() {
   await cleanRoundCommit(config, round).catch(log.error)
   await pusher.stop()
 }
-init().catch(log.error)
+await init().catch(log.error)
+process.exit(0)
+
+

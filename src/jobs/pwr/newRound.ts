@@ -17,4 +17,6 @@ async function init() {
     await doAction("roundstats")
   }
 }
-init().catch(log.error)
+await init().catch(log.error)
+process.exit(0)
+

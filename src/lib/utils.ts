@@ -84,8 +84,8 @@ export async function getRoundData(round:number) {
   const config = await tables.sys.config()
   const roundLength = config.time.round_length_sec.toNumber() * 1000
   const roundsStarted = config.time.rounds_start_sec_since_epoch.toNumber() * 1000
-  log.debug("round Length ms:", roundLength)
-  log.debug("rounds started ms:", roundsStarted)
+  // log.debug("round Length ms:", roundLength)
+  // log.debug("rounds started ms:", roundsStarted)
   const start = new Date((roundLength * round) + roundsStarted)
   const end = new Date(start.getTime() + roundLength)
   return { round, start, end }
@@ -122,6 +122,7 @@ export async function shouldFinishReport(report:Types.PwrReportRow):Promise<bool
   const reportIsActiveReportingRound = report.report.round.toNumber() == reportingRound
   const leewayPeriod = rndProgress < config.reports_accumulate_weight_round_pct.value
   log.debug(reportIsActiveReportingRound, leewayPeriod)
+  if (!leewayPeriod) log.debug("too early in round to finish report")
   if (reportIsActiveReportingRound && leewayPeriod) return false
   log.debug("already merged/reported?", report.merged || report.reported)
   if (report.merged || report.reported) return false
