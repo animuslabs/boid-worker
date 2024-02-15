@@ -29,9 +29,9 @@ const runPinning = async() => {
     console.error("Failed to pin data to IPFS:", error)
   }
 }
-runPinning()
+await runPinning()
 setInterval(async() => {
-  runPinning()
+  await runPinning()
 }, interval6)
 
 

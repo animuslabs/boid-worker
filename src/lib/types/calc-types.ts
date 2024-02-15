@@ -69,6 +69,10 @@ export interface Config {
   recoveryAccount:string;
 }
 
+export interface ConfigAccount {
+  min_pwr_tax_mult:number;
+}
+
 export type UserConfig = {
   power?:Partial<Pick<PowerConfig, "sponsor_tax_mult" | "powered_stake_mult">>,
   mint?:Partial<Pick<MintConfig, "round_powered_stake_mult" | "round_power_mult">>
@@ -96,4 +100,14 @@ export interface ContractTables extends BaseTables {
   nfts:(scope:string) =>TableView;
   invites:(scope:string) =>TableView;
   assets:(scope:string) =>TableView;
+}
+
+export interface BoidData {
+  locked_BOID_EOS_IBC:string;
+  staked_BOID_Telos:string;
+  liquid_BOID_AlcorTelos:string;
+  liquid_BOID_DefiboxEOS:string;
+  boid_EOS_supply:string;
+  boid_TLOS_supply:string;
+  boid_max_total_supply:string;
 }

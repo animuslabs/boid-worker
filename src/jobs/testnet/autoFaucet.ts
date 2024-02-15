@@ -29,7 +29,7 @@ async function init() {
     console.log(result)
   }
 }
-init().catch(console.error)
+await init().catch(console.error)
   .then(() => {
     console.log("Waiting...")
     setTimeout(() => {

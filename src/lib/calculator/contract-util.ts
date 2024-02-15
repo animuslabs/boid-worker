@@ -2,7 +2,7 @@
 import { Authority, Name, PermissionLevel, PermissionLevelWeight, TimePoint, UInt16, UInt32, UInt64 } from "@wharfkit/antelope"
 import { Account, AccountPermission, Blockchain } from "@proton/vert"
 import { Types } from "lib/types/boid-contract-structure"
-import { Config, ContractTables, TableView } from "lib/types/calc-types"
+import { Config, ContractTables, TableView, ConfigAccount } from "lib/types/calc-types"
 
 function getTable<T extends keyof ContractTables>(
   contractInstance:{ tables:{ [key:string]:any } }, // Add contractInstance parameter
@@ -162,22 +162,24 @@ export class ChainCalculator {
   roundStartTime:TimePoint
   token:Account
   aa:Account
+  min_pwr_tax_mult:number
   tkn:typeof this.token.actions
   owners = ["boid"]
   boid_id = "testaccount"
   acc = "testacct"
   configStart = defaultConfig
-  constructor(config:Config) {
+  constructor(config:Config, configAccount:ConfigAccount) {
     this.chain = new Blockchain()
     this.contract = this.chain.createContract("boid", "../src/lib/calculator/contract/boid-core/boid.contract")
     this.token = this.chain.createContract("token.boid", "../src/lib/calculator/contract/token/token.contract")
     this.aa = this.chain.createContract("atomicassets", "../src/lib/calculator/contract/atomicassets/atomicassets")
+    this.min_pwr_tax_mult = configAccount.min_pwr_tax_mult
     this.tkn = this.token.actions
     this.configStart = config
     this.roundStartTime = TimePoint.fromMilliseconds(config.time.rounds_start_sec_since_epoch * 1000)
   }
 
-  async init(config:Config) {
+  async init(config:Config, configAccount:ConfigAccount) {
     await wait(3) // this is just here because the proton library has a race condition 0_0
     await createBoidSystemAccounts(this.chain)
     // @ts-ignore
@@ -194,7 +196,7 @@ export class ChainCalculator {
     await this.act("account.add", { boid_id: Name.from("sponsorbrok"), owners: ["sponsorbrok"], sponsors: [], keys: [] })
     await this.act("account.add", { boid_id: Name.from("sponsorrich"), owners: ["sponsorrich"], sponsors: [], keys: [] })
     await this.act("account.add", { boid_id: Name.from("teamownr"), owners: ["recover.boid"], sponsors: [], keys: [] })
-    await this.act("team.create", { owner: Name.from("teamownr"), min_pwr_tax_mult: 10, owner_cut_mult: 4, url_safe_name: "teamteam", info_json_ipfs: "" })
+    await this.act("team.create", { owner: Name.from("teamownr"), min_pwr_tax_mult: configAccount.min_pwr_tax_mult, owner_cut_mult: 4, url_safe_name: "teamteam", info_json_ipfs: "" })
     await this.depositTokens()
     await this.act("global.chain", { chain_name: "localtestnet" })
     this.chain.createAccount(this.acc)
@@ -206,7 +208,7 @@ export class ChainCalculator {
     await this.tkn.create!({ issuer, maximum_supply }).send()
     await this.tkn.issue!({ to: issuer, quantity: maximum_supply, memo: "" }).send()
     await this.setupAccountOwner()
-    await this.tkn.transfer!({ from: issuer, to: Name.from("tknmint.boid"), quantity: "100000000.0000 BOID", memo: "" }).send("token.boid@active")
+    await this.tkn.transfer!({ from: issuer, to: Name.from("tknmint.boid"), quantity: "25000000000.0000 BOID", memo: "" }).send("token.boid@active")
   }
 
 

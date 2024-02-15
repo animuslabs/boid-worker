@@ -92,7 +92,7 @@ export const actions = route
       if (!input.sort || input.sort == "asc") results.sort((a, b) => a.sequence - b.sequence)
       else if (input.sort == "desc") results.sort((a, b) => b.sequence - a.sequence)
       else throw (new Error("invalid sort param, must be 'asc', 'desc' or not included"))
-      cache.set(inputStr, results)
+      await cache.set(inputStr, results)
       return results
     } catch (error:any) {
       log.error(error)

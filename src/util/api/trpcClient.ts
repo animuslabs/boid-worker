@@ -88,30 +88,35 @@ async function fetchPwrClaim(boid_id) {
 //   }
 // }
 
-async function fetchCalculatorData() {
-  const rounds = 100
-  const basePowerPerRound = 100
-  const stake = 100
-  const userConfig = {
-    power: {
-      sponsor_tax_mult: 0.1,
-      powered_stake_mult: 0.1
-    },
-    mint: {
-      round_powered_stake_mult: 0.1,
-      round_power_mult: 0.1
-    }
-  }
+// async function fetchCalculatorData() {
+//   const rounds = 100
+//   const basePowerPerRound = 100
+//   const stake = 100
+//   const liveSim = false
+//   const activeSponsor = false
+//   const configAccount = {
+//     min_pwr_tax_mult: 10
+//   }
+//   const userConfig = {
+//     power: {
+//       sponsor_tax_mult: 0.1,
+//       powered_stake_mult: 0.1
+//     },
+//     mint: {
+//       round_powered_stake_mult: 0.1,
+//       round_power_mult: 0.1
+//     }
+//   }
   
-  try {
-    const queryParameters:any = { rounds, basePowerPerRound, stake, userConfig }
+//   try {
+//     const queryParameters:any = { rounds, basePowerPerRound, stake, userConfig, liveSim, activeSponsor, configAccount }
 
-    const data = await trpc.GetCalculatedData.query(queryParameters)
-    console.log("Calculator Data:", data)
-  } catch (error) {
-    console.error("Error fetching data:", error)
-  }
-}
+//     const data = await trpc.GetCalculatedData.query(queryParameters)
+//     console.log("Calculator Data:", data)
+//   } catch (error) {
+//     console.error("Error fetching data:", error)
+//   }
+// }
 
 const boid_id = "boidis.cool"
 // fetchperBoidID(boid_id)
@@ -119,4 +124,4 @@ const boid_id = "boidis.cool"
 // fetchPwrClaim(boid_id)
 // fetchCombinedData(boid_id)
 // fetchGlobalDeltas()
-fetchCalculatorData()
+// await fetchCalculatorData()

@@ -7,6 +7,8 @@ import { z } from "zod"
 import { getAllAccountsDeltas, getBoidIDs, getLogPwrClaimData, getCombinedData, getGlobalDeltaData } from "./api4DeltasFunctions"
 import { RequestQueryParams } from "./api4DeltasTypes"
 import { accountCalculator } from "lib/calculator/calculator"
+import { aggregateBoidData } from "lib/calculator/antelope"
+import { toObject } from "lib/utils"
 
 process.env.TZ = "Etc/UTC"
 dotenv.config()
@@ -30,7 +32,6 @@ const calculatedDataInputSchema = z.object({
   rounds: z.number(),
   basePowerPerRound: z.number(),
   stake: z.number(),
-  liveSim: z.boolean(),
   userConfig: z.object({
     power: z.object({
       sponsor_tax_mult: z.number(),
@@ -40,6 +41,11 @@ const calculatedDataInputSchema = z.object({
       round_powered_stake_mult: z.number(),
       round_power_mult: z.number()
     })
+  }),
+  liveSim: z.boolean(),
+  activeSponsor: z.boolean(),
+  configAccount: z.object({
+    min_pwr_tax_mult: z.number()
   })
 })
 
@@ -119,8 +125,14 @@ const appRouter = t.router({
   GetCalculatedData: publicProcedure
     .input(calculatedDataInputSchema)
     .query(async(input) => {
-      const calculatedData = await accountCalculator(input.input.rounds, input.input.basePowerPerRound, input.input.stake, input.input.userConfig, input.input.liveSim)
-      return calculatedData
+      const calculatedData = await accountCalculator(input.input.rounds, input.input.basePowerPerRound, input.input.stake, input.input.userConfig, input.input.liveSim, input.input.activeSponsor, input.input.configAccount)
+      return toObject(calculatedData)
+    }),
+  /* *** GetBOIDtokenInfo provides data from chain for the BOID token *** */
+  GetBOIDtokenInfo: publicProcedure
+    .query(async() => {
+      const tokenInfo = await aggregateBoidData()
+      return tokenInfo
     })
 })
 
