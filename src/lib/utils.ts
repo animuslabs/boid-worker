@@ -1,4 +1,4 @@
-import { ABI, Name, Serializer, UInt64 } from "@wharfkit/antelope"
+import { ABI, Name, Serializer, UInt64, UInt8 } from "@wharfkit/antelope"
 import { safeDo, getAccount } from "./eosio"
 import { tables } from "./queries"
 import moment from "moment"
@@ -14,6 +14,17 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export const sleep = async(ms:number) => new Promise(resolve => setTimeout(resolve, ms))
+
+
+export function stringToBytes(input:string):Uint8Array {
+  const encoder = new TextEncoder() // Use UTF-8 encoding by default
+  return encoder.encode(input)
+}
+export function bytesToString(bytes:Uint8Array):string {
+  const decoder = new TextDecoder("utf-8") // Use UTF-8 decoding by default
+  return decoder.decode(bytes)
+}
+
 
 export function shuffle<T>(array:T[]) {
   let currentIndex = array.length
@@ -74,7 +85,7 @@ export async function finalRound() {
   return round - 2
 }
 
-export interface roundData {
+export interface RoundData {
   round:number
   start:Date,
   end:Date
@@ -98,7 +109,9 @@ export function toObject(data) {
       : value // return everything else unchanged
   ))
 }
-
+export function throwErr(msg:string):never {
+  throw new Error(msg)
+}
 export function toInt(num:BigInt):number {
   return parseInt(num.toString())
 }
@@ -131,6 +144,7 @@ export async function shouldFinishReport(report:Types.PwrReportRow):Promise<bool
   if (report.approval_weight.value >= minApproval) return true
   return false
 }
+
 export async function shouldMergeReports(roundNum:number, reports:Types.PwrReportRow[]):Promise<boolean> {
   if (reports.length < 2) return false
   const config = await tables.pwr.config()

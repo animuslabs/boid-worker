@@ -22,6 +22,17 @@ model FahData {
   @@index([time, name])
 }
 
+model BoincData {
+  id              String   @id @default(uuid())
+  boincProtocolId Int
+  time            DateTime @default(now())
+  cpid            String
+  name            String
+  credits         BigInt
+
+  @@index([boincProtocolId, time, name, cpid])
+}
+
 model RosettaData {
   id        String   @id @default(uuid())
   time      DateTime @default(now())

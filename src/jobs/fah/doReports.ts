@@ -1,6 +1,7 @@
 import { ActionPusher } from "lib/actionPusher"
 import { pwrActions } from "lib/actions"
 import env from "lib/env"
+import { doAction } from "lib/eosio"
 import log from "lib/logger"
 import { dbQuery, getPwrReport } from "lib/queries"
 import { Timer } from "lib/timer"
@@ -29,10 +30,10 @@ async function init() {
       const units = lastRecord.score - previousRecord.score
       if (units < 1) continue
 
-      // log.debug("queries finished in ms", queryTimer.stop().elapsed)
-      // log.debug("found valid reports for", boidId)
-      // log.debug("reporting round last report:", lastRecord)
-      // log.debug("previous round last report:", previousRecord)
+      log.debug("queries finished in ms", queryTimer.stop().elapsed)
+      log.debug("found valid reports for", boidId)
+      log.debug("reporting round last report:", lastRecord)
+      log.debug("previous round last report:", previousRecord)
       log.info(boidId, "earned", units, "FaH credits during round ", reportingRound.round)
       const report = pwr.Types.PwrReport.from({ protocol_id: 0, round: reportingRound.round, units })
       const reportId = getReportId(report)
@@ -52,8 +53,9 @@ async function init() {
           report
         }
       ))
-      log.info("report not yet reported. Adding new Report:", reportId)
-      pusher.add(action)
+      log.info("report not yet reported. Adding new Report:", reportId.toString())
+      await doAction(action.name, action.data, action.account)
+      // pusher.add(action)
     }
     void pusher.stop()
   } catch (error:any) {

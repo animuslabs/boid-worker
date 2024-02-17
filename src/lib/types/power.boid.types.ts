@@ -1,5 +1,6 @@
 import type {
   Action,
+  BytesType,
   Float32Type,
   NameType,
   UInt16Type,
@@ -10,6 +11,7 @@ import type {
 import {
   ABI,
   Blob,
+  Bytes,
   Float32,
   Name,
   PublicKey,
@@ -22,7 +24,7 @@ import {
 import type { ActionOptions, ContractArgs, PartialBy, Table } from "@wharfkit/contract"
 import { Contract as BaseContract } from "@wharfkit/contract"
 export const abiBlob = Blob.from(
-  "DmVvc2lvOjphYmkvMS4yAEIHQWNjb3VudAAKB2JvaWRfaWQEbmFtZQZvd25lcnMGbmFtZVtdBGF1dGgLQWNjb3VudEF1dGgIc3BvbnNvcnMGbmFtZVtdBXN0YWtlDEFjY291bnRTdGFrZQVwb3dlcgxBY2NvdW50UG93ZXIEdGVhbQtBY2NvdW50VGVhbQdiYWxhbmNlBnVpbnQzMgtuZnRfYmFsYW5jZQZ1aW50MTYLcmVjb3ZlcmFibGUEYm9vbAtBY2NvdW50QXV0aAACBGtleXMMcHVibGljX2tleVtdBW5vbmNlBXVpbnQ4DkFjY291bnRCb29zdGVyAAQOcHdyX211bHRpcGxpZXIFdWludDgRcHdyX2FkZF9wZXJfcm91bmQGdWludDE2DWV4cGlyZXNfcm91bmQGdWludDE2F2FnZ3JlZ2F0ZV9wd3JfcmVtYWluaW5nBnVpbnQzMgxBY2NvdW50UG93ZXIABRJsYXN0X2NsYWltZWRfcm91bmQGdWludDE2EGxhc3RfYWRkZWRfcm91bmQGdWludDE2BnJhdGluZwZ1aW50MzIHaGlzdG9yeQh1aW50MTZbXQRtb2RzEEFjY291bnRCb29zdGVyW10MQWNjb3VudFN0YWtlAAMJdW5zdGFraW5nDlRva2VuVW5zdGFrZVtdC3NlbGZfc3Rha2VkBnVpbnQzMhhyZWNlaXZlZF9kZWxlZ2F0ZWRfc3Rha2UGdWludDE2C0FjY291bnRUZWFtAAQHdGVhbV9pZAV1aW50OA9sYXN0X2VkaXRfcm91bmQGdWludDE2DXRlYW1fdGF4X211bHQFdWludDgcdGVhbV9jdW11bGF0aXZlX2NvbnRyaWJ1dGlvbgZ1aW50MzIQQ29sbGF0ZXJhbENvbmZpZwACI29yYWNsZV9jb2xsYXRlcmFsX2RlcG9zaXRfaW5jcmVtZW50BnVpbnQzMhlvcmFjbGVfY29sbGF0ZXJhbF9taW5pbXVtBnVpbnQzMgZDb25maWcADAdhY2NvdW50DUNvbmZpZ0FjY291bnQFcG93ZXILQ29uZmlnUG93ZXIEbWludApDb25maWdNaW50BHRlYW0KQ29uZmlnVGVhbQVzdGFrZQtDb25maWdTdGFrZQR0aW1lCkNvbmZpZ1RpbWUEYXV0aApDb25maWdBdXRoA25mdAlDb25maWdOZnQGcGF1c2VkBGJvb2wOYWxsb3dfZGVwb3NpdHMEYm9vbBFhbGxvd193aXRoZHJhd2FscwRib29sD3JlY292ZXJ5QWNjb3VudARuYW1lDUNvbmZpZ0FjY291bnQACQxpbnZpdGVfcHJpY2UGdWludDMyFnByZW1pdW1fcHVyY2hhc2VfcHJpY2UGdWludDMyEm1heF9wcmVtaXVtX3ByZWZpeAV1aW50OAptYXhfb3duZXJzBXVpbnQ4DG1heF9ib29zdGVycwV1aW50OBBzdWZmaXhfd2hpdGVsaXN0Bm5hbWVbXRRyZW1vdmVfc3BvbnNvcl9wcmljZQZ1aW50MzIYc3BvbnNvcl9tYXhfaW52aXRlX2NvZGVzBXVpbnQ4GWludml0ZV9jb2RlX2V4cGlyZV9yb3VuZHMGdWludDE2CkNvbmZpZ0F1dGgABRVrZXlfYWN0aW9uc193aGl0ZWxpc3QGbmFtZVtdFWtleV9hY2NvdW50X21heF9zdGFrZQZ1aW50MzIXa2V5X2FjY291bnRfbWF4X2JhbGFuY2UGdWludDMyEGFjY291bnRfbWF4X2tleXMFdWludDgad29ya2VyX21heF9iaWxsX3Blcl9hY3Rpb24GdWludDMyCkNvbmZpZ01pbnQAAhhyb3VuZF9wb3dlcmVkX3N0YWtlX211bHQHZmxvYXQzMhByb3VuZF9wb3dlcl9tdWx0B2Zsb2F0MzIJQ29uZmlnTmZ0AAIUYm9pZF9pZF9tYXhpbXVtX25mdHMGdWludDE2FXdoaXRlbGlzdF9jb2xsZWN0aW9ucwZuYW1lW10LQ29uZmlnUG93ZXIABRBzcG9uc29yX3RheF9tdWx0B2Zsb2F0MzIScG93ZXJlZF9zdGFrZV9tdWx0B2Zsb2F0MzIcY2xhaW1fbWF4aW11bV9lbGFwc2VkX3JvdW5kcwZ1aW50MTYQc29mdF9tYXhfcHdyX2FkZAZ1aW50MTYUaGlzdG9yeV9zbG90c19sZW5ndGgFdWludDgLQ29uZmlnU3Rha2UAAg51bnN0YWtlX3JvdW5kcwV1aW50OB1leHRyYV9zdGFrZV9taW5fbG9ja2VkX3JvdW5kcwV1aW50OApDb25maWdUZWFtAAYRY2hhbmdlX21pbl9yb3VuZHMGdWludDE2FGVkaXRfdGVhbV9taW5fcm91bmRzBnVpbnQxNhh0ZWFtX2VkaXRfbWF4X3BjdF9jaGFuZ2UGdWludDE2DWJ1eV90ZWFtX2Nvc3QGdWludDMyFG93bmVyX3N0YWtlX3JlcXVpcmVkBnVpbnQzMidvd25lcl9mdXR1cmVfc3Rha2VfbG9ja19yb3VuZHNfcmVxdWlyZWQGdWludDE2CkNvbmZpZ1RpbWUAAhxyb3VuZHNfc3RhcnRfc2VjX3NpbmNlX2Vwb2NoBnVpbnQzMhByb3VuZF9sZW5ndGhfc2VjBnVpbnQzMg9Db25zZW5zdXNDb25maWcAAwptaW5fd2VpZ2h0BnVpbnQzMg5taW5fd2VpZ2h0X3BjdAdmbG9hdDMyE21lcmdlX2RldmlhdGlvbl9wY3QHZmxvYXQzMg1HbG9iYWxSZXBvcnRzAAQGbWVyZ2VkBnVpbnQ2NBd1bnJlcG9ydGVkX2FuZF91bm1lcmdlZAZ1aW50NjQIcmVwb3J0ZWQGdWludDY0CHByb3Bvc2VkBnVpbnQ2NAZPcmFjbGUABgdhY2NvdW50BG5hbWUGd2VpZ2h0BXVpbnQ4CmNvbGxhdGVyYWwQT3JhY2xlQ29sbGF0ZXJhbAVmdW5kcwtPcmFjbGVGdW5kcwdzdGFuZGJ5BGJvb2wZbGFzdF9zdGFuZGJ5X3RvZ2dsZV9yb3VuZAZ1aW50MTYQT3JhY2xlQ29sbGF0ZXJhbAAFBmxvY2tlZAZ1aW50MzIJdW5sb2NraW5nBnVpbnQzMgdzbGFzaGVkBnVpbnQzMhV1bmxvY2tfZmluaXNoZWRfcm91bmQGdWludDE2Fm1pbl91bmxvY2tfc3RhcnRfcm91bmQGdWludDE2C09yYWNsZUZ1bmRzAAQHY2xhaW1lZAZ1aW50MzIJdW5jbGFpbWVkBnVpbnQzMgt3aXRoZHJhd2luZwZ1aW50MzIYd2l0aGRyYXdhYmxlX2FmdGVyX3JvdW5kBnVpbnQxNgpPcmFjbGVTdGF0AAQFcm91bmQGdWludDE2BndlaWdodAV1aW50OAdyZXBvcnRzB1JlcG9ydHMJcHJvY2Vzc2VkBGJvb2wNUGF5bWVudENvbmZpZwAFIWNvbGxhdGVyYWxfcGN0X3BheV9wZXJfcm91bmRfbXVsdAdmbG9hdDMyF3JvdW5kX2JvbnVzX3BheV9yZXBvcnRzBnVpbnQzMhhyb3VuZF9ib251c19wYXlfcHJvcG9zZWQGdWludDMyG3JlcG9ydHNfcHJvcG9zZWRfYWRqdXN0X3B3cgdmbG9hdDMyF251bV9vcmFjbGVzX2FkanVzdF9iYXNlB2Zsb2F0MzIIUHJvdG9jb2wABAtwcm90b2NvbF9pZAZ1aW50NjQNcHJvdG9jb2xfbmFtZQRuYW1lDXVuaXRQb3dlck11bHQHZmxvYXQzMgZhY3RpdmUEYm9vbAlQd3JDb25maWcADAZwYXVzZWQEYm9vbAljb25zZW5zdXMPQ29uc2Vuc3VzQ29uZmlnB3BheW1lbnQNUGF5bWVudENvbmZpZwhzbGFzaExvdwtTbGFzaENvbmZpZwhzbGFzaE1lZAtTbGFzaENvbmZpZwlzbGFzaEhpZ2gLU2xhc2hDb25maWcFd2FpdHMKV2FpdENvbmZpZwpjb2xsYXRlcmFsEENvbGxhdGVyYWxDb25maWcZa2VlcF9maW5hbGl6ZWRfc3RhdHNfcm93cwZ1aW50MzIec3RhbmRieV90b2dnbGVfaW50ZXJ2YWxfcm91bmRzBnVpbnQxNh5taW5fcGF5X3JlcG9ydF9zaGFyZV90aHJlc2hvbGQHZmxvYXQzMiNyZXBvcnRzX2FjY3VtdWxhdGVfd2VpZ2h0X3JvdW5kX3BjdAdmbG9hdDMyCVB3ckdsb2JhbAAHDmFjdGl2ZV9vcmFjbGVzBm5hbWVbXRdleHBlY3RlZF9hY3RpdmVfb3JhY2xlcwZuYW1lW10Pc3RhbmRieV9vcmFjbGVzBXVpbnQ4FmV4cGVjdGVkX2FjdGl2ZV93ZWlnaHQGdWludDE2B3JlcG9ydHMNR2xvYmFsUmVwb3J0cwxyZXdhcmRzX3BhaWQGdWludDY0DWFjdGl2ZV93ZWlnaHQGdWludDE2CVB3clJlcG9ydAADC3Byb3RvY29sX2lkBXVpbnQ4BXJvdW5kBnVpbnQxNgV1bml0cwZ1aW50MzIMUHdyUmVwb3J0Um93AAYIcHJvcG9zZXIEbmFtZQZyZXBvcnQJUHdyUmVwb3J0CWFwcHJvdmFscwZuYW1lW10PYXBwcm92YWxfd2VpZ2h0BnVpbnQxNghyZXBvcnRlZARib29sBm1lcmdlZARib29sB1B3clN0YXQABwVyb3VuZAZ1aW50MTYPc3RhcnRpbmdfZ2xvYmFsCVB3ckdsb2JhbBdyZXBvcnRlZF9zaW5jZV9wcmV2aW91cwZ1aW50MzIidW5yZXBvcnRlZF91bm1lcmdlZF9zaW5jZV9wcmV2aW91cwZ1aW50MzIXcHJvcG9zZWRfc2luY2VfcHJldmlvdXMGdWludDMyF3Jld2FyZGVkX3NpbmNlX3ByZXZpb3VzBnVpbnQzMh12YWxpZF9wcm9wb3NlZF9zaW5jZV9wcmV2aW91cwZ1aW50MzIHUmVwb3J0cwADCHByb3Bvc2VkBnVpbnQzMhJyZXBvcnRlZF9vcl9tZXJnZWQGdWludDMyE3VucmVwb3J0ZWRfdW5tZXJnZWQGdWludDMyC1JvdW5kQ29tbWl0AAQPcm91bmRfY29tbWl0X2lkBnVpbnQ2NAtwcm90b2NvbF9pZAV1aW50OAVyb3VuZAZ1aW50MTYHYm9pZF9pZARuYW1lC1NsYXNoQ29uZmlnAAIVc2xhc2hfcXVhbnRpdHlfc3RhdGljBnVpbnQzMh1zbGFzaF9xdWFudGl0eV9jb2xsYXRlcmFsX3BjdAdmbG9hdDMyDFRva2VuVW5zdGFrZQACFnJlZGVlbWFibGVfYWZ0ZXJfcm91bmQGdWludDE2CHF1YW50aXR5BnVpbnQzMgpXYWl0Q29uZmlnAAIUd2l0aGRyYXdfcm91bmRzX3dhaXQGdWludDE2HWNvbGxhdGVyYWxfdW5sb2NrX3dhaXRfcm91bmRzBnVpbnQxNgxjb21taXRzY2xlYW4AAQVzY29wZQRuYW1lC2NvbmZpZ2NsZWFyAAAJY29uZmlnc2V0AAEGY29uZmlnCVB3ckNvbmZpZwpmaW5hbHJvdW5kAAAMZmluaXNocmVwb3J0AAINYm9pZF9pZF9zY29wZQRuYW1lDHB3cnJlcG9ydF9pZAZ1aW50NjQLZ2xvYmFsY2xlYXIAAAxtZXJnZXJlcG9ydHMAAg1ib2lkX2lkX3Njb3BlBG5hbWUNcHdycmVwb3J0X2lkcwh1aW50NjRbXQxvcmFjbGRlcG9zaXQAAgZvcmFjbGUEbmFtZQ9kZXBvc2l0UXVhbnRpdHkGdWludDMyDG9yYWNsZXNjbGVhcgAACW9yYWNsZXNldAADBm9yYWNsZQRuYW1lBndlaWdodAV1aW50OBFhZGRpbmdfY29sbGF0ZXJhbAZ1aW50MzILb3N0YXRzY2xlYW4AAQVzY29wZQRuYW1lCXBheW9yYWNsZQAEBm9yYWNsZQRuYW1lB2Jhc2VQYXkGdWludDMyCGJvbnVzUGF5BnVpbnQzMgVyb3VuZAZ1aW50MTYLcGF5b3V0cm91bmQAAgZvcmFjbGUEbmFtZQVyb3VuZAZ1aW50MTYKcHJvdG9jbGVhcgAACHByb3Rvc2V0AAEIcHJvdG9jb2wIUHJvdG9jb2wJcHdycmVwb3J0AAMGb3JhY2xlBG5hbWUNYm9pZF9pZF9zY29wZQRuYW1lBnJlcG9ydAlQd3JSZXBvcnQMcmVwb3J0c2NsZWFuAAEFc2NvcGUEbmFtZQxyZXBvcnRzY2xlYXIAAQVzY29wZQRuYW1lCnJvdW5kc3RhdHMAAApzZXRzdGFuZGJ5AAIGb3JhY2xlBG5hbWUHc3RhbmRieQRib29sCXNldHdlaWdodAACBm9yYWNsZQRuYW1lBndlaWdodAV1aW50OAlzbGFzaGhpZ2gAAQZvcmFjbGUEbmFtZQhzbGFzaGxvdwABBm9yYWNsZQRuYW1lCHNsYXNobWVkAAEGb3JhY2xlBG5hbWULc2xhc2hvcmFjbGUAAgZvcmFjbGUEbmFtZQhxdWFudGl0eQZ1aW50MzIKc3RhdHNjbGVhbgAACnN0YXRzY2xlYXIAAAl0aGlzcm91bmQAAAZ1bmxvY2sAAQZvcmFjbGUEbmFtZQp1bmxvY2tpbml0AAEGb3JhY2xlBG5hbWUId2l0aGRyYXcAAQZvcmFjbGUEbmFtZQx3aXRoZHJhd2luaXQAAQZvcmFjbGUEbmFtZSAwjYoIZyclRQxjb21taXRzY2xlYW4AAK5RETG3JkULY29uZmlnY2xlYXIAAADICjO3JkUJY29uZmlnc2V0AABAmpreaKZbCmZpbmFscm91bmQAkC+t6jbsplsMZmluaXNocmVwb3J0AACuURFFc2hkC2dsb2JhbGNsZWFyAIDzpVVdxa6SDG1lcmdlcmVwb3J0cwCQHaZVpYjMpQxvcmFjbGRlcG9zaXQAcI2KCKuIzKUMb3JhY2xlc2NsZWFyAAAAyAqriMylCW9yYWNsZXNldAAAplER4Wwypgtvc3RhdHNjbGVhbgAAAFARmUu9qQlwYXlvcmFjbGUAANLU9GZNvakLcGF5b3V0cm91bmQAAMA1KiKa6a0KcHJvdG9jbGVhcgAAAABZYZrprQhwcm90b3NldAAAAMiXVnUvrwlwd3JyZXBvcnQAMI2KCOdLq7oMcmVwb3J0c2NsZWFuAHCNigjnS6u6DHJlcG9ydHNjbGVhcgAAAM4m4zQ1vQpyb3VuZHN0YXRzAACAP2majLPCCnNldHN0YW5kYnkAAADIjTnFs8IJc2V0d2VpZ2h0AAAAaMy1hk3ECXNsYXNoaGlnaAAAAACcxoZNxAhzbGFzaGxvdwAAAABJyYZNxAhzbGFzaG1lZAAAVETm0oZNxAtzbGFzaG9yYWNsZQAAwDQqIpxNxgpzdGF0c2NsZWFuAADANSoinE3GCnN0YXRzY2xlYXIAAABIU9OLXcsJdGhpc3JvdW5kAAAAAABAROPUBnVubG9jawAAQHbTQUTj1Ap1bmxvY2tpbml0AAAAANzc1LLjCHdpdGhkcmF3AJDddNzc1LLjDHdpdGhkcmF3aW5pdAAKAAAAOE9NETIDaTY0AAAHQWNjb3VudAAAc2tSlBw9A2k2NAAABkNvbmZpZwAAAAAwtyZFA2k2NAAACVB3ckNvbmZpZwAAAABEc2hkA2k2NAAACVB3ckdsb2JhbAAAAACriMylA2k2NAAABk9yYWNsZQBwNhmriMylA2k2NAAACk9yYWNsZVN0YXQAAMCRIprprQNpNjQAAAhQcm90b2NvbAAAzpdWdS+vA2k2NAAADFB3clJlcG9ydFJvdwCyk5KiNDW9A2k2NAAAC1JvdW5kQ29tbWl0AAAAAACcTcYDaTY0AAAHUHdyU3RhdAAAAAAA"
+  "DmVvc2lvOjphYmkvMS4yAEkHQWNjb3VudAAKB2JvaWRfaWQEbmFtZQZvd25lcnMGbmFtZVtdBGF1dGgLQWNjb3VudEF1dGgIc3BvbnNvcnMGbmFtZVtdBXN0YWtlDEFjY291bnRTdGFrZQVwb3dlcgxBY2NvdW50UG93ZXIEdGVhbQtBY2NvdW50VGVhbQdiYWxhbmNlBnVpbnQzMgtuZnRfYmFsYW5jZQZ1aW50MTYLcmVjb3ZlcmFibGUEYm9vbAtBY2NvdW50QXV0aAACBGtleXMMcHVibGljX2tleVtdBW5vbmNlBXVpbnQ4DkFjY291bnRCb29zdGVyAAQOcHdyX211bHRpcGxpZXIFdWludDgRcHdyX2FkZF9wZXJfcm91bmQGdWludDE2DWV4cGlyZXNfcm91bmQGdWludDE2F2FnZ3JlZ2F0ZV9wd3JfcmVtYWluaW5nBnVpbnQzMgxBY2NvdW50UG93ZXIABRJsYXN0X2NsYWltZWRfcm91bmQGdWludDE2EGxhc3RfYWRkZWRfcm91bmQGdWludDE2BnJhdGluZwZ1aW50MTYHaGlzdG9yeQh1aW50MTZbXQhib29zdGVycxBBY2NvdW50Qm9vc3RlcltdDEFjY291bnRTdGFrZQADCXVuc3Rha2luZw5Ub2tlblVuc3Rha2VbXQtzZWxmX3N0YWtlZAZ1aW50MzIYcmVjZWl2ZWRfZGVsZWdhdGVkX3N0YWtlBnVpbnQxNgtBY2NvdW50VGVhbQAEB3RlYW1faWQFdWludDgPbGFzdF9lZGl0X3JvdW5kBnVpbnQxNg10ZWFtX3RheF9tdWx0BXVpbnQ4HHRlYW1fY3VtdWxhdGl2ZV9jb250cmlidXRpb24GdWludDMyCUJvaW5jQ1BJRAACB2JvaWRfaWQEbmFtZQpjcGlkX2J5dGVzBWJ5dGVzCUJvaW5jTWV0YQAEC3Byb3RvY29sX2lkBnVpbnQ2NAN1cmwGc3RyaW5nBnRlYW1JZAZ1aW50NjQEbWV0YQVieXRlcwpDUElEUmVwb3J0AAULcHJvdG9jb2xfaWQFdWludDgKY3BpZF9ieXRlcwVieXRlcwVyb3VuZAZ1aW50MTYJYXBwcm92YWxzBm5hbWVbXQ9hcHByb3ZhbF93ZWlnaHQGdWludDE2EENvbGxhdGVyYWxDb25maWcAAiNvcmFjbGVfY29sbGF0ZXJhbF9kZXBvc2l0X2luY3JlbWVudAZ1aW50MzIZb3JhY2xlX2NvbGxhdGVyYWxfbWluaW11bQZ1aW50MzIGQ29uZmlnAAwHYWNjb3VudA1Db25maWdBY2NvdW50BXBvd2VyC0NvbmZpZ1Bvd2VyBG1pbnQKQ29uZmlnTWludAR0ZWFtCkNvbmZpZ1RlYW0Fc3Rha2ULQ29uZmlnU3Rha2UEdGltZQpDb25maWdUaW1lBGF1dGgKQ29uZmlnQXV0aANuZnQJQ29uZmlnTmZ0BnBhdXNlZARib29sDmFsbG93X2RlcG9zaXRzBGJvb2wRYWxsb3dfd2l0aGRyYXdhbHMEYm9vbA9yZWNvdmVyeUFjY291bnQEbmFtZQ1Db25maWdBY2NvdW50AAkMaW52aXRlX3ByaWNlBnVpbnQzMhZwcmVtaXVtX3B1cmNoYXNlX3ByaWNlBnVpbnQzMhJtYXhfcHJlbWl1bV9wcmVmaXgFdWludDgKbWF4X293bmVycwV1aW50OAxtYXhfYm9vc3RlcnMFdWludDgQc3VmZml4X3doaXRlbGlzdAZuYW1lW10UcmVtb3ZlX3Nwb25zb3JfcHJpY2UGdWludDMyGHNwb25zb3JfbWF4X2ludml0ZV9jb2RlcwV1aW50OBlpbnZpdGVfY29kZV9leHBpcmVfcm91bmRzBnVpbnQxNgpDb25maWdBdXRoAAUVa2V5X2FjdGlvbnNfd2hpdGVsaXN0Bm5hbWVbXRVrZXlfYWNjb3VudF9tYXhfc3Rha2UGdWludDMyF2tleV9hY2NvdW50X21heF9iYWxhbmNlBnVpbnQzMhBhY2NvdW50X21heF9rZXlzBXVpbnQ4Gndvcmtlcl9tYXhfYmlsbF9wZXJfYWN0aW9uBnVpbnQzMgpDb25maWdNaW50AAIYcm91bmRfcG93ZXJlZF9zdGFrZV9tdWx0B2Zsb2F0MzIQcm91bmRfcG93ZXJfbXVsdAdmbG9hdDMyCUNvbmZpZ05mdAACFGJvaWRfaWRfbWF4aW11bV9uZnRzBnVpbnQxNhV3aGl0ZWxpc3RfY29sbGVjdGlvbnMGbmFtZVtdC0NvbmZpZ1Bvd2VyAAUQc3BvbnNvcl90YXhfbXVsdAdmbG9hdDMyEnBvd2VyZWRfc3Rha2VfbXVsdAdmbG9hdDMyHGNsYWltX21heGltdW1fZWxhcHNlZF9yb3VuZHMGdWludDE2EHNvZnRfbWF4X3B3cl9hZGQGdWludDE2FGhpc3Rvcnlfc2xvdHNfbGVuZ3RoBXVpbnQ4C0NvbmZpZ1N0YWtlAAIOdW5zdGFrZV9yb3VuZHMFdWludDgdZXh0cmFfc3Rha2VfbWluX2xvY2tlZF9yb3VuZHMFdWludDgKQ29uZmlnVGVhbQAGEWNoYW5nZV9taW5fcm91bmRzBnVpbnQxNhRlZGl0X3RlYW1fbWluX3JvdW5kcwZ1aW50MTYYdGVhbV9lZGl0X21heF9wY3RfY2hhbmdlBnVpbnQxNg1idXlfdGVhbV9jb3N0BnVpbnQzMhRvd25lcl9zdGFrZV9yZXF1aXJlZAZ1aW50MzInb3duZXJfZnV0dXJlX3N0YWtlX2xvY2tfcm91bmRzX3JlcXVpcmVkBnVpbnQxNgpDb25maWdUaW1lAAIccm91bmRzX3N0YXJ0X3NlY19zaW5jZV9lcG9jaAZ1aW50MzIQcm91bmRfbGVuZ3RoX3NlYwZ1aW50MzIPQ29uc2Vuc3VzQ29uZmlnAAMKbWluX3dlaWdodAZ1aW50MzIObWluX3dlaWdodF9wY3QHZmxvYXQzMhNtZXJnZV9kZXZpYXRpb25fcGN0B2Zsb2F0MzINR2xvYmFsUmVwb3J0cwAEBm1lcmdlZAZ1aW50NjQXdW5yZXBvcnRlZF9hbmRfdW5tZXJnZWQGdWludDY0CHJlcG9ydGVkBnVpbnQ2NAhwcm9wb3NlZAZ1aW50NjQGT3JhY2xlAAYHYWNjb3VudARuYW1lBndlaWdodAV1aW50OApjb2xsYXRlcmFsEE9yYWNsZUNvbGxhdGVyYWwFZnVuZHMLT3JhY2xlRnVuZHMHc3RhbmRieQRib29sGWxhc3Rfc3RhbmRieV90b2dnbGVfcm91bmQGdWludDE2EE9yYWNsZUNvbGxhdGVyYWwABQZsb2NrZWQGdWludDMyCXVubG9ja2luZwZ1aW50MzIHc2xhc2hlZAZ1aW50MzIVdW5sb2NrX2ZpbmlzaGVkX3JvdW5kBnVpbnQxNhZtaW5fdW5sb2NrX3N0YXJ0X3JvdW5kBnVpbnQxNgtPcmFjbGVGdW5kcwAEB2NsYWltZWQGdWludDMyCXVuY2xhaW1lZAZ1aW50MzILd2l0aGRyYXdpbmcGdWludDMyGHdpdGhkcmF3YWJsZV9hZnRlcl9yb3VuZAZ1aW50MTYKT3JhY2xlU3RhdAAEBXJvdW5kBnVpbnQxNgZ3ZWlnaHQFdWludDgHcmVwb3J0cwdSZXBvcnRzCXByb2Nlc3NlZARib29sDVBheW1lbnRDb25maWcABSFjb2xsYXRlcmFsX3BjdF9wYXlfcGVyX3JvdW5kX211bHQHZmxvYXQzMhdyb3VuZF9ib251c19wYXlfcmVwb3J0cwZ1aW50MzIYcm91bmRfYm9udXNfcGF5X3Byb3Bvc2VkBnVpbnQzMhtyZXBvcnRzX3Byb3Bvc2VkX2FkanVzdF9wd3IHZmxvYXQzMhdudW1fb3JhY2xlc19hZGp1c3RfYmFzZQdmbG9hdDMyCFByb3RvY29sAAQLcHJvdG9jb2xfaWQGdWludDY0DXByb3RvY29sX25hbWUEbmFtZQ11bml0UG93ZXJNdWx0B2Zsb2F0MzIGYWN0aXZlBGJvb2wJUHdyQ29uZmlnAAwGcGF1c2VkBGJvb2wJY29uc2Vuc3VzD0NvbnNlbnN1c0NvbmZpZwdwYXltZW50DVBheW1lbnRDb25maWcIc2xhc2hMb3cLU2xhc2hDb25maWcIc2xhc2hNZWQLU2xhc2hDb25maWcJc2xhc2hIaWdoC1NsYXNoQ29uZmlnBXdhaXRzCldhaXRDb25maWcKY29sbGF0ZXJhbBBDb2xsYXRlcmFsQ29uZmlnGWtlZXBfZmluYWxpemVkX3N0YXRzX3Jvd3MGdWludDMyHnN0YW5kYnlfdG9nZ2xlX2ludGVydmFsX3JvdW5kcwZ1aW50MTYebWluX3BheV9yZXBvcnRfc2hhcmVfdGhyZXNob2xkB2Zsb2F0MzIjcmVwb3J0c19hY2N1bXVsYXRlX3dlaWdodF9yb3VuZF9wY3QHZmxvYXQzMglQd3JHbG9iYWwABw5hY3RpdmVfb3JhY2xlcwZuYW1lW10XZXhwZWN0ZWRfYWN0aXZlX29yYWNsZXMGbmFtZVtdD3N0YW5kYnlfb3JhY2xlcwV1aW50OBZleHBlY3RlZF9hY3RpdmVfd2VpZ2h0BnVpbnQxNgdyZXBvcnRzDUdsb2JhbFJlcG9ydHMMcmV3YXJkc19wYWlkBnVpbnQ2NA1hY3RpdmVfd2VpZ2h0BnVpbnQxNglQd3JSZXBvcnQAAwtwcm90b2NvbF9pZAV1aW50OAVyb3VuZAZ1aW50MTYFdW5pdHMGdWludDMyDFB3clJlcG9ydFJvdwAGCHByb3Bvc2VyBG5hbWUGcmVwb3J0CVB3clJlcG9ydAlhcHByb3ZhbHMGbmFtZVtdD2FwcHJvdmFsX3dlaWdodAZ1aW50MTYIcmVwb3J0ZWQEYm9vbAZtZXJnZWQEYm9vbAdQd3JTdGF0AAcFcm91bmQGdWludDE2D3N0YXJ0aW5nX2dsb2JhbAlQd3JHbG9iYWwXcmVwb3J0ZWRfc2luY2VfcHJldmlvdXMGdWludDMyInVucmVwb3J0ZWRfdW5tZXJnZWRfc2luY2VfcHJldmlvdXMGdWludDMyF3Byb3Bvc2VkX3NpbmNlX3ByZXZpb3VzBnVpbnQzMhdyZXdhcmRlZF9zaW5jZV9wcmV2aW91cwZ1aW50MzIddmFsaWRfcHJvcG9zZWRfc2luY2VfcHJldmlvdXMGdWludDMyB1JlcG9ydHMAAwhwcm9wb3NlZAZ1aW50MzIScmVwb3J0ZWRfb3JfbWVyZ2VkBnVpbnQzMhN1bnJlcG9ydGVkX3VubWVyZ2VkBnVpbnQzMgtSb3VuZENvbW1pdAAED3JvdW5kX2NvbW1pdF9pZAZ1aW50NjQLcHJvdG9jb2xfaWQFdWludDgFcm91bmQGdWludDE2B2JvaWRfaWQEbmFtZQtTbGFzaENvbmZpZwACFXNsYXNoX3F1YW50aXR5X3N0YXRpYwZ1aW50MzIdc2xhc2hfcXVhbnRpdHlfY29sbGF0ZXJhbF9wY3QHZmxvYXQzMgxUb2tlblVuc3Rha2UAAhZyZWRlZW1hYmxlX2FmdGVyX3JvdW5kBnVpbnQxNghxdWFudGl0eQZ1aW50MzIKV2FpdENvbmZpZwACFHdpdGhkcmF3X3JvdW5kc193YWl0BnVpbnQxNh1jb2xsYXRlcmFsX3VubG9ja193YWl0X3JvdW5kcwZ1aW50MTYIYm9pbmNzZXQAAQlib2luY01ldGEJQm9pbmNNZXRhDGNvbW1pdHNjbGVhbgABBXNjb3BlBG5hbWULY29uZmlnY2xlYXIAAAljb25maWdzZXQAAQZjb25maWcJUHdyQ29uZmlnDGNwaWRyZXBjbGVhbgABDWJvaWRfaWRfc2NvcGUEbmFtZQpjcGlkcmVwb3J0AAQGb3JhY2xlBG5hbWULcHJvdG9jb2xfaWQFdWludDgNYm9pZF9pZF9zY29wZQRuYW1lCmNwaWRfYnl0ZXMFYnl0ZXMHY3BpZHNldAADC3Byb3RvY29sX2lkBnVpbnQ2NAdib2lkX2lkBG5hbWUKY3BpZF9ieXRlcwVieXRlcwpmaW5hbHJvdW5kAAAMZmluaXNocmVwb3J0AAINYm9pZF9pZF9zY29wZQRuYW1lDHB3cnJlcG9ydF9pZAZ1aW50NjQLZ2xvYmFsY2xlYXIAAAxtZXJnZXJlcG9ydHMAAg1ib2lkX2lkX3Njb3BlBG5hbWUNcHdycmVwb3J0X2lkcwh1aW50NjRbXQxvcmFjbGRlcG9zaXQAAgZvcmFjbGUEbmFtZQ9kZXBvc2l0UXVhbnRpdHkGdWludDMyDG9yYWNsZXNjbGVhcgAACW9yYWNsZXNldAADBm9yYWNsZQRuYW1lBndlaWdodAV1aW50OBFhZGRpbmdfY29sbGF0ZXJhbAZ1aW50MzILb3N0YXRzY2xlYW4AAQVzY29wZQRuYW1lCXBheW9yYWNsZQAEBm9yYWNsZQRuYW1lB2Jhc2VQYXkGdWludDMyCGJvbnVzUGF5BnVpbnQzMgVyb3VuZAZ1aW50MTYLcGF5b3V0cm91bmQAAgZvcmFjbGUEbmFtZQVyb3VuZAZ1aW50MTYKcHJvdG9jbGVhcgAACHByb3Rvc2V0AAEIcHJvdG9jb2wIUHJvdG9jb2wJcHdycmVwb3J0AAMGb3JhY2xlBG5hbWUNYm9pZF9pZF9zY29wZQRuYW1lBnJlcG9ydAlQd3JSZXBvcnQMcmVwb3J0c2NsZWFuAAEFc2NvcGUEbmFtZQxyZXBvcnRzY2xlYXIAAQVzY29wZQRuYW1lCnJvdW5kc3RhdHMAAApzZXRzdGFuZGJ5AAIGb3JhY2xlBG5hbWUHc3RhbmRieQRib29sCXNldHdlaWdodAACBm9yYWNsZQRuYW1lBndlaWdodAV1aW50OAlzbGFzaGhpZ2gAAQZvcmFjbGUEbmFtZQhzbGFzaGxvdwABBm9yYWNsZQRuYW1lCHNsYXNobWVkAAEGb3JhY2xlBG5hbWULc2xhc2hvcmFjbGUAAgZvcmFjbGUEbmFtZQhxdWFudGl0eQZ1aW50MzIKc3RhdHNjbGVhbgAACnN0YXRzY2xlYXIAAAl0aGlzcm91bmQAAAZ1bmxvY2sAAQZvcmFjbGUEbmFtZQp1bmxvY2tpbml0AAEGb3JhY2xlBG5hbWUId2l0aGRyYXcAAQZvcmFjbGUEbmFtZQx3aXRoZHJhd2luaXQAAQZvcmFjbGUEbmFtZSQAAABZYTQdPQhib2luY3NldAAwjYoIZyclRQxjb21taXRzY2xlYW4AAK5RETG3JkULY29uZmlnY2xlYXIAAADICjO3JkUJY29uZmlnc2V0ADCNiqiqm1xFDGNwaWRyZXBjbGVhbgAAQL60qptcRQpjcGlkcmVwb3J0AAAAACArnFxFB2NwaWRzZXQAAECamt5oplsKZmluYWxyb3VuZACQL63qNuymWwxmaW5pc2hyZXBvcnQAAK5REUVzaGQLZ2xvYmFsY2xlYXIAgPOlVV3FrpIMbWVyZ2VyZXBvcnRzAJAdplWliMylDG9yYWNsZGVwb3NpdABwjYoIq4jMpQxvcmFjbGVzY2xlYXIAAADICquIzKUJb3JhY2xlc2V0AACmURHhbDKmC29zdGF0c2NsZWFuAAAAUBGZS72pCXBheW9yYWNsZQAA0tT0Zk29qQtwYXlvdXRyb3VuZAAAwDUqIprprQpwcm90b2NsZWFyAAAAAFlhmumtCHByb3Rvc2V0AAAAyJdWdS+vCXB3cnJlcG9ydAAwjYoI50urugxyZXBvcnRzY2xlYW4AcI2KCOdLq7oMcmVwb3J0c2NsZWFyAAAAzibjNDW9CnJvdW5kc3RhdHMAAIA/aZqMs8IKc2V0c3RhbmRieQAAAMiNOcWzwglzZXR3ZWlnaHQAAABozLWGTcQJc2xhc2hoaWdoAAAAAJzGhk3ECHNsYXNobG93AAAAAEnJhk3ECHNsYXNobWVkAABURObShk3EC3NsYXNob3JhY2xlAADANCoinE3GCnN0YXRzY2xlYW4AAMA1KiKcTcYKc3RhdHNjbGVhcgAAAEhT04tdywl0aGlzcm91bmQAAAAAAEBE49QGdW5sb2NrAABAdtNBROPUCnVubG9ja2luaXQAAAAA3NzUsuMId2l0aGRyYXcAkN103NzUsuMMd2l0aGRyYXdpbml0AA0AAAA4T00RMgNpNjQAAAdBY2NvdW50AABOriI0HT0DaTY0AAAJQm9pbmNDUElEAAAwWUk0HT0DaTY0AAAJQm9pbmNNZXRhAAAAADC3JkUDaTY0AAAGQ29uZmlnAHC+tKqbXEUDaTY0AAAKQ1BJRFJlcG9ydAAAAABEc2hkA2k2NAAACVB3ckdsb2JhbAAAAACriMylA2k2NAAABk9yYWNsZQBwNhmriMylA2k2NAAACk9yYWNsZVN0YXQAAMCRIprprQNpNjQAAAhQcm90b2NvbAAAYG5Nii6vA2k2NAAACVB3ckNvbmZpZwAAzpdWdS+vA2k2NAAADFB3clJlcG9ydFJvdwCyk5KiNDW9A2k2NAAAC1JvdW5kQ29tbWl0AAAAAACcTcYDaTY0AAAHUHdyU3RhdAAAAAAA"
 )
 export const abi = ABI.from(abiBlob)
 export namespace Types {
@@ -75,14 +77,14 @@ export namespace Types {
         @Struct.field(UInt16)
           last_added_round!:UInt16
 
-        @Struct.field(UInt32)
-          rating!:UInt32
+        @Struct.field(UInt16)
+          rating!:UInt16
 
         @Struct.field(UInt16, { array: true })
           history!:UInt16[]
 
         @Struct.field(AccountBooster, { array: true })
-          mods!:AccountBooster[]
+          boosters!:AccountBooster[]
     }
     @Struct.type("AccountTeam")
     export class AccountTeam extends Struct {
@@ -129,6 +131,45 @@ export namespace Types {
 
         @Struct.field("bool")
           recoverable!:boolean
+    }
+    @Struct.type("BoincCPID")
+    export class BoincCPID extends Struct {
+        @Struct.field(Name)
+          boid_id!:Name
+
+        @Struct.field(Bytes)
+          cpid_bytes!:Bytes
+    }
+    @Struct.type("BoincMeta")
+    export class BoincMeta extends Struct {
+        @Struct.field(UInt64)
+          protocol_id!:UInt64
+
+        @Struct.field("string")
+          url!:string
+
+        @Struct.field(UInt64)
+          teamId!:UInt64
+
+        @Struct.field(Bytes)
+          meta!:Bytes
+    }
+    @Struct.type("CPIDReport")
+    export class CPIDReport extends Struct {
+        @Struct.field(UInt8)
+          protocol_id!:UInt8
+
+        @Struct.field(Bytes)
+          cpid_bytes!:Bytes
+
+        @Struct.field(UInt16)
+          round!:UInt16
+
+        @Struct.field(Name, { array: true })
+          approvals!:Name[]
+
+        @Struct.field(UInt16)
+          approval_weight!:UInt16
     }
     @Struct.type("CollateralConfig")
     export class CollateralConfig extends Struct {
@@ -568,6 +609,11 @@ export namespace Types {
         @Struct.field(Name)
           boid_id!:Name
     }
+    @Struct.type("boincset")
+    export class boincset extends Struct {
+        @Struct.field(BoincMeta)
+          boincMeta!:BoincMeta
+    }
     @Struct.type("commitsclean")
     export class commitsclean extends Struct {
         @Struct.field(Name)
@@ -579,6 +625,36 @@ export namespace Types {
     export class configset extends Struct {
         @Struct.field(PwrConfig)
           config!:PwrConfig
+    }
+    @Struct.type("cpidrepclean")
+    export class cpidrepclean extends Struct {
+        @Struct.field(Name)
+          boid_id_scope!:Name
+    }
+    @Struct.type("cpidreport")
+    export class cpidreport extends Struct {
+        @Struct.field(Name)
+          oracle!:Name
+
+        @Struct.field(UInt8)
+          protocol_id!:UInt8
+
+        @Struct.field(Name)
+          boid_id_scope!:Name
+
+        @Struct.field(Bytes)
+          cpid_bytes!:Bytes
+    }
+    @Struct.type("cpidset")
+    export class cpidset extends Struct {
+        @Struct.field(UInt64)
+          protocol_id!:UInt64
+
+        @Struct.field(Name)
+          boid_id!:Name
+
+        @Struct.field(Bytes)
+          cpid_bytes!:Bytes
     }
     @Struct.type("finalround")
     export class finalround extends Struct {}
@@ -746,24 +822,30 @@ export namespace Types {
 }
 export const TableMap = {
   accounts: Types.Account,
+  boinccpids: Types.BoincCPID,
+  boincmeta: Types.BoincMeta,
   config: Types.Config,
-  pwrconfig: Types.PwrConfig,
+  cpidreports: Types.CPIDReport,
   global: Types.PwrGlobal,
   oracles: Types.Oracle,
   oraclestats: Types.OracleStat,
   protocols: Types.Protocol,
+  pwrconfig: Types.PwrConfig,
   pwrreports: Types.PwrReportRow,
   roundcommit: Types.RoundCommit,
   stats: Types.PwrStat
 }
 export interface TableTypes {
     accounts:Types.Account
+    boinccpids:Types.BoincCPID
+    boincmeta:Types.BoincMeta
     config:Types.Config
-    pwrconfig:Types.PwrConfig
+    cpidreports:Types.CPIDReport
     global:Types.PwrGlobal
     oracles:Types.Oracle
     oraclestats:Types.OracleStat
     protocols:Types.Protocol
+    pwrconfig:Types.PwrConfig
     pwrreports:Types.PwrReportRow
     roundcommit:Types.RoundCommit
     stats:Types.PwrStat
@@ -772,6 +854,12 @@ export type RowType<T> = T extends keyof TableTypes ? TableTypes[T] : any
 export type TableNames = keyof TableTypes
 export namespace ActionParams {
     export namespace Type {
+        export interface BoincMeta {
+            protocol_id:UInt64Type
+            url:string
+            teamId:UInt64Type
+            meta:BytesType
+        }
         export interface PwrConfig {
             paused:boolean
             consensus:Type.ConsensusConfig
@@ -822,12 +910,29 @@ export namespace ActionParams {
             units:UInt32Type
         }
     }
+    export interface boincset {
+        boincMeta:Type.BoincMeta
+    }
     export interface commitsclean {
         scope:NameType
     }
     export interface configclear {}
     export interface configset {
         config:Type.PwrConfig
+    }
+    export interface cpidrepclean {
+        boid_id_scope:NameType
+    }
+    export interface cpidreport {
+        oracle:NameType
+        protocol_id:UInt8Type
+        boid_id_scope:NameType
+        cpid_bytes:BytesType
+    }
+    export interface cpidset {
+        protocol_id:UInt64Type
+        boid_id:NameType
+        cpid_bytes:BytesType
     }
     export interface finalround {}
     export interface finishreport {
@@ -916,9 +1021,13 @@ export namespace ActionParams {
     }
 }
 export interface ActionNameParams {
+    boincset:ActionParams.boincset
     commitsclean:ActionParams.commitsclean
     configclear:ActionParams.configclear
     configset:ActionParams.configset
+    cpidrepclean:ActionParams.cpidrepclean
+    cpidreport:ActionParams.cpidreport
+    cpidset:ActionParams.cpidset
     finalround:ActionParams.finalround
     finishreport:ActionParams.finishreport
     globalclear:ActionParams.globalclear
@@ -955,7 +1064,7 @@ export class Contract extends BaseContract {
     super({
       client: args.client,
       abi,
-      account: args.account || Name.from("power.boid")
+      account: args.account || Name.from("unknown")
     })
   }
 

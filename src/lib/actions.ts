@@ -25,7 +25,7 @@ export const sysActions = {
   buyAccount: (data:{ sponsor:NameType, boid_id:NameType, key:string }) => createAct("account.buy", Types.accountbuy.from(Object.assign(data, { owners: [] })), env.contracts.system),
   claim: (data:{ boid_id:NameType }) => createAct("power.claim", Types.powerclaim.from(data), env.contracts.system),
   inviteRm: (data:{ sponsor_boid_id:NameType, invite_code:number | string | UInt64 }) => createAct("invite.rm", Types.inviterm.from(data), env.contracts.system),
-  pwrModRm: (data:{boid_id:NameType, pwrmod_index:Int32Type[]}) => createAct("booster.rm", Types.boosterrm.from(data), env.contracts.system),
+  boosterRm: (data:{boid_id:NameType, booster_index:Int32Type[]}) => createAct("booster.rm", Types.boosterrm.from(data), env.contracts.system),
   pwrAdd: (data:{ boid_id:NameType, power:UInt16Type }) => createAct("power.add", Types.poweradd.from(data), env.contracts.system)
 }
 

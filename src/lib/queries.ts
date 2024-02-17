@@ -5,9 +5,10 @@ import env from "./env"
 import cacheManager from "cache-manager"
 import ax from "axios"
 import prisma from "lib/db"
-import { finalRound, getReportId, roundData } from "lib/utils"
+import { finalRound, getReportId, RoundData } from "lib/utils"
 import Logger from "lib/logger"
-import { API, NameType, UInt64 } from "@wharfkit/antelope"
+import { API, NameType, UInt64, UInt64Type } from "@wharfkit/antelope"
+import ms from "ms"
 const log = Logger.getLogger("queries")
 // import { API, NameType, UInt64 } from "@greymass/eosio"
 let cache = await cacheManager.caching("memory", { max: 100, ttl: 300/*seconds*/ })
@@ -91,10 +92,21 @@ export async function getAllReports():Promise<Record<string, pwr.Types.PwrReport
   return allPwrReports
 }
 
+export async function getBoincProtocols() {
+  const boincRows = getFullTable({ tableName: "boincmeta", contract: env.contracts.power }, pwr.Types.BoincMeta)
+  return boincRows
+}
+
 export async function getPwrReport(boidId:string, reportId:UInt64):Promise<pwr.Types.PwrReportRow | null> {
   const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: reportId, scope: boidId, type: pwr.Types.PwrReportRow })
   if (!existing.rows[0]) return null
   else if (!getReportId(existing.rows[0].report).equals(reportId)) return null
+  else return existing.rows[0]
+}
+
+export async function getProtocolRow(id:UInt64Type):Promise<pwr.Types.Protocol | null> {
+  const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "protocols", limit: 1, lower_bound: id, upper_bound: id, scope: env.contracts.power, type: pwr.Types.Protocol })
+  if (!existing.rows[0]) return null
   else return existing.rows[0]
 }
 
@@ -132,7 +144,32 @@ export const dbQuery = {
   getAllBoidUsers() {
     return prisma.boidAccount.findMany()
   },
-  async getLastFahRecordofRound(boidId:string, roundData:roundData) {
+  async getRecentBoincData(boincProtocolId:number) {
+    const result = await prisma.boincData.findMany({
+      where: { time: { gt: new Date(Date.now() - ms("6h")) }, boincProtocolId }
+    })
+    return result
+  },
+  async getBoidAccountProtocolCpid(boidId:string, roundData:Omit<RoundData, "round"> & Partial<Pick<RoundData, "round">>, boincProtocolId:number) {
+    log.debug(boidId, "getLastBoincRecordofRound", roundData)
+    const result = await prisma.boincData.findMany({
+      distinct: ["cpid"],
+      select: { cpid: true },
+      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId, boincProtocolId }
+    })
+    // log.debug("getLastFahRecordofRound result:", result)
+    return result
+  },
+  async getLastBoincRecordofRound(boidId:string, roundData:RoundData, boincProtocolId:number, cpid:string) {
+    log.debug(boidId, "getLastBoincRecordofRound", roundData)
+    const result = await prisma.boincData.findFirst({
+      orderBy: { time: "desc" },
+      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId, boincProtocolId, cpid }
+    })
+    log.debug("getLastBoincRecordofRound result:", result)
+    return result
+  },
+  async getLastFahRecordofRound(boidId:string, roundData:RoundData) {
     log.debug(boidId, "getLastFahRecordofRound", roundData)
     const result = await prisma.fahData.findFirst({
       orderBy: { time: "desc" },
@@ -141,7 +178,7 @@ export const dbQuery = {
     log.debug("getLastFahRecordofRound result:", result)
     return result
   },
-  async getLastRosettaRecordofRound(boidId:string, roundData:roundData) {
+  async getLastRosettaRecordofRound(boidId:string, roundData:RoundData) {
     log.debug(boidId, "getLastRosettaRecordofRound", roundData)
     const result = await prisma.rosettaData.findFirst({
       orderBy: { time: "desc" },
@@ -150,7 +187,7 @@ export const dbQuery = {
     log.debug("getLastRosettaRecordofRound result:", result)
     return result
   },
-  async getLastDenisRecordofRound(boidId:string, roundData:roundData) {
+  async getLastDenisRecordofRound(boidId:string, roundData:RoundData) {
     log.debug(boidId, "getLastDenisRecordofRound", roundData)
     const result = await prisma.denisData.findFirst({
       orderBy: { time: "desc" },

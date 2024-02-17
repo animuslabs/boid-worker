@@ -1,11 +1,18 @@
 import { dbQuery } from "lib/queries"
+import { throwErr } from "lib/utils"
+import ms from "ms"
 
 
-const result = await dbQuery.getLastFahRecordofRound("seth.voice", {
-  round: 6,
-  start: new Date("2023-10-26T11:43:47.000Z"),
-  end: new Date("2023-10-27T13:23:47.000Z")
+// const result = await dbQuery.getBoidAccountProtocolCpid("trovi.oid@boid.com", {
+//   round: 1,
+//   start: new Date(Date.now() - ms("1h")),
+//   end: new Date()
+// }, 2)
+
+// console.log(result)
+
+
+await new Promise(() => {
+  throwErr("hi")
 })
-
-console.log(result)
 

@@ -8,8 +8,6 @@ import * as pwr from "lib/types/power.boid.types"
 import { currentRound } from "lib/utils"
 const log = logger.getLogger("pwr-cleanTables")
 
-const pusher = new ActionPusher()
-
 async function cleanStatsRows(config:pwr.Types.PwrConfig, round:number) {
   log.info("checking for any stats rows to be cleared")
   const clearOlder = Math.max(round - config.keep_finalized_stats_rows.toNumber(), 0) - 1
@@ -27,10 +25,6 @@ async function cleanStatsRows(config:pwr.Types.PwrConfig, round:number) {
   log.info("clearStatsRows finished")
 }
 
-// async function cleanOracleStats(config:Config, round:number) {
-//   log.info("checking for any reports rows to be cleared")
-//   const scopes = await getOracleStatsScopes()
-// }
 async function cleanReports(config:pwr.Types.PwrConfig, round:number) {
   log.info("checking for any reports rows to be cleared")
   const scopes = await getReportScopes()
@@ -44,7 +38,7 @@ async function cleanReports(config:pwr.Types.PwrConfig, round:number) {
     log.debug(scope.toString(), "oldest report round:", oldestRound)
     if (!(oldestRound < cleanupOlder)) continue
     log.info("cleaning reports for", scope.toString())
-    pusher.add(pwrActions.reportsClean({ scope }))
+    await sendAction(pwrActions.reportsClean({ scope }))
   }
 }
 async function cleanOracleStats(config:pwr.Types.PwrConfig, round:number) {
@@ -60,7 +54,7 @@ async function cleanOracleStats(config:pwr.Types.PwrConfig, round:number) {
     log.debug(scope.toString(), "oldest oracle stat round:", oldestRound)
     if (!(oldestRound < cleanupOlder)) continue
     log.info("cleaning oracle stats for", scope.toString())
-    pusher.add(pwrActions.oracleStatsClean({ scope }))
+    await sendAction(pwrActions.oracleStatsClean({ scope }))
   }
 }
 async function cleanRoundCommit(config:pwr.Types.PwrConfig, round:number) {
@@ -76,21 +70,20 @@ async function cleanRoundCommit(config:pwr.Types.PwrConfig, round:number) {
     log.debug(scope.toString(), "oldest round commit round:", oldestRound)
     if (!(oldestRound < cleanupOlder)) continue
     log.info("cleaning oracle stats for", scope.toString())
-    pusher.add(pwrActions.roundCommitClean({ scope }))
+    await sendAction(pwrActions.roundCommitClean({ scope }))
   }
 }
 
-async function init() {
-  const config = await tables.pwr.config()
-  const round = Math.floor(await currentRound())
-  log.info("starting cleanTables, current round:", round)
-  await cleanStatsRows(config, round).catch(log.error)
-  await cleanReports(config, round).catch(log.error)
-  await cleanOracleStats(config, round).catch(log.error)
-  await cleanRoundCommit(config, round).catch(log.error)
-  await pusher.stop()
-}
-await init().catch(log.error)
+
+const config = await tables.pwr.config()
+const round = Math.floor(await currentRound())
+log.info("starting cleanTables, current round:", round)
+await cleanStatsRows(config, round).catch(log.error)
+await cleanReports(config, round).catch(log.error)
+await cleanOracleStats(config, round).catch(log.error)
+await cleanRoundCommit(config, round).catch(log.error)
+
+
 process.exit(0)
 
 

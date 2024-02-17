@@ -31,12 +31,12 @@
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^2.0.19",
-    "prisma": "^5.5.2",
+    "prisma": "^5.9.1",
     "tsc-alias": "^1.7.0",
     "typescript": "*"
   },
   "dependencies": {
-    "@prisma/client": "^5.5.2",
+    "@prisma/client": "^5.9.1",
     "@proton/hyperion": "^3.4.0",
     "@proton/vert": "^0.3.24",
     "@trpc/client": "^10.42.0",
@@ -49,6 +49,7 @@
     "@wharfkit/antelope": "^1.0.7",
     "@wharfkit/contract": "^1.1.5",
     "atomicassets": "^1.5.1",
+    "axios": "^1.6.7",
     "cache-manager": "^5.1.4",
     "chalk": "^5.0.1",
     "cors": "^2.8.5",

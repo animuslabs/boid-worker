@@ -1,6 +1,5 @@
 import { Types } from "lib/types/boid-contract-structure"
-import { doAction, getFullTable } from "../../lib/eosio"
-import db from "lib/db"
+import { doAction, getFullTable, sendAction } from "../../lib/eosio"
 import log from "lib/logger"
 import env from "lib/env"
 import { currentRound } from "lib/utils"
@@ -8,22 +7,22 @@ import { getSysConf } from "lib/queries"
 import { ActionPusher } from "lib/actionPusher"
 import { sysActions } from "lib/actions"
 
-// // remove expired pwrmods
-// async function handleExpired(account:Account, round:number) {
-//   let pwrModsCleared = 0
-//   const mods = account.power.boosters
-//   if (mods.length > 0) {
-//     let expiredIndexes:number[] = []
-//     mods.forEach((el, i) => {
-//       const expired = el.aggregate_pwr_remaining.toNumber() == 0 || el.expires_round.toNumber() <= round
-//       if (!expired) return
-//       expiredIndexes.push(i)
-//       pwrModsCleared++
-//     })
-//     if (expiredIndexes.length > 0) pusher.add(sysActions.pwrModRm({ boid_id: account.boid_id, pwrmod_index: expiredIndexes.reverse() }))
-//   }
-//   return pwrModsCleared
-// }
+// remove expired pwrmods
+async function handleExpired(account:Types.Account, round:number) {
+  let pwrModsCleared = 0
+  const mods = account.power.boosters
+  if (mods.length > 0) {
+    let expiredIndexes:number[] = []
+    mods.forEach((el, i) => {
+      const expired = el.aggregate_pwr_remaining.toNumber() == 0 || el.expires_round.toNumber() <= round
+      if (!expired) return
+      expiredIndexes.push(i)
+      pwrModsCleared++
+    })
+    if (expiredIndexes.length > 0) await sendAction(sysActions.boosterRm({ boid_id: account.boid_id, booster_index: expiredIndexes.reverse() }))
+  }
+  return pwrModsCleared
+}
 
 // claim if account needs to be claimed
 async function claimAccount(account:Types.Account, config:Types.Config, round:number) {
@@ -37,32 +36,16 @@ async function claimAccount(account:Types.Account, config:Types.Config, round:nu
   await doAction("power.claim", { boid_id: account.boid_id }, env.contracts.system)
 }
 
-async function init() {
-  try {
-    const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Types.Account)
-    log.info("Got all Boid accounts:", allAccounts.length)
-    const round = await currentRound()
-    log.info("Current round:", round.toFixed())
-    const config = await getSysConf()
-    for (const account of allAccounts) {
-      await claimAccount(account, config, round)
-      // await handleExpired(account, new ActionPusher(), round)
-    }
-    log.info("Job finished successfuly")
-    // let claimed = 0
-    // let pwrModsCleared = 0
-    // const pusher = new ActionPusher()
-    // for (const account of allAccounts) {
-    //   pwrModsCleared += handleExpired(account, pusher, round)
-    //   claimed += claimAccount(account, config, pusher, round)
-    // }
-    // pusher.stop()
-    // log.info("claimed", claimed, "accounts")
-    // log.info("expired pwrmods removed:", pwrModsCleared)
-  } catch (error:any) {
-    console.error(error.toString())
-  }
+const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Types.Account)
+log.info("Got all Boid accounts:", allAccounts.length)
+const round = await currentRound()
+log.info("Current round:", round.toFixed())
+const config = await getSysConf()
+for (const account of allAccounts) {
+  await claimAccount(account, config, round).catch(log.error)
+  await handleExpired(account, round).catch(log.error)
 }
-await init().catch(console.error)
+log.info("Job finished successfuly")
+
 process.exit(0)
 

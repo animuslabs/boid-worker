@@ -246,7 +246,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any } = {}, co
       uniqueErrors[exists].endpoints.push(el.url)
     }
   })
-
+  if (receipts.length == 0) log.error("doAction Error for:", name, data, errors[0])
   return { receipts, errors: uniqueErrors }
 }
 

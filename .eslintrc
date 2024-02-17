@@ -21,9 +21,7 @@
   ],
   "rules": {
     "no-void": "off",
-    "@typescript-eslint/no-floating-promises": [
-      "error"
-    ],
+    "@typescript-eslint/no-floating-promises": "error",
     "prefer-promise-reject-errors": "error",
     "promise/param-names": "off",
     "no-trailing-spaces": "off",
