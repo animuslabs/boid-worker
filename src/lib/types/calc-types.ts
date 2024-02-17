@@ -104,6 +104,8 @@ export interface ContractTables extends BaseTables {
 
 export interface BoidData {
   locked_BOID_EOS_IBC:string;
+  mint_BOID_Telos:string;
+  burned_BOID_Telos:string;
   staked_BOID_Telos:string;
   liquid_BOID_AlcorTelos:string;
   liquid_BOID_DefiboxEOS:string;

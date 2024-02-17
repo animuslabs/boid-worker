@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { ChainCalculator, defaultConfig } from "lib/calculator/contract-util"
 import { Config, UserConfig, ConfigAccount } from "lib/types/calc-types"
-import { Types } from "lib/types/boid-contract-structure"
 import { toObject } from "lib/utils"
 
 function mergeConfig(defaultConfig:Config, userConfig:UserConfig):Config {

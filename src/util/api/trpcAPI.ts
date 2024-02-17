@@ -9,6 +9,7 @@ import { RequestQueryParams } from "./api4DeltasTypes"
 import { accountCalculator } from "lib/calculator/calculator"
 import { aggregateBoidData } from "lib/calculator/antelope"
 import { toObject } from "lib/utils"
+import { calculateAveragesAndTotal } from "lib/calculator/userAverage"
 
 process.env.TZ = "Etc/UTC"
 dotenv.config()
@@ -132,7 +133,8 @@ const appRouter = t.router({
   GetBOIDtokenInfo: publicProcedure
     .query(async() => {
       const tokenInfo = await aggregateBoidData()
-      return tokenInfo
+      const avTotals = await calculateAveragesAndTotal()
+      return { tokenInfo, avTotals }
     })
 })
 
