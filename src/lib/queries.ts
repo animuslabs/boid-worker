@@ -97,6 +97,11 @@ export async function getBoincProtocols() {
   return boincRows
 }
 
+export async function getProtocols() {
+  const boincRows = getFullTable({ tableName: "protocols", contract: env.contracts.power }, pwr.Types.Protocol)
+  return boincRows
+}
+
 export async function getPwrReport(boidId:string, reportId:UInt64):Promise<pwr.Types.PwrReportRow | null> {
   const existing = await safeDo("get_table_rows", { code: env.contracts.power, table: "pwrreports", limit: 1, lower_bound: reportId, scope: boidId, type: pwr.Types.PwrReportRow })
   if (!existing.rows[0]) return null
