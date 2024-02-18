@@ -33,28 +33,6 @@ model BoincData {
   @@index([boincProtocolId, time, name, cpid])
 }
 
-model RosettaData {
-  id        String   @id @default(uuid())
-  time      DateTime @default(now())
-  cpid      String
-  rosettaId String
-  name      String
-  credits   BigInt
-
-  @@index([time, name])
-}
-
-model DenisData {
-  id      String   @id @default(uuid())
-  time    DateTime @default(now())
-  cpid    String
-  denisId String
-  name    String
-  credits BigInt
-
-  @@index([time, name])
-}
-
 model AdminReport {
   boid_id   String
   round     Int
