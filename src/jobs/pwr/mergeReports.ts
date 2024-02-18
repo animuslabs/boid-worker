@@ -6,7 +6,7 @@ import logger from "lib/logger"
 import { getReportScopes, tables } from "lib/queries"
 // import { Finishreport, PwrReportRow } from "lib/types/power.boid.types"
 import * as pwr from "lib/types/power.boid.types"
-import { finalizedRound, getReportId, shouldMergeReports } from "lib/utils"
+import { finalizedRound, getReportId, shouldMergeReports, toObject } from "lib/utils"
 const log = logger.getLogger("mergeReports")
 
 
@@ -52,14 +52,13 @@ for (const scope of reportScopes) {
         log.debug(JSON.parse(JSON.stringify(reports)))
         continue
       }
-      const mergeAction = pwr.Types.mergereports.from({ boid_id_scope: scope, pwrreport_ids: reports.map(el => getReportId(el.report)) })
+      const params = { boid_id_scope: scope, pwrreport_ids: reports.map(el => getReportId(el.report)) }
+      log.debug("merging reports:", toObject(params))
+      const mergeAction = pwr.Types.mergereports.from(params)
       await sendAction(pwrActions.mergeReports(mergeAction))
     }
   }
 }
-
-
-
 
 process.exit(0)
 

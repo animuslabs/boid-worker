@@ -41,6 +41,10 @@ async function handleProtocol(boincMeta:pwr.Types.BoincMeta) {
         units += unitsEarned
       }
       log.info(boidId, "earned", units, "Boinc credits during round ", reportingRound.round)
+      if (units < BigInt(1)) {
+        console.debug("skipping report, no units")
+        continue
+      }
       const report = pwr.Types.PwrReport.from({ protocol_id, round: reportingRound.round, units })
       const reportId = getReportId(report)
       const existing = await getPwrReport(boidId, reportId)
@@ -59,7 +63,7 @@ async function handleProtocol(boincMeta:pwr.Types.BoincMeta) {
           report
         }
       ))
-      log.info("report not yet reported. Adding new Report:", reportId)
+      log.info("report not yet reported. Adding new Report:", reportId.toString())
       await sendAction(action)
     }
   } catch (error:any) {

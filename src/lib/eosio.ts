@@ -2,7 +2,7 @@ import { API, APIClient, APIProvider, FetchProvider, Name, Action, Transaction, 
 
 import fetch from "node-fetch"
 import ms from "ms"
-import { rand, shuffle, sleep } from "./utils"
+import { rand, shuffle, sleep, toObject } from "./utils"
 import env from "./env"
 import logger from "lib/logger"
 import { caching } from "cache-manager"
@@ -246,7 +246,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any } = {}, co
       uniqueErrors[exists].endpoints.push(el.url)
     }
   })
-  if (receipts.length == 0) log.error("doAction Error for:", name, data, errors[0])
+  if (receipts.length == 0) log.error("doAction Error for:", name.toString(), toObject(data), errors[0])
   return { receipts, errors: uniqueErrors }
 }
 

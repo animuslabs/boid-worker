@@ -139,9 +139,9 @@ export async function shouldFinishReport(report:Types.PwrReportRow):Promise<bool
   if (reportIsActiveReportingRound && leewayPeriod) return false
   log.debug("already merged/reported?", report.merged || report.reported)
   if (report.merged || report.reported) return false
-  log.debug("has sufficient weight?:", report.approval_weight.value >= minApproval)
-  log.debug(report.approval_weight.value, minApproval)
-  if (report.approval_weight.value >= minApproval) return true
+  log.debug("has sufficient weight?:", report.approval_weight.toNumber() >= minApproval)
+  log.debug(report.approval_weight.toNumber(), minApproval)
+  if (report.approval_weight.toNumber() >= minApproval) return true
   return false
 }
 
@@ -154,7 +154,11 @@ export async function shouldMergeReports(roundNum:number, reports:Types.PwrRepor
   log.debug("calculated min consensus weight: ", minApproval)
   const cumulativeWeight = reports.reduce((acc:number, el) => acc + el.approval_weight.toNumber(), 0)
   const rndProgress = round % parseInt(`${round}`)
-  if (roundNum == round - 1 && rndProgress < config.reports_accumulate_weight_round_pct.value) return false
+  const leewayPeriod = rndProgress < config.reports_accumulate_weight_round_pct.value
+  if (!leewayPeriod) {
+    log.debug("too early in round to finish report")
+    return false
+  }
   if (reports.some(el => (el.merged || el.reported))) return false
   if (cumulativeWeight >= minApproval) return true
   return false
