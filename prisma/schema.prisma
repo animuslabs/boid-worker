@@ -188,7 +188,8 @@ model LogPwrAdd {
 
   boid_id             String
   received            Int
-  from_mult_boosters  Int
+  from_mult_mods      Int
+  from_mult_boosters  Int    @default(0)
   diverted_to_sponsor Int
   power_increased     Int
   orign               String
