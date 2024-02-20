@@ -59,6 +59,7 @@
     "express": "^4.18.1",
     "express-blacklist": "^1.0.3",
     "express-rate-limit": "^6.6.0",
+    "fast-xml-parser": "^4.3.4",
     "fs-extra": "^11.1.0",
     "greenlock-proxy": "^0.2.0",
     "greenlock-proxy-handler": "^0.0.1",

@@ -10,10 +10,10 @@ import { sysActions } from "lib/actions"
 // remove expired pwrmods
 async function handleExpired(account:Types.Account, round:number) {
   let pwrModsCleared = 0
-  const mods = account.power.boosters
-  if (mods.length > 0) {
+  const boosters = account.power.boosters
+  if (boosters.length > 0) {
     let expiredIndexes:number[] = []
-    mods.forEach((el, i) => {
+    boosters.forEach((el, i) => {
       const expired = el.aggregate_pwr_remaining.toNumber() == 0 || el.expires_round.toNumber() <= round
       if (!expired) return
       expiredIndexes.push(i)

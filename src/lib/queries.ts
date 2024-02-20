@@ -162,7 +162,15 @@ export const dbQuery = {
       select: { cpid: true },
       where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId, boincProtocolId }
     })
-    // log.debug("getLastFahRecordofRound result:", result)
+    return result
+  },
+  async getFahAccountProtocolid(boidId:string, roundData:Omit<RoundData, "round"> & Partial<Pick<RoundData, "round">>) {
+    log.debug(boidId, "getLastBoincRecordofRound", roundData)
+    const result = await prisma.fahData.findMany({
+      distinct: ["fahid"],
+      select: { fahid: true },
+      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId }
+    })
     return result
   },
   async getLastBoincRecordofRound(boidId:string, roundData:RoundData, boincProtocolId:number, cpid:string) {
@@ -174,31 +182,13 @@ export const dbQuery = {
     log.debug("getLastBoincRecordofRound result:", result)
     return result
   },
-  async getLastFahRecordofRound(boidId:string, roundData:RoundData) {
+  async getLastFahRecordofRound(boidId:string, roundData:RoundData, fahid:bigint) {
     log.debug(boidId, "getLastFahRecordofRound", roundData)
     const result = await prisma.fahData.findFirst({
       orderBy: { time: "desc" },
-      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId }
+      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId, fahid }
     })
     log.debug("getLastFahRecordofRound result:", result)
-    return result
-  },
-  async getLastRosettaRecordofRound(boidId:string, roundData:RoundData) {
-    log.debug(boidId, "getLastRosettaRecordofRound", roundData)
-    const result = await prisma.rosettaData.findFirst({
-      orderBy: { time: "desc" },
-      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId + "@boid.com" }
-    })
-    log.debug("getLastRosettaRecordofRound result:", result)
-    return result
-  },
-  async getLastDenisRecordofRound(boidId:string, roundData:RoundData) {
-    log.debug(boidId, "getLastDenisRecordofRound", roundData)
-    const result = await prisma.denisData.findFirst({
-      orderBy: { time: "desc" },
-      where: { time: { lt: roundData.end, gt: roundData.start }, name: boidId + "@boid.com" }
-    })
-    log.debug("getLastDenisRecordofRound result:", result)
     return result
   }
 }
