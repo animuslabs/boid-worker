@@ -24,7 +24,7 @@ import {
 import type { ActionOptions, ContractArgs, PartialBy, Table } from "@wharfkit/contract"
 import { Contract as BaseContract } from "@wharfkit/contract"
 export const abiBlob = Blob.from(
-  "DmVvc2lvOjphYmkvMS4yAEkHQWNjb3VudAAKB2JvaWRfaWQEbmFtZQZvd25lcnMGbmFtZVtdBGF1dGgLQWNjb3VudEF1dGgIc3BvbnNvcnMGbmFtZVtdBXN0YWtlDEFjY291bnRTdGFrZQVwb3dlcgxBY2NvdW50UG93ZXIEdGVhbQtBY2NvdW50VGVhbQdiYWxhbmNlBnVpbnQzMgtuZnRfYmFsYW5jZQZ1aW50MTYLcmVjb3ZlcmFibGUEYm9vbAtBY2NvdW50QXV0aAACBGtleXMMcHVibGljX2tleVtdBW5vbmNlBXVpbnQ4DkFjY291bnRCb29zdGVyAAQOcHdyX211bHRpcGxpZXIFdWludDgRcHdyX2FkZF9wZXJfcm91bmQGdWludDE2DWV4cGlyZXNfcm91bmQGdWludDE2F2FnZ3JlZ2F0ZV9wd3JfcmVtYWluaW5nBnVpbnQzMgxBY2NvdW50UG93ZXIABRJsYXN0X2NsYWltZWRfcm91bmQGdWludDE2EGxhc3RfYWRkZWRfcm91bmQGdWludDE2BnJhdGluZwZ1aW50MTYHaGlzdG9yeQh1aW50MTZbXQhib29zdGVycxBBY2NvdW50Qm9vc3RlcltdDEFjY291bnRTdGFrZQADCXVuc3Rha2luZw5Ub2tlblVuc3Rha2VbXQtzZWxmX3N0YWtlZAZ1aW50MzIYcmVjZWl2ZWRfZGVsZWdhdGVkX3N0YWtlBnVpbnQxNgtBY2NvdW50VGVhbQAEB3RlYW1faWQFdWludDgPbGFzdF9lZGl0X3JvdW5kBnVpbnQxNg10ZWFtX3RheF9tdWx0BXVpbnQ4HHRlYW1fY3VtdWxhdGl2ZV9jb250cmlidXRpb24GdWludDMyCUJvaW5jQ1BJRAACB2JvaWRfaWQEbmFtZQpjcGlkX2J5dGVzBWJ5dGVzCUJvaW5jTWV0YQAEC3Byb3RvY29sX2lkBnVpbnQ2NAN1cmwGc3RyaW5nBnRlYW1JZAZ1aW50NjQEbWV0YQVieXRlcwpDUElEUmVwb3J0AAULcHJvdG9jb2xfaWQFdWludDgKY3BpZF9ieXRlcwVieXRlcwVyb3VuZAZ1aW50MTYJYXBwcm92YWxzBm5hbWVbXQ9hcHByb3ZhbF93ZWlnaHQGdWludDE2EENvbGxhdGVyYWxDb25maWcAAiNvcmFjbGVfY29sbGF0ZXJhbF9kZXBvc2l0X2luY3JlbWVudAZ1aW50MzIZb3JhY2xlX2NvbGxhdGVyYWxfbWluaW11bQZ1aW50MzIGQ29uZmlnAAwHYWNjb3VudA1Db25maWdBY2NvdW50BXBvd2VyC0NvbmZpZ1Bvd2VyBG1pbnQKQ29uZmlnTWludAR0ZWFtCkNvbmZpZ1RlYW0Fc3Rha2ULQ29uZmlnU3Rha2UEdGltZQpDb25maWdUaW1lBGF1dGgKQ29uZmlnQXV0aANuZnQJQ29uZmlnTmZ0BnBhdXNlZARib29sDmFsbG93X2RlcG9zaXRzBGJvb2wRYWxsb3dfd2l0aGRyYXdhbHMEYm9vbA9yZWNvdmVyeUFjY291bnQEbmFtZQ1Db25maWdBY2NvdW50AAkMaW52aXRlX3ByaWNlBnVpbnQzMhZwcmVtaXVtX3B1cmNoYXNlX3ByaWNlBnVpbnQzMhJtYXhfcHJlbWl1bV9wcmVmaXgFdWludDgKbWF4X293bmVycwV1aW50OAxtYXhfYm9vc3RlcnMFdWludDgQc3VmZml4X3doaXRlbGlzdAZuYW1lW10UcmVtb3ZlX3Nwb25zb3JfcHJpY2UGdWludDMyGHNwb25zb3JfbWF4X2ludml0ZV9jb2RlcwV1aW50OBlpbnZpdGVfY29kZV9leHBpcmVfcm91bmRzBnVpbnQxNgpDb25maWdBdXRoAAUVa2V5X2FjdGlvbnNfd2hpdGVsaXN0Bm5hbWVbXRVrZXlfYWNjb3VudF9tYXhfc3Rha2UGdWludDMyF2tleV9hY2NvdW50X21heF9iYWxhbmNlBnVpbnQzMhBhY2NvdW50X21heF9rZXlzBXVpbnQ4Gndvcmtlcl9tYXhfYmlsbF9wZXJfYWN0aW9uBnVpbnQzMgpDb25maWdNaW50AAIYcm91bmRfcG93ZXJlZF9zdGFrZV9tdWx0B2Zsb2F0MzIQcm91bmRfcG93ZXJfbXVsdAdmbG9hdDMyCUNvbmZpZ05mdAACFGJvaWRfaWRfbWF4aW11bV9uZnRzBnVpbnQxNhV3aGl0ZWxpc3RfY29sbGVjdGlvbnMGbmFtZVtdC0NvbmZpZ1Bvd2VyAAUQc3BvbnNvcl90YXhfbXVsdAdmbG9hdDMyEnBvd2VyZWRfc3Rha2VfbXVsdAdmbG9hdDMyHGNsYWltX21heGltdW1fZWxhcHNlZF9yb3VuZHMGdWludDE2EHNvZnRfbWF4X3B3cl9hZGQGdWludDE2FGhpc3Rvcnlfc2xvdHNfbGVuZ3RoBXVpbnQ4C0NvbmZpZ1N0YWtlAAIOdW5zdGFrZV9yb3VuZHMFdWludDgdZXh0cmFfc3Rha2VfbWluX2xvY2tlZF9yb3VuZHMFdWludDgKQ29uZmlnVGVhbQAGEWNoYW5nZV9taW5fcm91bmRzBnVpbnQxNhRlZGl0X3RlYW1fbWluX3JvdW5kcwZ1aW50MTYYdGVhbV9lZGl0X21heF9wY3RfY2hhbmdlBnVpbnQxNg1idXlfdGVhbV9jb3N0BnVpbnQzMhRvd25lcl9zdGFrZV9yZXF1aXJlZAZ1aW50MzInb3duZXJfZnV0dXJlX3N0YWtlX2xvY2tfcm91bmRzX3JlcXVpcmVkBnVpbnQxNgpDb25maWdUaW1lAAIccm91bmRzX3N0YXJ0X3NlY19zaW5jZV9lcG9jaAZ1aW50MzIQcm91bmRfbGVuZ3RoX3NlYwZ1aW50MzIPQ29uc2Vuc3VzQ29uZmlnAAMKbWluX3dlaWdodAZ1aW50MzIObWluX3dlaWdodF9wY3QHZmxvYXQzMhNtZXJnZV9kZXZpYXRpb25fcGN0B2Zsb2F0MzINR2xvYmFsUmVwb3J0cwAEBm1lcmdlZAZ1aW50NjQXdW5yZXBvcnRlZF9hbmRfdW5tZXJnZWQGdWludDY0CHJlcG9ydGVkBnVpbnQ2NAhwcm9wb3NlZAZ1aW50NjQGT3JhY2xlAAYHYWNjb3VudARuYW1lBndlaWdodAV1aW50OApjb2xsYXRlcmFsEE9yYWNsZUNvbGxhdGVyYWwFZnVuZHMLT3JhY2xlRnVuZHMHc3RhbmRieQRib29sGWxhc3Rfc3RhbmRieV90b2dnbGVfcm91bmQGdWludDE2EE9yYWNsZUNvbGxhdGVyYWwABQZsb2NrZWQGdWludDMyCXVubG9ja2luZwZ1aW50MzIHc2xhc2hlZAZ1aW50MzIVdW5sb2NrX2ZpbmlzaGVkX3JvdW5kBnVpbnQxNhZtaW5fdW5sb2NrX3N0YXJ0X3JvdW5kBnVpbnQxNgtPcmFjbGVGdW5kcwAEB2NsYWltZWQGdWludDMyCXVuY2xhaW1lZAZ1aW50MzILd2l0aGRyYXdpbmcGdWludDMyGHdpdGhkcmF3YWJsZV9hZnRlcl9yb3VuZAZ1aW50MTYKT3JhY2xlU3RhdAAEBXJvdW5kBnVpbnQxNgZ3ZWlnaHQFdWludDgHcmVwb3J0cwdSZXBvcnRzCXByb2Nlc3NlZARib29sDVBheW1lbnRDb25maWcABSFjb2xsYXRlcmFsX3BjdF9wYXlfcGVyX3JvdW5kX211bHQHZmxvYXQzMhdyb3VuZF9ib251c19wYXlfcmVwb3J0cwZ1aW50MzIYcm91bmRfYm9udXNfcGF5X3Byb3Bvc2VkBnVpbnQzMhtyZXBvcnRzX3Byb3Bvc2VkX2FkanVzdF9wd3IHZmxvYXQzMhdudW1fb3JhY2xlc19hZGp1c3RfYmFzZQdmbG9hdDMyCFByb3RvY29sAAQLcHJvdG9jb2xfaWQGdWludDY0DXByb3RvY29sX25hbWUEbmFtZQ11bml0UG93ZXJNdWx0B2Zsb2F0MzIGYWN0aXZlBGJvb2wJUHdyQ29uZmlnAAwGcGF1c2VkBGJvb2wJY29uc2Vuc3VzD0NvbnNlbnN1c0NvbmZpZwdwYXltZW50DVBheW1lbnRDb25maWcIc2xhc2hMb3cLU2xhc2hDb25maWcIc2xhc2hNZWQLU2xhc2hDb25maWcJc2xhc2hIaWdoC1NsYXNoQ29uZmlnBXdhaXRzCldhaXRDb25maWcKY29sbGF0ZXJhbBBDb2xsYXRlcmFsQ29uZmlnGWtlZXBfZmluYWxpemVkX3N0YXRzX3Jvd3MGdWludDMyHnN0YW5kYnlfdG9nZ2xlX2ludGVydmFsX3JvdW5kcwZ1aW50MTYebWluX3BheV9yZXBvcnRfc2hhcmVfdGhyZXNob2xkB2Zsb2F0MzIjcmVwb3J0c19hY2N1bXVsYXRlX3dlaWdodF9yb3VuZF9wY3QHZmxvYXQzMglQd3JHbG9iYWwABw5hY3RpdmVfb3JhY2xlcwZuYW1lW10XZXhwZWN0ZWRfYWN0aXZlX29yYWNsZXMGbmFtZVtdD3N0YW5kYnlfb3JhY2xlcwV1aW50OBZleHBlY3RlZF9hY3RpdmVfd2VpZ2h0BnVpbnQxNgdyZXBvcnRzDUdsb2JhbFJlcG9ydHMMcmV3YXJkc19wYWlkBnVpbnQ2NA1hY3RpdmVfd2VpZ2h0BnVpbnQxNglQd3JSZXBvcnQAAwtwcm90b2NvbF9pZAV1aW50OAVyb3VuZAZ1aW50MTYFdW5pdHMGdWludDMyDFB3clJlcG9ydFJvdwAGCHByb3Bvc2VyBG5hbWUGcmVwb3J0CVB3clJlcG9ydAlhcHByb3ZhbHMGbmFtZVtdD2FwcHJvdmFsX3dlaWdodAZ1aW50MTYIcmVwb3J0ZWQEYm9vbAZtZXJnZWQEYm9vbAdQd3JTdGF0AAcFcm91bmQGdWludDE2D3N0YXJ0aW5nX2dsb2JhbAlQd3JHbG9iYWwXcmVwb3J0ZWRfc2luY2VfcHJldmlvdXMGdWludDMyInVucmVwb3J0ZWRfdW5tZXJnZWRfc2luY2VfcHJldmlvdXMGdWludDMyF3Byb3Bvc2VkX3NpbmNlX3ByZXZpb3VzBnVpbnQzMhdyZXdhcmRlZF9zaW5jZV9wcmV2aW91cwZ1aW50MzIddmFsaWRfcHJvcG9zZWRfc2luY2VfcHJldmlvdXMGdWludDMyB1JlcG9ydHMAAwhwcm9wb3NlZAZ1aW50MzIScmVwb3J0ZWRfb3JfbWVyZ2VkBnVpbnQzMhN1bnJlcG9ydGVkX3VubWVyZ2VkBnVpbnQzMgtSb3VuZENvbW1pdAAED3JvdW5kX2NvbW1pdF9pZAZ1aW50NjQLcHJvdG9jb2xfaWQFdWludDgFcm91bmQGdWludDE2B2JvaWRfaWQEbmFtZQtTbGFzaENvbmZpZwACFXNsYXNoX3F1YW50aXR5X3N0YXRpYwZ1aW50MzIdc2xhc2hfcXVhbnRpdHlfY29sbGF0ZXJhbF9wY3QHZmxvYXQzMgxUb2tlblVuc3Rha2UAAhZyZWRlZW1hYmxlX2FmdGVyX3JvdW5kBnVpbnQxNghxdWFudGl0eQZ1aW50MzIKV2FpdENvbmZpZwACFHdpdGhkcmF3X3JvdW5kc193YWl0BnVpbnQxNh1jb2xsYXRlcmFsX3VubG9ja193YWl0X3JvdW5kcwZ1aW50MTYIYm9pbmNzZXQAAQlib2luY01ldGEJQm9pbmNNZXRhDGNvbW1pdHNjbGVhbgABBXNjb3BlBG5hbWULY29uZmlnY2xlYXIAAAljb25maWdzZXQAAQZjb25maWcJUHdyQ29uZmlnDGNwaWRyZXBjbGVhbgABDWJvaWRfaWRfc2NvcGUEbmFtZQpjcGlkcmVwb3J0AAQGb3JhY2xlBG5hbWULcHJvdG9jb2xfaWQFdWludDgNYm9pZF9pZF9zY29wZQRuYW1lCmNwaWRfYnl0ZXMFYnl0ZXMHY3BpZHNldAADC3Byb3RvY29sX2lkBnVpbnQ2NAdib2lkX2lkBG5hbWUKY3BpZF9ieXRlcwVieXRlcwpmaW5hbHJvdW5kAAAMZmluaXNocmVwb3J0AAINYm9pZF9pZF9zY29wZQRuYW1lDHB3cnJlcG9ydF9pZAZ1aW50NjQLZ2xvYmFsY2xlYXIAAAxtZXJnZXJlcG9ydHMAAg1ib2lkX2lkX3Njb3BlBG5hbWUNcHdycmVwb3J0X2lkcwh1aW50NjRbXQxvcmFjbGRlcG9zaXQAAgZvcmFjbGUEbmFtZQ9kZXBvc2l0UXVhbnRpdHkGdWludDMyDG9yYWNsZXNjbGVhcgAACW9yYWNsZXNldAADBm9yYWNsZQRuYW1lBndlaWdodAV1aW50OBFhZGRpbmdfY29sbGF0ZXJhbAZ1aW50MzILb3N0YXRzY2xlYW4AAQVzY29wZQRuYW1lCXBheW9yYWNsZQAEBm9yYWNsZQRuYW1lB2Jhc2VQYXkGdWludDMyCGJvbnVzUGF5BnVpbnQzMgVyb3VuZAZ1aW50MTYLcGF5b3V0cm91bmQAAgZvcmFjbGUEbmFtZQVyb3VuZAZ1aW50MTYKcHJvdG9jbGVhcgAACHByb3Rvc2V0AAEIcHJvdG9jb2wIUHJvdG9jb2wJcHdycmVwb3J0AAMGb3JhY2xlBG5hbWUNYm9pZF9pZF9zY29wZQRuYW1lBnJlcG9ydAlQd3JSZXBvcnQMcmVwb3J0c2NsZWFuAAEFc2NvcGUEbmFtZQxyZXBvcnRzY2xlYXIAAQVzY29wZQRuYW1lCnJvdW5kc3RhdHMAAApzZXRzdGFuZGJ5AAIGb3JhY2xlBG5hbWUHc3RhbmRieQRib29sCXNldHdlaWdodAACBm9yYWNsZQRuYW1lBndlaWdodAV1aW50OAlzbGFzaGhpZ2gAAQZvcmFjbGUEbmFtZQhzbGFzaGxvdwABBm9yYWNsZQRuYW1lCHNsYXNobWVkAAEGb3JhY2xlBG5hbWULc2xhc2hvcmFjbGUAAgZvcmFjbGUEbmFtZQhxdWFudGl0eQZ1aW50MzIKc3RhdHNjbGVhbgAACnN0YXRzY2xlYXIAAAl0aGlzcm91bmQAAAZ1bmxvY2sAAQZvcmFjbGUEbmFtZQp1bmxvY2tpbml0AAEGb3JhY2xlBG5hbWUId2l0aGRyYXcAAQZvcmFjbGUEbmFtZQx3aXRoZHJhd2luaXQAAQZvcmFjbGUEbmFtZSQAAABZYTQdPQhib2luY3NldAAwjYoIZyclRQxjb21taXRzY2xlYW4AAK5RETG3JkULY29uZmlnY2xlYXIAAADICjO3JkUJY29uZmlnc2V0ADCNiqiqm1xFDGNwaWRyZXBjbGVhbgAAQL60qptcRQpjcGlkcmVwb3J0AAAAACArnFxFB2NwaWRzZXQAAECamt5oplsKZmluYWxyb3VuZACQL63qNuymWwxmaW5pc2hyZXBvcnQAAK5REUVzaGQLZ2xvYmFsY2xlYXIAgPOlVV3FrpIMbWVyZ2VyZXBvcnRzAJAdplWliMylDG9yYWNsZGVwb3NpdABwjYoIq4jMpQxvcmFjbGVzY2xlYXIAAADICquIzKUJb3JhY2xlc2V0AACmURHhbDKmC29zdGF0c2NsZWFuAAAAUBGZS72pCXBheW9yYWNsZQAA0tT0Zk29qQtwYXlvdXRyb3VuZAAAwDUqIprprQpwcm90b2NsZWFyAAAAAFlhmumtCHByb3Rvc2V0AAAAyJdWdS+vCXB3cnJlcG9ydAAwjYoI50urugxyZXBvcnRzY2xlYW4AcI2KCOdLq7oMcmVwb3J0c2NsZWFyAAAAzibjNDW9CnJvdW5kc3RhdHMAAIA/aZqMs8IKc2V0c3RhbmRieQAAAMiNOcWzwglzZXR3ZWlnaHQAAABozLWGTcQJc2xhc2hoaWdoAAAAAJzGhk3ECHNsYXNobG93AAAAAEnJhk3ECHNsYXNobWVkAABURObShk3EC3NsYXNob3JhY2xlAADANCoinE3GCnN0YXRzY2xlYW4AAMA1KiKcTcYKc3RhdHNjbGVhcgAAAEhT04tdywl0aGlzcm91bmQAAAAAAEBE49QGdW5sb2NrAABAdtNBROPUCnVubG9ja2luaXQAAAAA3NzUsuMId2l0aGRyYXcAkN103NzUsuMMd2l0aGRyYXdpbml0AA0AAAA4T00RMgNpNjQAAAdBY2NvdW50AABOriI0HT0DaTY0AAAJQm9pbmNDUElEAAAwWUk0HT0DaTY0AAAJQm9pbmNNZXRhAAAAADC3JkUDaTY0AAAGQ29uZmlnAHC+tKqbXEUDaTY0AAAKQ1BJRFJlcG9ydAAAAABEc2hkA2k2NAAACVB3ckdsb2JhbAAAAACriMylA2k2NAAABk9yYWNsZQBwNhmriMylA2k2NAAACk9yYWNsZVN0YXQAAMCRIprprQNpNjQAAAhQcm90b2NvbAAAYG5Nii6vA2k2NAAACVB3ckNvbmZpZwAAzpdWdS+vA2k2NAAADFB3clJlcG9ydFJvdwCyk5KiNDW9A2k2NAAAC1JvdW5kQ29tbWl0AAAAAACcTcYDaTY0AAAHUHdyU3RhdAAAAAAA"
+  "DmVvc2lvOjphYmkvMS4yAEQHQWNjb3VudAAKB2JvaWRfaWQEbmFtZQZvd25lcnMGbmFtZVtdBGF1dGgLQWNjb3VudEF1dGgIc3BvbnNvcnMGbmFtZVtdBXN0YWtlDEFjY291bnRTdGFrZQVwb3dlcgxBY2NvdW50UG93ZXIEdGVhbQtBY2NvdW50VGVhbQdiYWxhbmNlBnVpbnQzMgtuZnRfYmFsYW5jZQZ1aW50MTYLcmVjb3ZlcmFibGUEYm9vbAtBY2NvdW50QXV0aAACBGtleXMMcHVibGljX2tleVtdBW5vbmNlBXVpbnQ4DkFjY291bnRCb29zdGVyAAQOcHdyX211bHRpcGxpZXIFdWludDgRcHdyX2FkZF9wZXJfcm91bmQGdWludDE2DWV4cGlyZXNfcm91bmQGdWludDE2F2FnZ3JlZ2F0ZV9wd3JfcmVtYWluaW5nBnVpbnQzMgxBY2NvdW50UG93ZXIABRJsYXN0X2NsYWltZWRfcm91bmQGdWludDE2EGxhc3RfYWRkZWRfcm91bmQGdWludDE2BnJhdGluZwZ1aW50MTYHaGlzdG9yeQh1aW50MTZbXQhib29zdGVycxBBY2NvdW50Qm9vc3RlcltdDEFjY291bnRTdGFrZQADCXVuc3Rha2luZw5Ub2tlblVuc3Rha2VbXQtzZWxmX3N0YWtlZAZ1aW50MzIYcmVjZWl2ZWRfZGVsZWdhdGVkX3N0YWtlBnVpbnQxNgtBY2NvdW50VGVhbQAEB3RlYW1faWQFdWludDgPbGFzdF9lZGl0X3JvdW5kBnVpbnQxNg10ZWFtX3RheF9tdWx0BXVpbnQ4HHRlYW1fY3VtdWxhdGl2ZV9jb250cmlidXRpb24GdWludDMyCUJvaW5jTWV0YQAEC3Byb3RvY29sX2lkBnVpbnQ2NAN1cmwGc3RyaW5nBnRlYW1JZAZ1aW50NjQEbWV0YQVieXRlcxBDb2xsYXRlcmFsQ29uZmlnAAIjb3JhY2xlX2NvbGxhdGVyYWxfZGVwb3NpdF9pbmNyZW1lbnQGdWludDMyGW9yYWNsZV9jb2xsYXRlcmFsX21pbmltdW0GdWludDMyBkNvbmZpZwAMB2FjY291bnQNQ29uZmlnQWNjb3VudAVwb3dlcgtDb25maWdQb3dlcgRtaW50CkNvbmZpZ01pbnQEdGVhbQpDb25maWdUZWFtBXN0YWtlC0NvbmZpZ1N0YWtlBHRpbWUKQ29uZmlnVGltZQRhdXRoCkNvbmZpZ0F1dGgDbmZ0CUNvbmZpZ05mdAZwYXVzZWQEYm9vbA5hbGxvd19kZXBvc2l0cwRib29sEWFsbG93X3dpdGhkcmF3YWxzBGJvb2wPcmVjb3ZlcnlBY2NvdW50BG5hbWUNQ29uZmlnQWNjb3VudAAJDGludml0ZV9wcmljZQZ1aW50MzIWcHJlbWl1bV9wdXJjaGFzZV9wcmljZQZ1aW50MzISbWF4X3ByZW1pdW1fcHJlZml4BXVpbnQ4Cm1heF9vd25lcnMFdWludDgMbWF4X2Jvb3N0ZXJzBXVpbnQ4EHN1ZmZpeF93aGl0ZWxpc3QGbmFtZVtdFHJlbW92ZV9zcG9uc29yX3ByaWNlBnVpbnQzMhhzcG9uc29yX21heF9pbnZpdGVfY29kZXMFdWludDgZaW52aXRlX2NvZGVfZXhwaXJlX3JvdW5kcwZ1aW50MTYKQ29uZmlnQXV0aAAFFWtleV9hY3Rpb25zX3doaXRlbGlzdAZuYW1lW10Va2V5X2FjY291bnRfbWF4X3N0YWtlBnVpbnQzMhdrZXlfYWNjb3VudF9tYXhfYmFsYW5jZQZ1aW50MzIQYWNjb3VudF9tYXhfa2V5cwV1aW50OBp3b3JrZXJfbWF4X2JpbGxfcGVyX2FjdGlvbgZ1aW50MzIKQ29uZmlnTWludAACGHJvdW5kX3Bvd2VyZWRfc3Rha2VfbXVsdAdmbG9hdDMyEHJvdW5kX3Bvd2VyX211bHQHZmxvYXQzMglDb25maWdOZnQAAhRib2lkX2lkX21heGltdW1fbmZ0cwZ1aW50MTYVd2hpdGVsaXN0X2NvbGxlY3Rpb25zBm5hbWVbXQtDb25maWdQb3dlcgAFEHNwb25zb3JfdGF4X211bHQHZmxvYXQzMhJwb3dlcmVkX3N0YWtlX211bHQHZmxvYXQzMhxjbGFpbV9tYXhpbXVtX2VsYXBzZWRfcm91bmRzBnVpbnQxNhBzb2Z0X21heF9wd3JfYWRkBnVpbnQxNhRoaXN0b3J5X3Nsb3RzX2xlbmd0aAV1aW50OAtDb25maWdTdGFrZQACDnVuc3Rha2Vfcm91bmRzBXVpbnQ4HWV4dHJhX3N0YWtlX21pbl9sb2NrZWRfcm91bmRzBXVpbnQ4CkNvbmZpZ1RlYW0ABhFjaGFuZ2VfbWluX3JvdW5kcwZ1aW50MTYUZWRpdF90ZWFtX21pbl9yb3VuZHMGdWludDE2GHRlYW1fZWRpdF9tYXhfcGN0X2NoYW5nZQZ1aW50MTYNYnV5X3RlYW1fY29zdAZ1aW50MzIUb3duZXJfc3Rha2VfcmVxdWlyZWQGdWludDMyJ293bmVyX2Z1dHVyZV9zdGFrZV9sb2NrX3JvdW5kc19yZXF1aXJlZAZ1aW50MTYKQ29uZmlnVGltZQACHHJvdW5kc19zdGFydF9zZWNfc2luY2VfZXBvY2gGdWludDMyEHJvdW5kX2xlbmd0aF9zZWMGdWludDMyD0NvbnNlbnN1c0NvbmZpZwADCm1pbl93ZWlnaHQGdWludDMyDm1pbl93ZWlnaHRfcGN0B2Zsb2F0MzITbWVyZ2VfZGV2aWF0aW9uX3BjdAdmbG9hdDMyBk9yYWNsZQAGB2FjY291bnQEbmFtZQZ3ZWlnaHQFdWludDgKY29sbGF0ZXJhbBBPcmFjbGVDb2xsYXRlcmFsBWZ1bmRzC09yYWNsZUZ1bmRzB3N0YW5kYnkEYm9vbBlsYXN0X3N0YW5kYnlfdG9nZ2xlX3JvdW5kBnVpbnQxNhBPcmFjbGVDb2xsYXRlcmFsAAUGbG9ja2VkBnVpbnQzMgl1bmxvY2tpbmcGdWludDMyB3NsYXNoZWQGdWludDMyFXVubG9ja19maW5pc2hlZF9yb3VuZAZ1aW50MTYWbWluX3VubG9ja19zdGFydF9yb3VuZAZ1aW50MTYLT3JhY2xlRnVuZHMABAdjbGFpbWVkBnVpbnQzMgl1bmNsYWltZWQGdWludDMyC3dpdGhkcmF3aW5nBnVpbnQzMhh3aXRoZHJhd2FibGVfYWZ0ZXJfcm91bmQGdWludDE2Ck9yYWNsZVN0YXQABAVyb3VuZAZ1aW50MTYGd2VpZ2h0BXVpbnQ4B3JlcG9ydHMHUmVwb3J0cwlwcm9jZXNzZWQEYm9vbA1QYXltZW50Q29uZmlnAAUhY29sbGF0ZXJhbF9wY3RfcGF5X3Blcl9yb3VuZF9tdWx0B2Zsb2F0MzIXcm91bmRfYm9udXNfcGF5X3JlcG9ydHMGdWludDMyGHJvdW5kX2JvbnVzX3BheV9wcm9wb3NlZAZ1aW50MzIbcmVwb3J0c19wcm9wb3NlZF9hZGp1c3RfcHdyB2Zsb2F0MzIXbnVtX29yYWNsZXNfYWRqdXN0X2Jhc2UHZmxvYXQzMghQcm90b2NvbAAEC3Byb3RvY29sX2lkBnVpbnQ2NA1wcm90b2NvbF9uYW1lBG5hbWUNdW5pdFBvd2VyTXVsdAdmbG9hdDMyBmFjdGl2ZQRib29sCVB3ckNvbmZpZwALBnBhdXNlZARib29sCWNvbnNlbnN1cw9Db25zZW5zdXNDb25maWcHcGF5bWVudA1QYXltZW50Q29uZmlnCHNsYXNoTG93C1NsYXNoQ29uZmlnCHNsYXNoTWVkC1NsYXNoQ29uZmlnCXNsYXNoSGlnaAtTbGFzaENvbmZpZwV3YWl0cwpXYWl0Q29uZmlnCmNvbGxhdGVyYWwQQ29sbGF0ZXJhbENvbmZpZxlrZWVwX2ZpbmFsaXplZF9zdGF0c19yb3dzBnVpbnQzMh5zdGFuZGJ5X3RvZ2dsZV9pbnRlcnZhbF9yb3VuZHMGdWludDE2I3JlcG9ydHNfYWNjdW11bGF0ZV93ZWlnaHRfcm91bmRfcGN0B2Zsb2F0MzIJUHdyR2xvYmFsAAUPcmVwb3J0aW5nX3JvdW5kBnVpbnQxNg5hY3RpdmVfb3JhY2xlcwZuYW1lW10XZXhwZWN0ZWRfYWN0aXZlX29yYWNsZXMGbmFtZVtdFmV4cGVjdGVkX2FjdGl2ZV93ZWlnaHQGdWludDE2DWFjdGl2ZV93ZWlnaHQGdWludDE2CVB3clJlcG9ydAADC3Byb3RvY29sX2lkBXVpbnQ4BXJvdW5kBnVpbnQxNgV1bml0cwZ1aW50MzIMUHdyUmVwb3J0Um93AAQIcHJvcG9zZXIEbmFtZQZyZXBvcnQJUHdyUmVwb3J0CWFwcHJvdmFscwZuYW1lW10PYXBwcm92YWxfd2VpZ2h0BnVpbnQxNgdSZXBvcnRzAAMIcHJvcG9zZWQGdWludDMyEnJlcG9ydGVkX29yX21lcmdlZAZ1aW50MzITdW5yZXBvcnRlZF91bm1lcmdlZAZ1aW50MzILUm91bmRDb21taXQABA9yb3VuZF9jb21taXRfaWQGdWludDY0C3Byb3RvY29sX2lkBXVpbnQ4BXJvdW5kBnVpbnQxNgdib2lkX2lkBG5hbWULU2xhc2hDb25maWcAAhVzbGFzaF9xdWFudGl0eV9zdGF0aWMGdWludDMyHXNsYXNoX3F1YW50aXR5X2NvbGxhdGVyYWxfcGN0B2Zsb2F0MzIMVG9rZW5VbnN0YWtlAAIWcmVkZWVtYWJsZV9hZnRlcl9yb3VuZAZ1aW50MTYIcXVhbnRpdHkGdWludDMyCldhaXRDb25maWcAAhR3aXRoZHJhd19yb3VuZHNfd2FpdAZ1aW50MTYdY29sbGF0ZXJhbF91bmxvY2tfd2FpdF9yb3VuZHMGdWludDE2CmJvaW5jY2xlYXIAAAhib2luY3NldAABCWJvaW5jTWV0YQlCb2luY01ldGEMY29tbWl0c2NsZWFuAAIFc2NvcGUEbmFtZQVyb3VuZAZ1aW50MTYMY29tbWl0c2NsZWFyAAEFc2NvcGUEbmFtZQtjb25maWdjbGVhcgAACWNvbmZpZ3NldAABBmNvbmZpZwlQd3JDb25maWcKZmluYWxyb3VuZAAADGZpbmlzaHJlcG9ydAACDWJvaWRfaWRfc2NvcGUEbmFtZQxwd3JyZXBvcnRfaWQGdWludDY0C2dsb2JhbGNsZWFyAAAJZ2xvYmFsc2V0AAEGZ2xvYmFsCVB3ckdsb2JhbAxtZXJnZXJlcG9ydHMAAg1ib2lkX2lkX3Njb3BlBG5hbWUNcHdycmVwb3J0X2lkcwh1aW50NjRbXQxvcmFjbGRlcG9zaXQAAgZvcmFjbGUEbmFtZQ9kZXBvc2l0UXVhbnRpdHkGdWludDMyDG9yYWNsZXNjbGVhcgAACW9yYWNsZXNldAADBm9yYWNsZQRuYW1lBndlaWdodAV1aW50OBFhZGRpbmdfY29sbGF0ZXJhbAZ1aW50MzILb3N0YXRzY2xlYW4AAQVzY29wZQRuYW1lC29zdGF0c2NsZWFyAAEFc2NvcGUEbmFtZQlwYXlvcmFjbGUABAZvcmFjbGUEbmFtZQdiYXNlUGF5BnVpbnQzMghib251c1BheQZ1aW50MzIFcm91bmQGdWludDE2C3BheW91dHJvdW5kAAIGb3JhY2xlBG5hbWUFcm91bmQGdWludDE2CnByb3RvY2xlYXIAAAhwcm90b3NldAABCHByb3RvY29sCFByb3RvY29sCXB3cnJlcG9ydAADBm9yYWNsZQRuYW1lDWJvaWRfaWRfc2NvcGUEbmFtZQZyZXBvcnQJUHdyUmVwb3J0DHJlcG9ydHNjbGVhbgABBXNjb3BlBG5hbWUMcmVwb3J0c2NsZWFyAAEFc2NvcGUEbmFtZQtyb3VuZGNvbW1pdAAEBm9yYWNsZQRuYW1lB2JvaWRfaWQEbmFtZQtwcm90b2NvbF9pZAV1aW50OAVyb3VuZAZ1aW50MTYKc2V0c3RhbmRieQACBm9yYWNsZQRuYW1lB3N0YW5kYnkEYm9vbAlzZXR3ZWlnaHQAAgZvcmFjbGUEbmFtZQZ3ZWlnaHQFdWludDgJc2xhc2hoaWdoAAEGb3JhY2xlBG5hbWUIc2xhc2hsb3cAAQZvcmFjbGUEbmFtZQhzbGFzaG1lZAABBm9yYWNsZQRuYW1lC3NsYXNob3JhY2xlAAIGb3JhY2xlBG5hbWUIcXVhbnRpdHkGdWludDMyCXRoaXNyb3VuZAAABnVubG9jawABBm9yYWNsZQRuYW1lCnVubG9ja2luaXQAAQZvcmFjbGUEbmFtZQh3aXRoZHJhdwABBm9yYWNsZQRuYW1lDHdpdGhkcmF3aW5pdAABBm9yYWNsZQRuYW1lIwDANSoiNB09CmJvaW5jY2xlYXIAAAAAWWE0HT0IYm9pbmNzZXQAMI2KCGcnJUUMY29tbWl0c2NsZWFuAHCNighnJyVFDGNvbW1pdHNjbGVhcgAArlERMbcmRQtjb25maWdjbGVhcgAAAMgKM7cmRQljb25maWdzZXQAAECamt5oplsKZmluYWxyb3VuZACQL63qNuymWwxmaW5pc2hyZXBvcnQAAK5REUVzaGQLZ2xvYmFsY2xlYXIAAADICkdzaGQJZ2xvYmFsc2V0AIDzpVVdxa6SDG1lcmdlcmVwb3J0cwCQHaZVpYjMpQxvcmFjbGRlcG9zaXQAcI2KCKuIzKUMb3JhY2xlc2NsZWFyAAAAyAqriMylCW9yYWNsZXNldAAAplER4Wwypgtvc3RhdHNjbGVhbgAArlER4Wwypgtvc3RhdHNjbGVhcgAAAFARmUu9qQlwYXlvcmFjbGUAANLU9GZNvakLcGF5b3V0cm91bmQAAMA1KiKa6a0KcHJvdG9jbGVhcgAAAABZYZrprQhwcm90b3NldAAAAMiXVnUvrwlwd3JyZXBvcnQAMI2KCOdLq7oMcmVwb3J0c2NsZWFuAHCNigjnS6u6DHJlcG9ydHNjbGVhcgAAspOSojQ1vQtyb3VuZGNvbW1pdAAAgD9pmoyzwgpzZXRzdGFuZGJ5AAAAyI05xbPCCXNldHdlaWdodAAAAGjMtYZNxAlzbGFzaGhpZ2gAAAAAnMaGTcQIc2xhc2hsb3cAAAAAScmGTcQIc2xhc2htZWQAAFRE5tKGTcQLc2xhc2hvcmFjbGUAAABIU9OLXcsJdGhpc3JvdW5kAAAAAABAROPUBnVubG9jawAAQHbTQUTj1Ap1bmxvY2tpbml0AAAAANzc1LLjCHdpdGhkcmF3AJDddNzc1LLjDHdpdGhkcmF3aW5pdAAKAAAAOE9NETIDaTY0AAAHQWNjb3VudAAAMFlJNB09A2k2NAAACUJvaW5jTWV0YQAAAAAwtyZFA2k2NAAABkNvbmZpZwAAAABEc2hkA2k2NAAACVB3ckdsb2JhbAAAAACriMylA2k2NAAABk9yYWNsZQBwNhmriMylA2k2NAAACk9yYWNsZVN0YXQAAMCRIprprQNpNjQAAAhQcm90b2NvbAAAYG5Nii6vA2k2NAAACVB3ckNvbmZpZwAAzpdWdS+vA2k2NAAADFB3clJlcG9ydFJvdwCyk5KiNDW9A2k2NAAAC1JvdW5kQ29tbWl0AAAAAAA="
 )
 export const abi = ABI.from(abiBlob)
 export namespace Types {
@@ -132,14 +132,6 @@ export namespace Types {
         @Struct.field("bool")
           recoverable!:boolean
     }
-    @Struct.type("BoincCPID")
-    export class BoincCPID extends Struct {
-        @Struct.field(Name)
-          boid_id!:Name
-
-        @Struct.field(Bytes)
-          cpid_bytes!:Bytes
-    }
     @Struct.type("BoincMeta")
     export class BoincMeta extends Struct {
         @Struct.field(UInt64)
@@ -153,23 +145,6 @@ export namespace Types {
 
         @Struct.field(Bytes)
           meta!:Bytes
-    }
-    @Struct.type("CPIDReport")
-    export class CPIDReport extends Struct {
-        @Struct.field(UInt8)
-          protocol_id!:UInt8
-
-        @Struct.field(Bytes)
-          cpid_bytes!:Bytes
-
-        @Struct.field(UInt16)
-          round!:UInt16
-
-        @Struct.field(Name, { array: true })
-          approvals!:Name[]
-
-        @Struct.field(UInt16)
-          approval_weight!:UInt16
     }
     @Struct.type("CollateralConfig")
     export class CollateralConfig extends Struct {
@@ -343,20 +318,6 @@ export namespace Types {
         @Struct.field(Float32)
           merge_deviation_pct!:Float32
     }
-    @Struct.type("GlobalReports")
-    export class GlobalReports extends Struct {
-        @Struct.field(UInt64)
-          merged!:UInt64
-
-        @Struct.field(UInt64)
-          unreported_and_unmerged!:UInt64
-
-        @Struct.field(UInt64)
-          reported!:UInt64
-
-        @Struct.field(UInt64)
-          proposed!:UInt64
-    }
     @Struct.type("OracleCollateral")
     export class OracleCollateral extends Struct {
         @Struct.field(UInt32)
@@ -513,30 +474,21 @@ export namespace Types {
           standby_toggle_interval_rounds!:UInt16
 
         @Struct.field(Float32)
-          min_pay_report_share_threshold!:Float32
-
-        @Struct.field(Float32)
           reports_accumulate_weight_round_pct!:Float32
     }
     @Struct.type("PwrGlobal")
     export class PwrGlobal extends Struct {
+        @Struct.field(UInt16)
+          reporting_round!:UInt16
+
         @Struct.field(Name, { array: true })
           active_oracles!:Name[]
 
         @Struct.field(Name, { array: true })
           expected_active_oracles!:Name[]
 
-        @Struct.field(UInt8)
-          standby_oracles!:UInt8
-
         @Struct.field(UInt16)
           expected_active_weight!:UInt16
-
-        @Struct.field(GlobalReports)
-          reports!:GlobalReports
-
-        @Struct.field(UInt64)
-          rewards_paid!:UInt64
 
         @Struct.field(UInt16)
           active_weight!:UInt16
@@ -565,35 +517,6 @@ export namespace Types {
 
         @Struct.field(UInt16)
           approval_weight!:UInt16
-
-        @Struct.field("bool")
-          reported!:boolean
-
-        @Struct.field("bool")
-          merged!:boolean
-    }
-    @Struct.type("PwrStat")
-    export class PwrStat extends Struct {
-        @Struct.field(UInt16)
-          round!:UInt16
-
-        @Struct.field(PwrGlobal)
-          starting_global!:PwrGlobal
-
-        @Struct.field(UInt32)
-          reported_since_previous!:UInt32
-
-        @Struct.field(UInt32)
-          unreported_unmerged_since_previous!:UInt32
-
-        @Struct.field(UInt32)
-          proposed_since_previous!:UInt32
-
-        @Struct.field(UInt32)
-          rewarded_since_previous!:UInt32
-
-        @Struct.field(UInt32)
-          valid_proposed_since_previous!:UInt32
     }
     @Struct.type("RoundCommit")
     export class RoundCommit extends Struct {
@@ -609,6 +532,8 @@ export namespace Types {
         @Struct.field(Name)
           boid_id!:Name
     }
+    @Struct.type("boincclear")
+    export class boincclear extends Struct {}
     @Struct.type("boincset")
     export class boincset extends Struct {
         @Struct.field(BoincMeta)
@@ -618,6 +543,14 @@ export namespace Types {
     export class commitsclean extends Struct {
         @Struct.field(Name)
           scope!:Name
+
+        @Struct.field(UInt16)
+          round!:UInt16
+    }
+    @Struct.type("commitsclear")
+    export class commitsclear extends Struct {
+        @Struct.field(Name)
+          scope!:Name
     }
     @Struct.type("configclear")
     export class configclear extends Struct {}
@@ -625,36 +558,6 @@ export namespace Types {
     export class configset extends Struct {
         @Struct.field(PwrConfig)
           config!:PwrConfig
-    }
-    @Struct.type("cpidrepclean")
-    export class cpidrepclean extends Struct {
-        @Struct.field(Name)
-          boid_id_scope!:Name
-    }
-    @Struct.type("cpidreport")
-    export class cpidreport extends Struct {
-        @Struct.field(Name)
-          oracle!:Name
-
-        @Struct.field(UInt8)
-          protocol_id!:UInt8
-
-        @Struct.field(Name)
-          boid_id_scope!:Name
-
-        @Struct.field(Bytes)
-          cpid_bytes!:Bytes
-    }
-    @Struct.type("cpidset")
-    export class cpidset extends Struct {
-        @Struct.field(UInt64)
-          protocol_id!:UInt64
-
-        @Struct.field(Name)
-          boid_id!:Name
-
-        @Struct.field(Bytes)
-          cpid_bytes!:Bytes
     }
     @Struct.type("finalround")
     export class finalround extends Struct {}
@@ -668,6 +571,11 @@ export namespace Types {
     }
     @Struct.type("globalclear")
     export class globalclear extends Struct {}
+    @Struct.type("globalset")
+    export class globalset extends Struct {
+        @Struct.field(PwrGlobal)
+          global!:PwrGlobal
+    }
     @Struct.type("mergereports")
     export class mergereports extends Struct {
         @Struct.field(Name)
@@ -699,6 +607,11 @@ export namespace Types {
     }
     @Struct.type("ostatsclean")
     export class ostatsclean extends Struct {
+        @Struct.field(Name)
+          scope!:Name
+    }
+    @Struct.type("ostatsclear")
+    export class ostatsclear extends Struct {
         @Struct.field(Name)
           scope!:Name
     }
@@ -752,8 +665,20 @@ export namespace Types {
         @Struct.field(Name)
           scope!:Name
     }
-    @Struct.type("roundstats")
-    export class roundstats extends Struct {}
+    @Struct.type("roundcommit")
+    export class roundcommit extends Struct {
+        @Struct.field(Name)
+          oracle!:Name
+
+        @Struct.field(Name)
+          boid_id!:Name
+
+        @Struct.field(UInt8)
+          protocol_id!:UInt8
+
+        @Struct.field(UInt16)
+          round!:UInt16
+    }
     @Struct.type("setstandby")
     export class setstandby extends Struct {
         @Struct.field(Name)
@@ -793,10 +718,6 @@ export namespace Types {
         @Struct.field(UInt32)
           quantity!:UInt32
     }
-    @Struct.type("statsclean")
-    export class statsclean extends Struct {}
-    @Struct.type("statsclear")
-    export class statsclear extends Struct {}
     @Struct.type("thisround")
     export class thisround extends Struct {}
     @Struct.type("unlock")
@@ -822,25 +743,20 @@ export namespace Types {
 }
 export const TableMap = {
   accounts: Types.Account,
-  boinccpids: Types.BoincCPID,
   boincmeta: Types.BoincMeta,
   config: Types.Config,
-  cpidreports: Types.CPIDReport,
   global: Types.PwrGlobal,
   oracles: Types.Oracle,
   oraclestats: Types.OracleStat,
   protocols: Types.Protocol,
   pwrconfig: Types.PwrConfig,
   pwrreports: Types.PwrReportRow,
-  roundcommit: Types.RoundCommit,
-  stats: Types.PwrStat
+  roundcommit: Types.RoundCommit
 }
 export interface TableTypes {
     accounts:Types.Account
-    boinccpids:Types.BoincCPID
     boincmeta:Types.BoincMeta
     config:Types.Config
-    cpidreports:Types.CPIDReport
     global:Types.PwrGlobal
     oracles:Types.Oracle
     oraclestats:Types.OracleStat
@@ -848,7 +764,6 @@ export interface TableTypes {
     pwrconfig:Types.PwrConfig
     pwrreports:Types.PwrReportRow
     roundcommit:Types.RoundCommit
-    stats:Types.PwrStat
 }
 export type RowType<T> = T extends keyof TableTypes ? TableTypes[T] : any
 export type TableNames = keyof TableTypes
@@ -871,7 +786,6 @@ export namespace ActionParams {
             collateral:Type.CollateralConfig
             keep_finalized_stats_rows:UInt32Type
             standby_toggle_interval_rounds:UInt16Type
-            min_pay_report_share_threshold:Float32Type
             reports_accumulate_weight_round_pct:Float32Type
         }
         export interface ConsensusConfig {
@@ -898,6 +812,13 @@ export namespace ActionParams {
             oracle_collateral_deposit_increment:UInt32Type
             oracle_collateral_minimum:UInt32Type
         }
+        export interface PwrGlobal {
+            reporting_round:UInt16Type
+            active_oracles:NameType[]
+            expected_active_oracles:NameType[]
+            expected_active_weight:UInt16Type
+            active_weight:UInt16Type
+        }
         export interface Protocol {
             protocol_id:UInt64Type
             protocol_name:NameType
@@ -910,29 +831,20 @@ export namespace ActionParams {
             units:UInt32Type
         }
     }
+    export interface boincclear {}
     export interface boincset {
         boincMeta:Type.BoincMeta
     }
     export interface commitsclean {
         scope:NameType
+        round:UInt16Type
+    }
+    export interface commitsclear {
+        scope:NameType
     }
     export interface configclear {}
     export interface configset {
         config:Type.PwrConfig
-    }
-    export interface cpidrepclean {
-        boid_id_scope:NameType
-    }
-    export interface cpidreport {
-        oracle:NameType
-        protocol_id:UInt8Type
-        boid_id_scope:NameType
-        cpid_bytes:BytesType
-    }
-    export interface cpidset {
-        protocol_id:UInt64Type
-        boid_id:NameType
-        cpid_bytes:BytesType
     }
     export interface finalround {}
     export interface finishreport {
@@ -940,6 +852,9 @@ export namespace ActionParams {
         pwrreport_id:UInt64Type
     }
     export interface globalclear {}
+    export interface globalset {
+        global:Type.PwrGlobal
+    }
     export interface mergereports {
         boid_id_scope:NameType
         pwrreport_ids:UInt64Type[]
@@ -955,6 +870,9 @@ export namespace ActionParams {
         adding_collateral:UInt32Type
     }
     export interface ostatsclean {
+        scope:NameType
+    }
+    export interface ostatsclear {
         scope:NameType
     }
     export interface payoracle {
@@ -982,7 +900,12 @@ export namespace ActionParams {
     export interface reportsclear {
         scope:NameType
     }
-    export interface roundstats {}
+    export interface roundcommit {
+        oracle:NameType
+        boid_id:NameType
+        protocol_id:UInt8Type
+        round:UInt16Type
+    }
     export interface setstandby {
         oracle:NameType
         standby:boolean
@@ -1004,8 +927,6 @@ export namespace ActionParams {
         oracle:NameType
         quantity:UInt32Type
     }
-    export interface statsclean {}
-    export interface statsclear {}
     export interface thisround {}
     export interface unlock {
         oracle:NameType
@@ -1021,21 +942,22 @@ export namespace ActionParams {
     }
 }
 export interface ActionNameParams {
+    boincclear:ActionParams.boincclear
     boincset:ActionParams.boincset
     commitsclean:ActionParams.commitsclean
+    commitsclear:ActionParams.commitsclear
     configclear:ActionParams.configclear
     configset:ActionParams.configset
-    cpidrepclean:ActionParams.cpidrepclean
-    cpidreport:ActionParams.cpidreport
-    cpidset:ActionParams.cpidset
     finalround:ActionParams.finalround
     finishreport:ActionParams.finishreport
     globalclear:ActionParams.globalclear
+    globalset:ActionParams.globalset
     mergereports:ActionParams.mergereports
     oracldeposit:ActionParams.oracldeposit
     oraclesclear:ActionParams.oraclesclear
     oracleset:ActionParams.oracleset
     ostatsclean:ActionParams.ostatsclean
+    ostatsclear:ActionParams.ostatsclear
     payoracle:ActionParams.payoracle
     payoutround:ActionParams.payoutround
     protoclear:ActionParams.protoclear
@@ -1043,15 +965,13 @@ export interface ActionNameParams {
     pwrreport:ActionParams.pwrreport
     reportsclean:ActionParams.reportsclean
     reportsclear:ActionParams.reportsclear
-    roundstats:ActionParams.roundstats
+    roundcommit:ActionParams.roundcommit
     setstandby:ActionParams.setstandby
     setweight:ActionParams.setweight
     slashhigh:ActionParams.slashhigh
     slashlow:ActionParams.slashlow
     slashmed:ActionParams.slashmed
     slashoracle:ActionParams.slashoracle
-    statsclean:ActionParams.statsclean
-    statsclear:ActionParams.statsclear
     thisround:ActionParams.thisround
     unlock:ActionParams.unlock
     unlockinit:ActionParams.unlockinit

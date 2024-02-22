@@ -2,7 +2,7 @@ import { Action } from "@wharfkit/antelope"
 import { ActionPusher } from "lib/actionPusher"
 import { actions } from "lib/actions"
 import logger from "lib/logger"
-import { getInviteScopes, getOldestOracleStat, getOldestReport, getOldestRoundCommit, getOracleStatsScopes, getReportScopes, getRoundCommitScopes, getStatRow, tables } from "lib/queries"
+import { getInviteScopes, getOldestOracleStat, getOldestReport, getOldestRoundCommit, getOracleStatsScopes, getReportScopes, getRoundCommitScopes, tables } from "lib/queries"
 import { Types } from "lib/types/boid-contract-structure"
 import { currentRound } from "lib/utils"
 const log = logger.getLogger("pwr-cleanTables")

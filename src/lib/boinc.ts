@@ -1,7 +1,7 @@
 import { Types } from "lib/types/power.boid.types"
 import ax from "axios"
 import { throwErr } from "lib/utils"
-import { getProtocolRow, getStatRow } from "lib/queries"
+import { getProtocolRow } from "lib/queries"
 import { Prisma } from "../../prisma/client"
 import { parseString } from "xml2js"
 import logger from "lib/logger"

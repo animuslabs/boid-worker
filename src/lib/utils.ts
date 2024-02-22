@@ -1,4 +1,4 @@
-import { ABI, Name, Serializer, UInt64, UInt8 } from "@wharfkit/antelope"
+import { ABI, Name, Serializer, UInt128, UInt16, UInt64, UInt8 } from "@wharfkit/antelope"
 import { safeDo, getAccount } from "./eosio"
 import { tables } from "./queries"
 import moment from "moment"
@@ -42,8 +42,40 @@ export function shuffle<T>(array:T[]) {
 }
 
 export function getReportId(report:Types.PwrReport) {
-  return UInt64.from((BigInt(report.protocol_id.toNumber()) << BigInt(48)) + (BigInt(report.round.toNumber()) << BigInt(32)) + BigInt(report.units.toNumber()))
+  return UInt64.from((BigInt(report.round.toNumber()) << BigInt(32)) + (BigInt(report.protocol_id.toNumber()) << BigInt(48)) + BigInt(report.units.toNumber()))
 }
+
+// class U128 {
+//   value:bigint
+
+//   constructor(low:bigint, high:bigint) {
+//     this.value = (high << 64n) | low
+//   }
+
+//   // Example method to demonstrate how you might interact with U128 values
+//   static fromBigInt(value:bigint):U128 {
+//     return new U128(value & 0xFFFFFFFFFFFFFFFFn, value >> 64n)
+//   }
+
+//   // Add other methods as necessary
+// }
+export function getByRoundProtocolBoidId(boid_id:Name, protocol_id:number, round:number):UInt128 {
+  // return UInt128.from(new U128(BigInt(boid_id.value.value), (BigInt(protocol_id) << 16n) + BigInt(round)).value)
+  const data = Serializer.decode({
+    data:
+    Serializer.encode({ object: boid_id.value }).hexString +
+    Serializer.encode({ object: UInt8.from(protocol_id) }).hexString +
+    Serializer.encode({ object: UInt16.from(protocol_id) }).hexString,
+    type: "uint128"
+  })
+  console.log("result", data.toString())
+  return data
+}
+
+
+
+
+
 
 export async function accountExists(name:string) {
   const validRegex = /(^[a-z1-5.]{0,11}[a-z1-5]$)|(^[a-z1-5.]{12}[a-j1-5]$)/
@@ -137,8 +169,8 @@ export async function shouldFinishReport(report:Types.PwrReportRow):Promise<bool
   log.debug(reportIsActiveReportingRound, leewayPeriod)
   if (!leewayPeriod) log.debug("too early in round to finish report")
   if (reportIsActiveReportingRound && leewayPeriod) return false
-  log.debug("already merged/reported?", report.merged || report.reported)
-  if (report.merged || report.reported) return false
+
+
   log.debug("has sufficient weight?:", report.approval_weight.toNumber() >= minApproval)
   log.debug(report.approval_weight.toNumber(), minApproval)
   if (report.approval_weight.toNumber() >= minApproval) return true
@@ -159,7 +191,6 @@ export async function shouldMergeReports(roundNum:number, reports:Types.PwrRepor
     log.debug("too early in round to finish report")
     return false
   }
-  if (reports.some(el => (el.merged || el.reported))) return false
   if (cumulativeWeight >= minApproval) return true
   return false
 }

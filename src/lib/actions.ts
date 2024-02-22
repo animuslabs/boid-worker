@@ -1,4 +1,4 @@
-import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64 } from "@wharfkit/antelope"
+import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64, UInt8Type } from "@wharfkit/antelope"
 import env from "lib/env"
 import { Types } from "lib/types/boid-contract-structure"
 import * as pwr from "lib/types/power.boid.types"
@@ -16,8 +16,9 @@ export const pwrActions = {
   mergeReports: (data:{boid_id_scope:NameType, pwrreport_ids:UInt64[]}) => createAct("mergereports", pwr.Types.mergereports.from(data)),
   reportsClean: (data:{scope:NameType}) => createAct("reportsclean", pwr.Types.reportsclean.from(data)),
   oracleStatsClean: (data:{ scope:NameType }) => createAct("ostatsclean", pwr.Types.ostatsclean.from(data)),
-  roundCommitClean: (data:{ scope:NameType }) => createAct("commitsclean", pwr.Types.commitsclean.from(data)),
-  payoutround: (data:{ oracle:NameType, round:number }) => createAct("payoutround", pwr.Types.payoutround.from(data))
+  roundCommitClean: (data:{ scope:NameType, round:UInt16Type }) => createAct("commitsclean", pwr.Types.commitsclean.from(data)),
+  payoutround: (data:{ oracle:NameType, round:number }) => createAct("payoutround", pwr.Types.payoutround.from(data)),
+  roundCommit: (data:{oracle:NameType, boid_id:NameType, round:UInt16Type, protocol_id:UInt8Type}) => createAct("roundcommit", pwr.Types.roundcommit.from(data))
 }
 
 export const sysActions = {

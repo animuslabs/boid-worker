@@ -66,6 +66,7 @@ async function errorCounter(endpoint:string, error:string) {
 export async function safeDo(cb:string, params?:any, retry?:number):Promise<any | null> {
   if (!retry) retry = 0
   const rpc = pickRpc()
+
   const url = rpc.endpoint.toString()
   // log.debug("Try rpc:", url)
 
@@ -126,6 +127,9 @@ export async function sendAction(act:Action) {
 
   return doAction(act.name, act.data, act.account)
 }
+// export async function computeAction(act:Action) {
+//   const rpc = pickRpc().rpc
+// }
 export async function getFullTable< T extends ABISerializableConstructor>(params:GetTableParams, type?:T):Promise<InstanceType<T>[]> {
   let code = params.contract
   const table = params.tableName
@@ -151,10 +155,9 @@ export async function getInfo():Promise<API.v1.GetInfoResponse> {
   // log.debug("getinfo:", result)
   if (result) return result as API.v1.GetInfoResponse
   else {
-    log.info("got info")
     const info = await safeDo("get_info")
-    // log.info("got info", info)
     await cache.set("get_info", info)
+    log.info("got info")
     return info
   }
 }
@@ -168,7 +171,7 @@ export async function getAccount(name:Name):Promise<API.v1.AccountObject> {
 
 // }
 
-export async function doAction(name:NameType, data:{ [key:string]:any } = {}, contract:NameType = env.contracts.power, authorization?:PermissionLevel[], keys?:PrivateKey[], retry?:number):Promise<DoActionResponse | null> {
+export async function computeAction(name:NameType, data:{ [key:string]:any } = {}, contract:NameType = env.contracts.power, authorization?:PermissionLevel[], keys?:PrivateKey[], retry?:number):Promise<DoActionResponse | null> {
   if (!data) data = {}
   if (!authorization) authorization = [PermissionLevel.from({ actor: env.worker.account, permission: env.worker.permission })]
   log.debug("Do action:", name.toString(), JSON.stringify(data, null, 2))
@@ -218,7 +221,7 @@ export async function doAction(name:NameType, data:{ [key:string]:any } = {}, co
   const timeoutTimer = ms("15s")
   await Promise.all(apis.map(({ endpoint, rpc }) => Promise.race([
     new Promise(res => {
-      rpc.push_transaction(signedTransaction).then(result => {
+      rpc.compute_transaction(signedTransaction).then(result => {
         receipts.push({ url: endpoint.origin, receipt: result.processed })
       }).catch(error => {
         // log.info('Error Type:', typeof error);
@@ -230,7 +233,88 @@ export async function doAction(name:NameType, data:{ [key:string]:any } = {}, co
       res(null)
     }, timeoutTimer))
   ])))
-  // log.info('doAction finished;', receipts, errors);
+  // log.info("doAction finished;", receipts, errors)
+  interface UniqueErrors {
+    endpoints:string[]
+    error:string
+  }
+  const uniqueErrors:UniqueErrors[] = []
+  errors.forEach(el => {
+    const exists = uniqueErrors.findIndex(el2 => el2.error = el.error)
+    if (exists === -1) {
+      el.endpoints = [el.url]
+      delete el.url
+      uniqueErrors.push(el)
+    } else {
+      uniqueErrors[exists].endpoints.push(el.url)
+    }
+  })
+  // if (receipts.length == 0) log.error("doAction Error for:", name.toString(), toObject(data), errors[0])
+  return { receipts, errors: uniqueErrors }
+}
+
+export async function doAction(name:NameType, data:{ [key:string]:any } = {}, contract:NameType = env.contracts.power, authorization?:PermissionLevel[], keys?:PrivateKey[], retry?:number):Promise<DoActionResponse | null> {
+  if (!data) data = {}
+  if (!authorization) authorization = [PermissionLevel.from({ actor: env.worker.account, permission: env.worker.permission })]
+  log.debug("Do action:", name.toString(), JSON.stringify(data, null, 2))
+  const info:any = await getInfo().catch(error => log.error("doAction:getInfo error", error))
+  const header = info.getTransactionHeader()
+  let action:Action
+  try {
+    action = Action.from({
+      authorization,
+      account: contract,
+      name,
+      data
+    })
+  } catch (error:any) {
+    log.info(error.toString())
+
+    let abi:ABI.Def|undefined = abiCache[contract.toString()]
+    if (!abi) {
+      abi = (await pickRpc().rpc.get_abi(contract)).abi
+      if (abi) abiCache[contract.toString()] = abi
+    }
+    if (!abi) {
+      throw new Error(`No ABI for ${contract}`)
+    }
+    action = Action.from({
+      authorization,
+      account: contract,
+      name,
+      data
+    }, abi)
+  }
+  const transaction = Transaction.from({
+    ...header,
+    actions: [action]
+  })
+  if (!keys) keys = [env.worker.key]
+  log.debug("Transaction:", transaction.id.toString())
+  const signatures = keys.map(key => key.signDigest(transaction.signingDigest(info.chain_id)))
+  const signedTransaction = SignedTransaction.from({ ...transaction, signatures })
+  const receipts:TransactionResponse[] = []
+  const errors:any[] = []
+  let apis = shuffle(rpcs)
+  if (apis.length > 3) apis = apis.slice(0, 3)
+  // log.info(apis)
+
+  const timeoutTimer = ms("15s")
+  await Promise.all(apis.map(({ endpoint, rpc }) => Promise.race([
+    new Promise(res => {
+      rpc.push_transaction(signedTransaction).then(result => {
+        receipts.push({ url: endpoint.origin, receipt: result.processed })
+      }).catch(error => {
+        // log.info("Error Type:", typeof error)
+        errors.push({ url: endpoint.origin, error: error?.error?.details[0]?.message || JSON.stringify(error?.error, null, 2) })
+      }).finally(() => res(null))
+    }),
+    new Promise(res => setTimeout(() => {
+      errors.push({ url: endpoint.origin, error: "Timeout Error after " + (timeoutTimer / 1000) + " seconds" })
+      res(null)
+    }, timeoutTimer))
+  ])))
+  log.info("doAction finished;", receipts, errors)
   interface UniqueErrors {
     endpoints:string[]
     error:string

@@ -1,61 +1,44 @@
-import { dbQuery } from "lib/queries"
-import { throwErr } from "lib/utils"
-import { parseString } from "xml2js"
-import { XMLParser } from "fast-xml-parser"
-import ms from "ms"
-import axios from "axios"
 import { log } from "console"
+import { getOldestReport, getOldestRoundCommit, getPwrReport } from "lib/queries"
+import { Types } from "lib/types/power.boid.types"
+import { getReportId, toObject } from "lib/utils"
+
+// const roundCommit = await getRoundCommit("boidworker11", Name.from("aerokossa.oid"), 0, 52)
+// const roundCommit = await getOldestRoundCommit("boidworker11")
+// const roundCommit = await getRoundCommitFromID(Name.from("boidworker12"), "2418825707512760199806976")
+// log(roundCommit)
+
+// const data = { oracle: "boidworker12", boid_id: "trovi.oid", round: 52, protocol_id: 2 }
+// const action = pwrActions.roundCommit(data)
+// const result = await computeAction(action.name, action.data, action.account)
+// const result = await commitExists("boidworker12", "trovi.oid", 52, 2)
+// log(result)
 
 
-const data = await axios.get("https://einsteinathome.org/community/teams/230028/members")
-const parsingOptions = {
-  ignoreAttributes: false,
-  // preserveOrder: true,
-  unpairedTags: ["hr", "br", "link", "meta"],
-  stopNodes: ["*.pre", "*.script"],
-  processEntities: true,
-  htmlEntities: true
-}
-const parser = new XMLParser(parsingOptions)
-const htmlJson = parser.parse(data.data)
-// log(JSON.stringify(htmlJson, null, 2))
+// function combineProtocolIdAndBoidId(protocol_id:number, boid_id:Name):UInt64 {
+//   const protocolIdShifted = BigInt(protocol_id) << BigInt(56)
 
+//   // Combine the shifted protocol_id with boid_id without shifting boid_id,
+//   // assuming boid_id's significant content is in the lower bits and we want to preserve it.
+//   const combinedId = protocolIdShifted | BigInt(boid_id.value.toString())
 
-type UserData = {
-    name:string;
-    credits?:string;
-    id:string;
-};
+//   return UInt64.from(combinedId)
+// }
 
-function extractUsersWithCredits(htmlJson:any):UserData[] {
-  // Assuming the user data is always located in this specific path
-  const userDataPath = htmlJson.html.body.div[0].div[1].div[0].div[0].div[1].div[0].div[0].div[0].div[0].div
-  const users:UserData[] = []
-  const creditsText = userDataPath[0].div[0].ul.li[0] // "Total credit: XX,XXX"
-  const creditsPattern = /Total credit: ([\d,]+)/
-  const creditsMatch = creditsPattern.exec(creditsText)
-  let credits = creditsMatch ? creditsMatch[1] : undefined
+// // const num = combineProtocolIdAndBoidId(3, name)
+// // const num2 = combineProtocolIdAndBoidId(4, name)
+// // console.log(num.toString())
+// // console.log(num2.toString())
 
-  userDataPath[1].div.forEach((column:any) => {
-    column.ul.li.forEach((li:any) => {
-      if ("a" in li) {
-        const user:UserData = {
-          name: li.a["#text"],
-          id: li.a["@_href"].split("/").pop()
-        }
-        if (credits) {
-          user.credits = credits
-        }
-        // Only add user if they have credits
-        if (user.credits) {
-          users.push(user)
-        }
-      }
-    })
-  })
+// const name = Name.from("a")
+// const name2 = Name.from("b")
+// console.log(name.value.toString())
+// console.log(name2.value.toString())
+// const result = await getOldestReport("boidworker11")
+// console.log(toObject(result))
+// process.exit(0)
 
-  return users
-}
-
-console.log(extractUsersWithCredits(htmlJson))
-
+const id = getReportId(Types.PwrReport.from({ "protocol_id": 0, "round": 54, "units": 54053 }))
+log(id.toString())
+const report = await getPwrReport("brandonr.oid", id)
+log(toObject(report))

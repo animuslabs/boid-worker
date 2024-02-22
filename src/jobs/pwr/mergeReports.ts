@@ -18,7 +18,7 @@ log.debug("final round:", finalRound)
 
 for (const scope of reportScopes) {
   let reports = await tables.pwr.pwrReports(scope)
-  reports = reports.filter(el => (el.report.round.toNumber() >= finalRound && !el.reported && !el.merged))
+  reports = reports.filter(el => (el.report.round.toNumber() >= finalRound))
   if (reports.length < 2) {
     log.debug("no mergable reports found for", scope.toString())
     continue
