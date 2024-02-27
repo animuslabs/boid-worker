@@ -2,7 +2,7 @@ import { pwrActions } from "lib/actions"
 import getConfig from "lib/config"
 import { sendAction } from "lib/eosio"
 import log from "lib/logger"
-import { commitExists, dbQuery, getPwrReport } from "lib/queries"
+import { commitExists, dbQuery, getAllRoundCommits, getPwrReport } from "lib/queries"
 import * as pwr from "lib/types/power.boid.types"
 import { RoundData, currentRound, getReportId, getRoundData, toObject } from "lib/utils"
 const env = getConfig()
@@ -12,9 +12,11 @@ export async function handleProtocol(protocol_id:number) {
   const previousRound = await getRoundData((await currentRound()) - 2)
   log.info("generating reports for round: ", reportingRound, "and protocol:", protocol_id)
   const allBoidUsers = (await dbQuery.getAllBoidUsers()).filter(el => el.boidId != "boid")
+  const allRoundCommits = await getAllRoundCommits(env.worker.account, reportingRound.round)
   const boidIds = allBoidUsers.map(el => el.boidId.toString())
   for (const boidId of boidIds) {
-    const alreadyReported = await commitExists(env.worker.account, boidId, reportingRound.round, protocol_id)
+    let alreadyReported = false
+    if (allRoundCommits) alreadyReported = !!allRoundCommits.find(el => el.boid_id.toString() == boidId && el.round.toNumber() == reportingRound.round && el.protocol_id.toNumber() == protocol_id)
     if (alreadyReported) {
       console.debug("skipped report for", boidId, "already reported")
     } else await handleBoidId(protocol_id, boidId, reportingRound, previousRound)
