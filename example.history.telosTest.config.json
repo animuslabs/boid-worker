@@ -31,7 +31,7 @@
       ]
     },
     {
-      "name": "history-server-telosTest",
+      "name": "server-history-telosTest",
       "cwd": "./dist",
       "script": "./servers/history.js",
       "autorestart": true,

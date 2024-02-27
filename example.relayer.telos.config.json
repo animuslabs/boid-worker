@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
   "apps": [
     {
-      "name": "relayer-server-telos",
+      "name": "server-relayer-telos",
       "cwd": "./dist",
       "script": "./servers/relayer.js",
       "autorestart": true,
