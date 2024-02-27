@@ -1,0 +1,35 @@
+{
+    "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+    "apps": [
+      {
+        "name": "boid-worker-historyDeltasAPI-accountsTableFill",
+        "cwd": "./dist",
+        "script": "./util/accountsTableFill.js",
+        "autorestart": true,
+        "cron_restart": "0 * * * *",
+        "args": [
+          "--color"
+        ]
+      },
+      {
+        "name": "boid-worker-historyDeltasAPI-server",
+        "cwd": "./dist",
+        "script": "./util/api/trpcAPI.js",
+        "autorestart": true,
+        "args": [
+          "--color"
+        ]
+      },
+      {
+        "name": "boid-worker-historyDeltas",
+        "cwd": "./dist",
+        "script": "./jobs/history/loadStateDeltas.js",
+        "autorestart": true,
+        "cron_restart": "0 * * * *",
+        "args": [
+          "--color"
+        ]
+      }
+    ]
+  }
+  
