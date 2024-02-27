@@ -1,4 +1,4 @@
-import config from "lib/env"
+import config from "lib/config"
 import Logger from "lib/logger"
 import ms from "ms"
 import injest, { actionMap, ActionMapType, getTableFromAction } from "lib/injest"
@@ -6,7 +6,7 @@ import db from "lib/db"
 import { parseISOString, shuffle, sleep, toDate, validateDate } from "lib/utils"
 import { getActions, getActionsRange } from "lib/hyp"
 import { Action } from "@proton/hyperion"
-const sysContract = config.contracts.system.toString()
+const sysContract = config().contracts.system.toString()
 const log = Logger.getLogger("fillRangeSysActions")
 
 async function init(actionName:string, start:Date, end:Date) {

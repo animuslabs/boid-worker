@@ -1,7 +1,8 @@
 import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64, UInt8Type } from "@wharfkit/antelope"
-import env from "lib/env"
+import getConfig from "lib/config"
 import { Types } from "lib/types/boid-contract-structure"
 import * as pwr from "lib/types/power.boid.types"
+const env = getConfig()
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
 const pwrAcct = env.contracts.power
 

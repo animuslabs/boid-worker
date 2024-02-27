@@ -3,9 +3,10 @@ import { API, APIClient, APIProvider, FetchProvider, Name, Action, Transaction, 
 import fetch from "node-fetch"
 import ms from "ms"
 import { rand, shuffle, sleep, toObject } from "./utils"
-import env from "./env"
+import getConfig from "lib/config"
 import logger from "lib/logger"
 import { caching } from "cache-manager"
+const env = getConfig()
 const log = logger.getLogger("eosio")
 let client:APIClient
 let provider:APIProvider

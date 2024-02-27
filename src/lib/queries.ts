@@ -1,7 +1,7 @@
 import { computeAction, getAllScopes, getFullTable, pickRpc, safeDo } from "./eosio"
 import * as sys from "lib/types/boid-contract-structure"
 import * as pwr from "./types/power.boid.types"
-import env, { ChainsType } from "./env"
+import getConfig from "lib/config"
 import cacheManager from "cache-manager"
 import ax from "axios"
 import prisma from "lib/db"
@@ -10,6 +10,7 @@ import Logger from "lib/logger"
 import { API, Name, NameType, UInt128, UInt16, UInt16Type, UInt64, UInt64Type, UInt8, UInt8Type } from "@wharfkit/antelope"
 import ms from "ms"
 import { pwrActions } from "lib/actions"
+const env = getConfig()
 const log = Logger.getLogger("queries")
 // import { API, NameType, UInt64 } from "@greymass/eosio"
 let cache = await cacheManager.caching("memory", { max: 100, ttl: 300/*seconds*/ })

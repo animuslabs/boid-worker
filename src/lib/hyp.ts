@@ -1,9 +1,10 @@
-import config from "lib/env"
+import getConfig from "lib/config"
 import Logger from "lib/logger"
 import { Action, GetActions, GetDeltas, JsonRpc, V2_GET_DELTAS } from "@proton/hyperion"
 import { parseISOString, pickRand, sleep } from "lib/utils"
 import ms from "ms"
 import ax from "axios"
+const config = getConfig()
 const log = Logger.getLogger("hyp")
 if (!config.history?.hyperion || config.history.hyperion.length == 0) throw (new Error("must configure at least one hyperion endpoint in .env.json"))
 export const hypClients = config.history.hyperion.map(el => new JsonRpc(el))

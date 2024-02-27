@@ -1,11 +1,12 @@
 import { Types } from "lib/types/boid-contract-structure"
 import { doAction, getFullTable, sendAction } from "../../lib/eosio"
 import log from "lib/logger"
-import env from "lib/env"
+import getConfig from "lib/config"
 import { currentRound } from "lib/utils"
 import { getSysConf } from "lib/queries"
 import { ActionPusher } from "lib/actionPusher"
 import { sysActions } from "lib/actions"
+const env = getConfig()
 
 // remove expired pwrmods
 async function handleExpired(account:Types.Account, round:number) {

@@ -1,8 +1,9 @@
 
-import env from "lib/env"
+import getConfig from "lib/config"
 import { doAction, getFullTable } from "lib/eosio"
 import { Types } from "lib/types/boid-contract-structure"
 import { Asset, Name, PermissionLevel, Struct } from "@wharfkit/antelope"
+const env = getConfig()
 
 @Struct.type("transfer")
 export class Transfer extends Struct {

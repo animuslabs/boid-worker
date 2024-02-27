@@ -1,10 +1,11 @@
-import config from "lib/env"
+import getConfig from "lib/config"
 import Logger from "lib/logger"
 import ms from "ms"
 import injest, { actionMap } from "lib/injest"
 import db from "lib/db"
 import { parseISOString, shuffle, sleep } from "lib/utils"
 import { getActions } from "lib/hyp"
+const config = getConfig()
 const sysContract = config.contracts.system.toString()
 const log = Logger.getLogger("backfillSysActions")
 

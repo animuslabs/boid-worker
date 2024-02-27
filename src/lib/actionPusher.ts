@@ -1,6 +1,6 @@
 import { Action, Transaction } from "@wharfkit/antelope"
 import { doAction, sendAction } from "lib/eosio"
-import env from "lib/env"
+import env from "lib/config"
 import logger from "lib/logger"
 import { sleep } from "lib/utils"
 const log = logger.getLogger("ActionPusher")

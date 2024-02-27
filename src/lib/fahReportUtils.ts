@@ -1,10 +1,11 @@
 import { pwrActions } from "lib/actions"
-import env from "lib/env"
+import getConfig from "lib/config"
 import { sendAction } from "lib/eosio"
 import log from "lib/logger"
 import { commitExists, dbQuery, getPwrReport } from "lib/queries"
 import * as pwr from "lib/types/power.boid.types"
 import { RoundData, currentRound, getReportId, getRoundData, toObject } from "lib/utils"
+const env = getConfig()
 
 export async function handleProtocol(protocol_id:number) {
   const reportingRound = await getRoundData((await currentRound()) - 1)

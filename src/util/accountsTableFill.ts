@@ -1,7 +1,8 @@
-import env from "./../lib/env"
+import getConfig from "lib/config"
 import { getFullTable } from "../lib/eosio"
 import { Types } from "lib/types/boid-contract-structure"
 import db from "lib/db"
+const env = getConfig()
 
 const allAccounts = await getFullTable({ tableName: "accounts", contract: env.contracts.system }, Types.Account)
 const selectedAccounts = allAccounts.map(account => ({

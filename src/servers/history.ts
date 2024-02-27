@@ -4,11 +4,12 @@ import cors from "cors"
 import * as invites from "servers/routes/invites"
 import t from "servers/trpc"
 import { pushActions } from "servers/routes/actions"
-import env from "lib/env"
+import getConfig from "lib/config"
 import ms from "ms"
 import blacklist from "express-blacklist"
 import rateLimit from "express-rate-limit"
 import { actions } from "servers/routes/history"
+const env = getConfig()
 
 if (!env.history) throw new Error(".env.json missing history config")
 

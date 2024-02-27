@@ -1,7 +1,8 @@
 import GreenlockProxy from "greenlock-proxy"
-import env from "lib/env"
+import getConfig from "lib/config"
 import logger from "lib/logger"
 import events from "events"
+const env = getConfig()
 const log = logger.getLogger("proxy")
 
 async function init() {

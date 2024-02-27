@@ -1,10 +1,11 @@
 import { Action, GetDeltas } from "@proton/hyperion"
 import db, { Prisma } from "lib/db"
 import { parseISOString } from "./utils"
-import config from "lib/env"
+import getConfig from "lib/config"
 import { getActions, hypClients } from "lib/hyp"
 import ms from "ms"
 import Logger from "lib/logger"
+const config = getConfig()
 const log = Logger.getLogger("injest")
 const sysContract = config.contracts.system.toString()
 

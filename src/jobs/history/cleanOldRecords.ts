@@ -1,9 +1,10 @@
-import config from "lib/env"
+import getConfig from "lib/config"
 import Logger from "lib/logger"
 import ms from "ms"
 import { GetActions, JsonRpc } from "@proton/hyperion"
 import { actionMap, ActionMapType } from "lib/injest"
 import db from "lib/db"
+const config = getConfig()
 
 const log = Logger.getLogger("cleanOldRecords")
 const cutoff = new Date(Date.now() - ms(config.history?.keepHistoryDataDays + "d" || "90d"))

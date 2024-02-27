@@ -1,8 +1,9 @@
-import config from "lib/env"
+import getConfig from "lib/config"
 import Logger from "lib/logger"
 import ms from "ms"
 import { actionMap, getRecentActions } from "lib/injest"
 import { shuffle, sleep } from "lib/utils"
+const config = getConfig()
 
 const log = Logger.getLogger("loadSysActions")
 

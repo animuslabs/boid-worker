@@ -1,9 +1,10 @@
 import db from "lib/db"
 import Logger from "lib/logger"
 import ms from "ms"
-import config from "lib/env"
+import getConfig from "lib/config"
 import { getDeltas } from "lib/hyp"
 import { parseISOString } from "lib/utils"
+const config = getConfig()
 const log = Logger.getLogger("deltas")
 const sysContract = config.contracts.system.toString()
 
@@ -66,8 +67,8 @@ export const deltas = {
         timeStamp: parseISOString(delta.timestamp),
         chain_name: data.chain_name,
         total_power: parseInt(data.total_power),
-        last_inflation_adjust_round: parseInt(data.last_inflation_adjust_round)      
-        
+        last_inflation_adjust_round: parseInt(data.last_inflation_adjust_round)
+
       }
       const result = await db.globalDelta.upsert({
         where: { id },
