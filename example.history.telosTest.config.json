@@ -2,14 +2,13 @@
   "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
   "apps": [
     {
-      "name": "boid-worker-history-loadSysActions",
+      "name": "history-loadSysActions-telos",
       "cwd": "./dist",
       "script": "./jobs/history/loadSysActions.js",
       "autorestart": true,
       "env": {
-        "CHAIN": "telosTest",
+        "CHAIN": "telos",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
@@ -17,13 +16,13 @@
       ]
     },
     {
-      "name": "boid-worker-history-cleanOldRecords",
+      "name": "history-cleanOldRecords-telos",
       "cwd": "./dist",
       "script": "./jobs/history/cleanOldRecords.js",
       "autorestart": false,
       "cron_restart": "0 0 * * *",
       "env": {
-        "CHAIN": "telosTest",
+        "CHAIN": "telos",
         "LOGLEVEL": "DEBUG",
         "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
@@ -33,10 +32,11 @@
       ]
     },
     {
-      "name": "boid-worker-history-server",
+      "name": "history-server-telos",
       "cwd": "./dist",
       "script": "./servers/history.js",
       "autorestart": true,
+      "cron_restart": "0 0 * * *",
       "env": {
         "NODE_ENV": "production",
         "CHAIN": "telosTest",

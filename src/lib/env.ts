@@ -2,11 +2,12 @@ import dotenv from "dotenv"
 import fs from "fs-extra"
 import { Name, NameType, PrivateKey } from "@wharfkit/antelope"
 import { Options } from "ipfs-http-client"
+import { throwErr } from "lib/utils"
 dotenv.config()
-
-type chains = "eos" | "kylin" | "jungle" | "wax" | "waxTest" | "telos" | "telosTest"
+const chains = ["eos", "kylin", "jungle", "wax", "waxTest", "telos", "telosTest"] as const
+export type ChainsType = typeof chains[number]
 interface eosioConfig {
-  chain:string
+  chain:ChainsType
   endpoints:URL[],
 
   worker:{
@@ -37,9 +38,9 @@ interface eosioConfig {
     port:number
   }
 }
-type eosioConfigs = { [k in chains]?:eosioConfig }
+type eosioConfigs = { [k in ChainsType]?:eosioConfig }
 interface envType {
-  default:chains
+  default:ChainsType
   chain:eosioConfigs
 }
 
@@ -47,11 +48,11 @@ const readEnv:envType = fs.readJSONSync("../.env.json")
 // console.log("readENV", readEnv)
 let useChain = process.env.CHAIN
 if (!useChain) useChain = readEnv.default
-// console.log(useChain)
+if (!chains.includes(useChain as ChainsType)) throwErr("CHAIN not recognized: " + useChain)
 
 const untyped = readEnv.chain[useChain]
 const typed:eosioConfig = {
-  chain: useChain,
+  chain: useChain as ChainsType,
   endpoints: untyped.endpoints.map(el => new URL(el)),
   worker: {
     account: Name.from(untyped.worker.account),

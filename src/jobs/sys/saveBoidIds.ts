@@ -9,7 +9,7 @@ log.info("Got all Boid accounts:", allAccounts.length)
 const accountNames = allAccounts.map(el => el.boid_id.toString())
 let inserted = 0
 for (const boidId of accountNames) {
-  const exists = await db.boidAccount.findUnique({ where: { boidId } })
+  const exists = await db.boidAccount.findFirst({ where: { boidId } })
   if (!exists) {
     await db.boidAccount.create({ data: { boidId } })
     inserted++

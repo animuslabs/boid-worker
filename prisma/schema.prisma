@@ -52,11 +52,10 @@ model AccountAdd {
   sequence  BigInt   @unique
   trxId     String
   timeStamp DateTime
-
-  boid_id String
-  sponsor String?
-  owner   String?
-  key     String?
+  boid_id   String
+  sponsor   String?
+  owner     String?
+  key       String?
 
   @@index([boid_id])
   @@index([sponsor, timeStamp])

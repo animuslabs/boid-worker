@@ -1,5 +1,5 @@
 import { Action, GetDeltas } from "@proton/hyperion"
-import db from "lib/db"
+import db, { Prisma } from "lib/db"
 import { parseISOString } from "./utils"
 import config from "lib/env"
 import { getActions, hypClients } from "lib/hyp"
@@ -282,7 +282,7 @@ let skip:any = {
 }
 export async function getRecentActions(action:string, table:string) {
   //@ts-ignore
-  const existing = await db[table as any].findFirst({ orderBy: { timeStamp: "desc" } })
+  const existing = await db[table as Prisma.ModelName].findFirst({ orderBy: { timeStamp: "desc" } })
     .catch(async err => {
       log.error(err)
       log.error("critical Error, stopping")

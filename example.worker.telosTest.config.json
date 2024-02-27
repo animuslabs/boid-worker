@@ -2,15 +2,14 @@
   "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
   "apps": [
     {
-      "name": "boid-worker-fah-saveTeamMembers",
+      "name": "fah-saveMembers-telosTest",
       "cwd": "./dist",
       "script": "./jobs/fah/saveTeamMembers.js",
       "autorestart": false,
-      "cron_restart": "*/5 * * * *",
+      "cron_restart": "15 */3 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
@@ -18,15 +17,14 @@
       ]
     },
     {
-      "name": "boid-worker-fah-doReport",
+      "name": "fah-doReports-telosTest",
       "cwd": "./dist",
       "script": "./jobs/fah/doReports.js",
       "autorestart": false,
-      "cron_restart": "*/5 * * * *",
+      "cron_restart": "20 */2 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
@@ -34,15 +32,74 @@
       ]
     },
     {
-      "name": "boid-worker-sys-saveBoidIds",
+      "name": "wcg-saveMembers-telosTest",
+      "cwd": "./dist",
+      "script": "./jobs/wcg/saveMembers.js",
+      "autorestart": false,
+      "cron_restart": "15 */3 * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "wcg-doReports-telosTest",
+      "cwd": "./dist",
+      "script": "./jobs/wcg/doReports.js",
+      "autorestart": false,
+      "cron_restart": "20 */2 * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boinc-saveMembers-telosTest",
+      "cwd": "./dist",
+      "script": "./jobs/boinc/saveMembers.js",
+      "autorestart": false,
+      "cron_restart": "10 */3 * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boinc-doReports-telosTest",
+      "cwd": "./dist",
+      "script": "./jobs/boinc/doReports.js",
+      "autorestart": false,
+      "cron_restart": "15 */2 * * *",
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "sys-saveBoidIds-telosTest",
       "cwd": "./dist",
       "script": "./jobs/sys/saveBoidIds.js",
       "autorestart": false,
-      "cron_restart": "*/30 * * * *",
+      "cron_restart": "0 */1 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
         "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
@@ -50,55 +107,22 @@
       ]
     },
     {
-      "name": "boid-worker-pwr-slashAbsent",
-      "cwd": "./dist",
-      "script": "./jobs/pwr/slashAbsent.js",
-      "autorestart": false,
-      "cron_restart": "*/30 * * * *",
-      "env": {
-        "CHAIN": "telosTest",
-        "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--enable-source-maps"
-      },
-      "args": [
-        "--color"
-      ]
-    },
-    {
-      "name": "boid-worker-pwr-newRound",
-      "cwd": "./dist",
-      "script": "./jobs/pwr/newRound.js",
-      "autorestart": false,
-      "cron_restart": "*/30 * * * *",
-      "env": {
-        "CHAIN": "telosTest",
-        "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
-      },
-      "args": [
-        "--color"
-      ]
-    },
-    {
-      "name": "boid-worker-pwr-mergeReports",
+      "name": "pwr-mergeReports-telosTest",
       "cwd": "./dist",
       "script": "./jobs/pwr/mergeReports.js",
       "autorestart": false,
-      "cron_restart": "*/20 * * * *",
+      "cron_restart": "0 */3 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+        "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
         "--color"
       ]
     },
     {
-      "name": "boid-worker-pwr-cleanTables",
+      "name": "pwr-cleanTables-telosTest",
       "cwd": "./dist",
       "script": "./jobs/pwr/cleanTables.js",
       "autorestart": false,
@@ -107,55 +131,52 @@
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
         "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+        "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
         "--color"
       ]
     },
     {
-      "name": "boid-worker-pwr-handleOracleStats",
+      "name": "pwr-payoutOracles-telosTest",
       "cwd": "./dist",
-      "script": "./jobs/pwr/handleOracleStats.js",
+      "script": "./jobs/pwr/payoutOracles.js",
       "autorestart": false,
-      "cron_restart": "0 */1 * * *",
+      "cron_restart": "0 */12 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+        "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
         "--color"
       ]
     },
     {
-      "name": "boid-worker-pwr-finishReports",
+      "name": "pwr-finishReports-telosTest",
       "cwd": "./dist",
       "script": "./jobs/pwr/finishReports.js",
       "autorestart": false,
-      "cron_restart": "10 */1 * * *",
+      "cron_restart": "55 */3 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+        "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
         "--color"
       ]
     },
     {
-      "name": "boid-worker-sys-handleBoidAccounts",
+      "name": "sys-handleBoidAccounts-telosTest",
       "cwd": "./dist",
       "script": "./jobs/sys/handleBoidAccounts.js",
       "autorestart": false,
-      "cron_restart": "10 */1 * * *",
+      "cron_restart": "0 */3 * * *",
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--experimental-specifier-resolution=node --enable-source-maps"
+        "NODE_OPTIONS": "--enable-source-maps"
       },
       "args": [
         "--color"

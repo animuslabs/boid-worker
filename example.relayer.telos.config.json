@@ -2,10 +2,16 @@
   "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
   "apps": [
     {
-      "name": "boid-relayer",
+      "name": "relayer-server-telos",
       "cwd": "./dist",
       "script": "./servers/relayer.js",
       "autorestart": true,
+      "cron_restart": "0 0 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
       "args": [
         "--color"
       ]

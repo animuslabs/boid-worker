@@ -6,9 +6,11 @@ const log = logger.getLogger("boinc-saveMembers")
 
 const boincRows = await getBoincProtocols()
 for (let row of boincRows) {
-  const boinc = await new Boinc(row).init()
-  log.debug("Processing Protocol", toObject(row))
-  await boinc.saveMembers(await boinc.getMembers())
+  try {
+    const boinc = await new Boinc(row).init()
+    log.debug("Processing Protocol", toObject(row))
+    await boinc.saveMembers(await boinc.getMembers())
+  } catch (err) { log.error(err) }
 }
 
 process.exit(0)

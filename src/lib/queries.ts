@@ -1,7 +1,7 @@
 import { computeAction, getAllScopes, getFullTable, pickRpc, safeDo } from "./eosio"
 import * as sys from "lib/types/boid-contract-structure"
 import * as pwr from "./types/power.boid.types"
-import env from "./env"
+import env, { ChainsType } from "./env"
 import cacheManager from "cache-manager"
 import ax from "axios"
 import prisma from "lib/db"

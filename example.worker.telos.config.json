@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+  "apps": [
+    {
+      "name": "fah-saveMembers-telos",
+      "cwd": "./dist",
+      "script": "./jobs/fah/saveTeamMembers.js",
+      "autorestart": false,
+      "cron_restart": "15 */3 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "fah-doReports-telos",
+      "cwd": "./dist",
+      "script": "./jobs/fah/doReports.js",
+      "autorestart": false,
+      "cron_restart": "20 */2 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "wcg-saveMembers-telos",
+      "cwd": "./dist",
+      "script": "./jobs/wcg/saveMembers.js",
+      "autorestart": false,
+      "cron_restart": "15 */3 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "wcg-doReports-telos",
+      "cwd": "./dist",
+      "script": "./jobs/wcg/doReports.js",
+      "autorestart": false,
+      "cron_restart": "20 */2 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boinc-saveMembers-telos",
+      "cwd": "./dist",
+      "script": "./jobs/boinc/saveMembers.js",
+      "autorestart": false,
+      "cron_restart": "10 */3 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "boinc-doReports-telos",
+      "cwd": "./dist",
+      "script": "./jobs/boinc/doReports.js",
+      "autorestart": false,
+      "cron_restart": "15 */2 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "sys-saveBoidIds-telos",
+      "cwd": "./dist",
+      "script": "./jobs/sys/saveBoidIds.js",
+      "autorestart": false,
+      "cron_restart": "0 */1 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "pwr-mergeReports-telos",
+      "cwd": "./dist",
+      "script": "./jobs/pwr/mergeReports.js",
+      "autorestart": false,
+      "cron_restart": "0 */3 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "pwr-cleanTables-telos",
+      "cwd": "./dist",
+      "script": "./jobs/pwr/cleanTables.js",
+      "autorestart": false,
+      "cron_restart": "0 */12 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_NO_WARNINGS": "1",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "pwr-payoutOracles-telos",
+      "cwd": "./dist",
+      "script": "./jobs/pwr/payoutOracles.js",
+      "autorestart": false,
+      "cron_restart": "0 */12 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "pwr-finishReports-telos",
+      "cwd": "./dist",
+      "script": "./jobs/pwr/finishReports.js",
+      "autorestart": false,
+      "cron_restart": "55 */3 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    },
+    {
+      "name": "sys-handleBoidAccounts-telos",
+      "cwd": "./dist",
+      "script": "./jobs/sys/handleBoidAccounts.js",
+      "autorestart": false,
+      "cron_restart": "0 */3 * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    }
+  ]
+}
