@@ -27,6 +27,7 @@ interface eosioConfig {
   }, relayer?:{
     port:number
   },
+  dburl:string,
   history?:{
     hyperion:string[],
     injestChunkSize:number,
@@ -76,6 +77,7 @@ const typed:eosioConfig = {
         port: untyped.relayer.port
       }
     : undefined,
+  dburl: untyped.dburl,
   history: untyped.history
     ? {
         hyperion: untyped.history.hyperion,
