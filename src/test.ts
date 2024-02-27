@@ -1,5 +1,5 @@
 import { log } from "console"
-import { getOldestReport, getOldestRoundCommit, getPwrReport } from "lib/queries"
+import { getAllRoundCommits, getOldestReport, getOldestRoundCommit, getPwrReport } from "lib/queries"
 import { Types } from "lib/types/power.boid.types"
 import { getReportId, toObject } from "lib/utils"
 
@@ -38,7 +38,11 @@ import { getReportId, toObject } from "lib/utils"
 // console.log(toObject(result))
 // process.exit(0)
 
-const id = getReportId(Types.PwrReport.from({ "protocol_id": 0, "round": 54, "units": 54053 }))
-log(id.toString())
-const report = await getPwrReport("brandonr.oid", id)
-log(toObject(report))
+// const id = getReportId(Types.PwrReport.from({ "protocol_id": 0, "round": 54, "units": 54053 }))
+// log(id.toString())
+// const report = await getPwrReport("brandonr.oid", id)
+// log(toObject(report))
+
+
+const allCommits = await getAllRoundCommits("work1.animus", 64)
+log(toObject(allCommits))

@@ -12,7 +12,7 @@ export async function handleProtocol(protocol_id:number) {
   const previousRound = await getRoundData((await currentRound()) - 2)
   log.info("generating reports for round: ", reportingRound, "and protocol:", protocol_id)
   const allBoidUsers = (await dbQuery.getAllBoidUsers()).filter(el => el.boidId != "boid")
-  const allRoundCommits = await getAllRoundCommits(env.worker.account, reportingRound.round)
+  const allRoundCommits = (await getAllRoundCommits(env.worker.account, reportingRound.round))?.filter(el => el.protocol_id.toNumber() == protocol_id)
   const boidIds = allBoidUsers.map(el => el.boidId.toString())
   for (const boidId of boidIds) {
     let alreadyReported = false

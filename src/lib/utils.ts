@@ -165,12 +165,10 @@ export async function shouldFinishReport(report:Types.PwrReportRow):Promise<bool
   const reportingRound = parseInt(round.toString()) - 1
   log.debug("activeReportingRound:", reportingRound)
   const reportIsActiveReportingRound = report.report.round.toNumber() == reportingRound
-  const leewayPeriod = rndProgress < config.reports_accumulate_weight_round_pct.value
-  log.debug(reportIsActiveReportingRound, leewayPeriod)
-  if (!leewayPeriod) log.debug("too early in round to finish report")
-  if (reportIsActiveReportingRound && leewayPeriod) return false
-
-
+  const leewayPeriodPassed = rndProgress > config.reports_accumulate_weight_round_pct.value
+  log.debug(reportIsActiveReportingRound, leewayPeriodPassed)
+  if (!leewayPeriodPassed) log.debug("too early in round to finish report")
+  if (!reportIsActiveReportingRound || !leewayPeriodPassed) return false
   log.debug("has sufficient weight?:", report.approval_weight.toNumber() >= minApproval)
   log.debug(report.approval_weight.toNumber(), minApproval)
   if (report.approval_weight.toNumber() >= minApproval) return true
@@ -186,7 +184,9 @@ export async function shouldMergeReports(roundNum:number, reports:Types.PwrRepor
   log.debug("calculated min consensus weight: ", minApproval)
   const cumulativeWeight = reports.reduce((acc:number, el) => acc + el.approval_weight.toNumber(), 0)
   const rndProgress = round % parseInt(`${round}`)
-  const leewayPeriod = rndProgress < config.reports_accumulate_weight_round_pct.value
+  // console.log("rndProgress:", rndProgress)
+  // console.log("config min:", config.reports_accumulate_weight_round_pct.value)
+  const leewayPeriod = rndProgress > config.reports_accumulate_weight_round_pct.value
   if (!leewayPeriod) {
     log.debug("too early in round to finish report")
     return false

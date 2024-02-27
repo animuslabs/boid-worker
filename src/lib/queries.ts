@@ -83,10 +83,10 @@ export async function getRoundCommit(scope:NameType, boidId:Name, protocolId:num
   else return result.rows[0]
 }
 export async function getAllRoundCommits(scope:NameType, round:number):Promise<null|pwr.Types.RoundCommit[]> {
-  const params:API.v1.GetTableRowsParamsTyped = { scope, code: env.contracts.power, table: "roundcommit", limit: 100000, type: pwr.Types.RoundCommit, index_position: "secondary", lower_bound: UInt64.from(round) }
-  const result = await safeDo("get_table_rows", params) as API.v1.GetTableRowsResponse
+  const params:API.v1.GetTableRowsParamsTyped = { scope, code: env.contracts.power, table: "roundcommit", limit: 100000, type: pwr.Types.RoundCommit, lower_bound: UInt64.from(round), upper_bound: UInt64.from(round), index_position: "secondary" }
+  const result = await safeDo("get_table_rows", params) as API.v1.GetTableRowsResponse<pwr.Types.RoundCommit>
   if (!result || result.rows.length == 0) return null
-  else return result.rows[0]
+  else return result.rows
 }
 export async function getRoundCommitFromID(scope:Name, id:string):Promise<null|pwr.Types.RoundCommit> {
   const lower_bound = UInt128.from(id)
