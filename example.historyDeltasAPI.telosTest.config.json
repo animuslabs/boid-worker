@@ -2,50 +2,48 @@
   "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
   "apps": [
     {
-      "name": "history-loadSysActions-telosTest",
+      "name": "historyDeltas-accountsTableFill-telosTest",
       "cwd": "./dist",
-      "script": "./jobs/history/loadSysActions.js",
+      "script": "./util/accountsTableFill.js",
       "autorestart": true,
+      "cron_restart": "0 * * * *",
+      "args": [
+        "--color"
+      ],
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
         "NODE_OPTIONS": "--enable-source-maps"
-      },
-      "args": [
-        "--color"
-      ]
+      }
     },
     {
-      "name": "history-cleanOldRecords-telosTest",
+      "name": "historyDeltas-server-telosTest",
       "cwd": "./dist",
-      "script": "./jobs/history/cleanOldRecords.js",
-      "autorestart": false,
-      "cron_restart": "0 0 * * *",
+      "script": "./util/api/trpcAPI.js",
+      "autorestart": true,
+      "args": [
+        "--color"
+      ],
       "env": {
         "CHAIN": "telosTest",
         "LOGLEVEL": "DEBUG",
         "NODE_OPTIONS": "--enable-source-maps"
-      },
-      "args": [
-        "--color"
-      ]
+      }
     },
     {
-      "name": "history-server-telosTest",
+      "name": "historyDeltas-loadStateDeltas-telosTest",
       "cwd": "./dist",
-      "script": "./servers/history.js",
+      "script": "./jobs/history/loadStateDeltas.js",
       "autorestart": true,
-      "cron_restart": "0 0 * * *",
-      "env": {
-        "NODE_ENV": "production",
-        "CHAIN": "telosTest",
-        "LOGLEVEL": "DEBUG",
-        "NODE_NO_WARNINGS": "1",
-        "NODE_OPTIONS": "--enable-source-maps"
-      },
+      "cron_restart": "0 * * * *",
       "args": [
         "--color"
-      ]
+      ],
+      "env": {
+        "CHAIN": "telosTest",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      }
     }
   ]
 }
