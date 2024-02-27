@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+  "apps": [
+    {
+      "name": "server-proxy",
+      "cwd": "./dist",
+      "script": "./servers/proxy.js",
+      "autorestart": true,
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    }
+  ]
+}

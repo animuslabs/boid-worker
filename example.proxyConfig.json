@@ -1,0 +1,37 @@
+{
+  "maintainerEmail": "john@boid.com",
+  "proxies": [
+    {
+      "internal": [
+        "http://localhost:8017"
+      ],
+      "external": [
+        "testnet.relayer.boid.io"
+      ]
+    },
+    {
+      "internal": [
+        "http://localhost:8020"
+      ],
+      "external": [
+        "relayer.boid.io"
+      ]
+    },
+    {
+      "internal": [
+        "http://localhost:8021"
+      ],
+      "external": [
+        "history.boid.io"
+      ]
+    },
+    {
+      "internal": [
+        "http://localhost:8018"
+      ],
+      "external": [
+        "testnet.history.boid.io"
+      ]
+    }
+  ]
+}

@@ -22,7 +22,7 @@ yarn
 yarn prisma db push
 yarn build
 cp example.env.json .env.json
-cp example.ecosystem.config.json ecosystem.config.json
+cp example.relayer.telos.config.json relayer.telos.config.json
 ```
 
 Modify `.env.json` with your information about your worker node. Make sure the worker name, authority, key are correct. For the rpc nodes you can specify as many as you like and the scripts will automatically use them and if one fails will retry actions on another node. Additionally the script will push actions to up to 4 endpoints to reduce the chance of trx being lost.
@@ -81,7 +81,7 @@ replace YOUR_DOCKER_IP with your host ipaddress
 
 Note: this cannot be 127.0.0.1 or localhost as docker containers have no access to that.
 
-to build the container image and initialize the postgresql Database run the following command: 
+to build the container image and initialize the postgresql Database run the following command:
 
 ```sh
 
@@ -93,7 +93,7 @@ once the image is created you can start it with docker-compose
 
 ```sh
 
-docker-compose up 
+docker-compose up
 
 ```
 
@@ -139,8 +139,8 @@ When running the History API server, this is the internal port the history serve
 copy the history ecosystem file, customize it as you need and then run it with pm2.
 
 ```sh
-cp ./example.history.ecosystem.config.json ./history.ecosystem.config.json
-pm2 start ./history.ecosystem.config.json
+cp ./example.history.telos.config.json ./history.telos.config.json
+pm2 start ./history.telos.config.json
 ```
 
 The file runs three services by default:
@@ -157,7 +157,7 @@ node ./util/backfillSysActions.js
 ```
 
 While this script is running you can browse the database to see data being loaded
-This requires localhost access to port 5001 , so not an option on VPS
+This opens on port 5001, use ssh tunnel to access locally.
 
 ```sh
 yarn prisma studio
@@ -198,32 +198,20 @@ To run it use pm2 and example.historyDeltasAPI.ecosystem.config.json file
 cp ./example.historyDeltasAPI.ecosystem.config.json ./historyDeltasAPI.ecosystem.config.json
 pm2 start ./historyDeltasAPI.ecosystem.config.json
 ```
-you can edit the port that this API uses in .env file  
+you can edit the port that this API uses in .env file
 default settings: TRPC_API_PORT=3001
 
 ## Relayer
-To run a relayer you need to have a local running IPFS node with port 5001 (the admin port) available and configured in the ipfs section of the .env.json file. Additoionally it's higly suggested you expose the ipfs public gateway (8080) port so that users could use it in the Boid application. The ipfs gatway can be entered into the proxy section of the config if you are using the built in proxy server or you could use your own firewall solution.
-
-We recommend using Kubo's ipfs , its a single golang binary you need to install in /usr/local/bin , you can find systemd scripts for it in the config folder
-<https://github.com/ipfs/kubo/releases/download/v0.17.0/kubo_v0.17.0_linux-amd64.tar.gz>
-Warning: DO NOT EXPOSE the RPC port (e.g. 5001) of ipfs to the internet !!
-
-In addition make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain
+Make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain. Your configured worker account will need to have staked CPU/NET to handle relayed transactions.
 
 ```sh
-cp ./example.relayer.ecosystem.config.json ./relayer.ecosystem.config.json
-pm2 start ./relayer.ecosystem.config.json
+cp ./example.relayer.telos.config.json ./relayer.telos.config.json
+pm2 start ./relayer.telos.config.json
 ```
 
-## Pintastic
-To run automatic pinning for all Boid NFTs IPFS Collections you can run the Pintastic service
-
-example.pintastic.ecosystem.config.json
-
-in the index.ts file located in jobs/ipfspinning
-you can edit at what intervals the data will be checked from chains (EOS, WAX, TelosTestnet) and pinned to your local IPFS node/nodes.
-
-In links.ts there is a const IPFSnodes where you can edit your internal node setup.
-In collectionsEOS, collectionsTelos and collectionsWAX you can add AtomicHub Collections that you may want to pin in addtion to offical Boid ones.
-More than 1 BoidTeam Info Pinnnig is still under dev.
-In the const endpoints you can change which API endpoints you want to use for this service.
+## Proxy Server
+This is an optional component to setup a simple https proxy in cases where you are not using nginx etc. You can specify an array of internal ports and external domains those ports should be mapped to. The proxy server automatically gets and renews ssl certs. Make sure your dns settings are correct before starting the proxy.
+```sh
+cp ./example.proxy.config.json ./proxy.config.json
+cp ./example.proxyConfig.json ./proxyConfig.json
+```
