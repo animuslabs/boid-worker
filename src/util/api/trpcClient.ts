@@ -39,23 +39,6 @@ const trpc = createTRPCProxyClient<AppRouter>({
 // }  
 
 
-// CHECK AGAIN DOESNT LOOK GOOD
-async function fetchPwrClaim(boid_id) {
-  const fromDate = "2023-10-25T00:00:00.000Z"
-  const toDate = "2023-10-31T00:00:00.000Z"
-  
-  try {
-    const queryParameters:any = { from: fromDate, to: toDate }
-    if (boid_id) {
-      queryParameters.boid_id = boid_id
-    }
-    const data = await trpc.GetLogPwrClaim.query(queryParameters)
-    console.log("All Deltas:", data)
-  } catch (error) {
-    console.error("Error fetching data:", error)
-  }
-}
-
 // async function fetchCombinedData(boid_id) {
 //   const fromDate = "2023-10-15T00:00:00.000Z"
 //   const toDate = "2023-10-31T23:59:59.000Z"
@@ -118,10 +101,35 @@ async function fetchPwrClaim(boid_id) {
 //   }
 // }
 
-const boid_id = "boidis.cool"
+async function fetchPowerReports(round?:number, boid_id?:string, protocol_id?:number) {
+  try {
+    const queryParameters:any = { round }
+    if (boid_id) {
+      queryParameters.boid_id = boid_id
+    }
+    if (protocol_id) {
+      queryParameters.protocol_id = protocol_id
+    }
+    if (round) {
+      queryParameters.round = round
+    }
+    const data = await trpc.GetPowerReports.query(queryParameters)
+    console.log("Power Reports:", data)
+  } catch (error) {
+    console.error("Error fetching data:", error)
+  }
+}
+
+
+const boid_id = "seth.voice"
 // fetchperBoidID(boid_id)
 // fetchperBoidID("")
 // fetchPwrClaim(boid_id)
 // fetchCombinedData(boid_id)
 // fetchGlobalDeltas()
 // await fetchCalculatorData()
+
+
+const protocol_id = 1
+const round = 130
+await fetchPowerReports(round)

@@ -1,5 +1,5 @@
 import db from "lib/db"
-import { RequestQueryParams, AccountsDeltaData, PwrClaimData, AccountResponse, RequestParams, GlobalDeltaResponse, FahDataResponse, FahDataResTimeStamp, CombinedResponse } from "./api4DeltasTypes"
+import { RequestQueryParams, ReqQueryReport, AccountsDeltaData, PwrClaimData, AccountResponse, RequestParams, GlobalDeltaResponse, FahDataResponse, FahDataResTimeStamp, CombinedResponse } from "./api4DeltasTypes"
 
 // get a list of boidids from the db
 export async function getBoidIDs():Promise<string[]> {
@@ -213,13 +213,60 @@ export async function getCombinedData(queryParams:RequestQueryParams):Promise<Co
   }
 }
 
+// returns data from ReportSent table from the db | this shows entries for chosen boid_id
+export async function getReportSentData(queryParams:ReqQueryReport) {
+  // Initialize the where object with conditions that are always applied
+  const whereCondition:any = {
+    target_boid_id: queryParams.boid_id ? { equals: queryParams.boid_id } : undefined,
+    report_protocol_id: queryParams.protocol_id ? { equals: queryParams.protocol_id } : undefined,
+    report_round: queryParams.round ? { equals: queryParams.round } : undefined
+  }
+  
+  // Conditionally add the timeStamp condition if both from and to are provided
+  if (queryParams.from && queryParams.to) {
+    whereCondition.timeStamp = {
+      gte: queryParams.from,
+      lte: queryParams.to
+    }
+  }
+  const sentReportsData = await db.reportSent.findMany({
+    where: {
+      target_boid_id: queryParams.boid_id ? { equals: queryParams.boid_id } : undefined,
+      timeStamp: {
+        gte: queryParams.from,
+        lte: queryParams.to
+      },
+      report_protocol_id: queryParams.protocol_id ? { equals: queryParams.protocol_id } : undefined,
+      report_round: queryParams.round ? { equals: queryParams.round } : undefined
+    },
+    select: {
+      timeStamp: true,
+      target_boid_id: true,
+      adding_power: true,
+      report_approvals: false,
+      report_approval_weight: true,
+      report_protocol_id: true,
+      report_round: true,
+      report_units: false
+    }
+  })
 
-
-const queryParams:RequestQueryParams = {
-  boid_id: "seth.voice",
-  from: new Date("2023-04-25T00:00:00.000Z"),
-  to: new Date("2023-04-29T00:00:00.000Z")
+  return sentReportsData.map((data) => ({
+    timeStamp: data.timeStamp,
+    boid_id: data.target_boid_id,
+    added_power: Number(data.adding_power),
+    approval_weight: Number(data.report_approval_weight),
+    protocol_id: data.report_protocol_id,
+    round: data.report_round
+  }))
 }
+
+
+// const queryParams:RequestQueryParams = {
+//   boid_id: "seth.voice",
+//   from: new Date("2023-04-25T00:00:00.000Z"),
+//   to: new Date("2023-04-29T00:00:00.000Z")
+// }
 
 // console.log(await getCombinedData(queryParams))
 // console.log(await getBoidIDs())
@@ -228,3 +275,13 @@ const queryParams:RequestQueryParams = {
 // console.log(await getAccountData(queryParams))
 // console.log(await getGlobalDeltaData(queryParams))
 // console.log(await getFahData(queryParams))
+
+
+// const queryParams:ReqQueryReport = {
+//   boid_id: "seth.voice",
+//   // from: new Date("2023-03-25T00:00:00.000Z"),
+//   // to: new Date("2025-04-06T00:00:00.000Z"),
+//   protocol_id: 1
+//   // round: 120
+// }
+// console.log(await getReportSentData(queryParams))

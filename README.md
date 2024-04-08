@@ -149,11 +149,11 @@ The file runs three services by default:
 - `cleanOldRecords.js`: Runs daily to cleanup old history data.
 - `history.js`:the history api, enables users to query your history data, configure the port to expose externally
 
-The `loadsysActions` job only pulls the past 24 hours of history data when you first run it, to backfill all history data (up to your configured limit) You need to manually run the `backfillSysActions` script. The script only needs to be run once during initial setup. If you node goes offline for an extended period but still retains the history data in your database then the `loadSysActions` script will automatically grab all the actions that happened while you were offline until it is back in sync.
+The `loadsysActions` job only pulls the past 24 hours of history data when you first run it, to backfill all history data (up to your configured limit) You need to manually run the `backfillActions` script. The script only needs to be run once during initial setup. If you node goes offline for an extended period but still retains the history data in your database then the `loadSysActions` script will automatically grab all the actions that happened while you were offline until it is back in sync.
 
 ```sh
 cd dist
-node ./util/backfillSysActions.js
+node ./util/backfillActions.js
 ```
 
 While this script is running you can browse the database to see data being loaded
@@ -167,7 +167,7 @@ When the script finishes that means all history data is loaded into your DB up t
 
 ### History Advanced
 
-The `backfillSysActions` script loads data backwards and `loadSysActions` loads data forwards. Under normal circumstaces you should have a full history, but in cases where there is holes in your data, like from getting bad data from a hyperion node, or database errors, you can manually pull actions within an arbitrary time range using the `util/fillRangeSysActions` script.
+The `backfillSysActions` script loads data backwards and `loadSysActions` loads data forwards. Under normal circumstaces you should have a full history, but in cases where there is holes in your data, like from getting bad data from a hyperion node, or database errors, you can manually pull actions within an arbitrary time range using the `util/fillRangeActions` script.
 
 This script is meant to be run manually, it will download all actions in a range and then place them in the DB overwriting any existing records.
 
@@ -198,8 +198,7 @@ To run it use pm2 and example.historyDeltasAPI.ecosystem.config.json file
 cp ./example.historyDeltasAPI.ecosystem.config.json ./historyDeltasAPI.ecosystem.config.json
 pm2 start ./historyDeltasAPI.ecosystem.config.json
 ```
-you can edit the port that this API uses in .env file
-default settings: TRPC_API_PORT=3001
+you can edit the port that this API uses in .env.json file
 
 ## Relayer
 Make sure to have relayer port setup in .env.json and firewall configured properly to allow connections from outside, including your dns / domain. Your configured worker account will need to have staked CPU/NET to handle relayed transactions.

@@ -8,9 +8,8 @@ const config = getConfig()
 const log = Logger.getLogger("hyp")
 if (!config.history?.hyperion || config.history.hyperion.length == 0) throw (new Error("must configure at least one hyperion endpoint in .env.json"))
 export const hypClients = config.history.hyperion.map(el => new JsonRpc(el))
-const sysContract = config.contracts.system.toString()
 
-export async function getActions(params:any, account = sysContract, retry = 0):Promise<null | GetActions<any>> {
+export async function getActions(params:any, account:string, retry = 0):Promise<null | GetActions<any>> {
   if (retry > 5) {
     log.error("too many hyperion errors: " + JSON.stringify(params, params))
     return null
@@ -26,7 +25,7 @@ export async function getActions(params:any, account = sysContract, retry = 0):P
   }
 }
 
-export async function getDeltas(params:any, account = sysContract, retry = 0):Promise<null | GetDeltas<any>> {
+export async function getDeltas(params:any, account:string, retry = 0):Promise<null | GetDeltas<any>> {
   if (retry > 5) {
     log.error("too many hyperion errors: " + JSON.stringify(params, params))
     return null
@@ -51,7 +50,7 @@ export async function getDeltas(params:any, account = sysContract, retry = 0):Pr
 }
 
 
-export async function getActionsRange(before:Date, after:Date, action:string, account:string = sysContract) {
+export async function getActionsRange(before:Date, after:Date, action:string, account:string) {
   log.info("getting actions in range from:", after.toISOString(), "to:", before.toISOString())
   await sleep(ms("3s"))
   const limit = config.history?.injestChunkSize || 500
@@ -69,7 +68,7 @@ export async function getActionsRange(before:Date, after:Date, action:string, ac
   async function loopGetActions() {
     console.log("saved actions:", Object.keys(actions).length)
     log.info(params)
-    const result = await getActions(params)
+    const result = await getActions(params, account)
     if (!result) throw (new Error("hyperion query error"))
     if (result.actions.length == 0) return
     result.actions.forEach(el => actions[el.global_sequence.toString()] = el)

@@ -2,7 +2,7 @@ import db, { Prisma } from "lib/db"
 import * as z from "zod"
 import { route } from "../trpc"
 import Logger from "lib/logger"
-import { getTableFromAction } from "lib/injest"
+import { getTableFromAction, actionMap } from "lib/injest"
 import ms from "ms"
 import { parseISOString, removeDuplicates, toObject } from "lib/utils"
 import { caching } from "cache-manager"
@@ -45,7 +45,7 @@ export const actions = route
       let sort:Prisma.SortOrder = "desc"
       if (input.sort == "desc" || input.sort == "asc") sort = input.sort
       for (const action of removeDuplicates(input.actions)) {
-        const table = getTableFromAction(action)
+        const table = getTableFromAction(action, actionMap)
         let results:any[] = []
         if (table == "internalXfer" && input.filter?.boid_id) {
           let customWhere = JSON.parse(JSON.stringify(where))

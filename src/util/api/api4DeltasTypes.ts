@@ -26,6 +26,13 @@ export interface RequestQueryParams {
     to:Date;
     boid_id?:string;
   }
+export interface ReqQueryReport {
+    from?:Date;
+    to?:Date;
+    boid_id?:string;
+    protocol_id?:number;
+    round?:number;
+  }
 export interface MintTotalByDate {
     date:string;
     total:number;

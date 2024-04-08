@@ -1,21 +1,19 @@
-import { Action, GetDeltas } from "@proton/hyperion"
+import { Action } from "@proton/hyperion"
 import db, { Prisma } from "lib/db"
 import { parseISOString } from "./utils"
 import getConfig from "lib/config"
-import { getActions, hypClients } from "lib/hyp"
+import { getActions } from "lib/hyp"
 import ms from "ms"
 import Logger from "lib/logger"
 const config = getConfig()
 const log = Logger.getLogger("injest")
-const sysContract = config.contracts.system.toString()
-
 
 
 type DBKeys = keyof Partial<typeof db>
 export type ActionMapType = Partial<Record<DBKeys, string>>
 
-export function getTableFromAction(actionName:string):string {
-  const val = Object.entries(actionMap).find(([key, value]) => value == actionName)
+export function getTableFromAction(actionName:string, actionsMap:{ [key:string]:string}):string {
+  const val = Object.entries(actionsMap).find(([key, value]) => value == actionName)
   if (!val) throw (new Error("invalid action name"))
   else return val[0]
 }
@@ -39,8 +37,8 @@ export const actionMap:ActionMapType = {
   offerClaim: "offer.claim",
   ownerAdd: "owner.add",
   ownerRm: "owner.rm",
-  pwrModAdd: "pwrmod.add",
-  pwrModRm: "pwrmod.rm",
+  boosterAdd: "booster.add",
+  boosterRm: "booster.rm",
   stake: "stake",
   stakeDeleg: "stake.deleg",
   teamChange: "team.change",
@@ -49,6 +47,14 @@ export const actionMap:ActionMapType = {
   unstakeEnd: "unstake.end",
   withdraw: "withdraw",
   unstakeDeleg: "unstke.deleg"
+}
+
+export const actionMapPower:ActionMapType = {
+  reportSent: "reportsent",
+  finishReport: "finishreport",
+  mergeReports: "mergereports",
+  pwrReport: "pwrreport",
+  payOracle: "payoracle"
 }
 
 const sys = {
@@ -216,7 +222,7 @@ const sys = {
   async ownerRm(action:Action<any>) {
     return basicInjest("ownerRm", action)
   },
-  async pwrModAdd(action:Action<any>) {
+  async boosterAdd(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
       // log.info("injestData:", data)
@@ -224,22 +230,81 @@ const sys = {
 
       const params = {
         boid_id: data.boid_id,
-        mod_id: data.mod_id
+        booster_id: data.booster_id
       }
-      await addRow("pwrModAdd", action, params)
+      await addRow("boosterAdd", action, params)
     } catch (error) {
       log.error(error)
     }
   },
-  async pwrModRm(action:Action<any>) {
+  async boosterRm(action:Action<any>) {
     try {
       const data = action.act.data.data || action.act.data
-      // log.info(data)
+      log.info("boosterRm data: ", data)
       const params = {
         boid_id: data.boid_id,
-        pwrmod_index: JSON.stringify(data.pwrmod_index)
+        booster_index: data.pwrmod_index
       }
-      await addRow("pwrModRm", action, params)
+      await addRow("boosterRm", action, params)
+    } catch (error) {
+      log.error(error)
+    }
+  },
+  async reportSent(action:Action<any>) {
+    try {
+      const data = action.act.data.data || action.act.data
+      log.info("reportsent data: ", data)
+      const params = {
+        report_approval_weight: data.report.approval_weight,
+        report_approvals: data.report.approvals,
+        report_proposer: data.report.proposer,
+        report_protocol_id: data.report.report.protocol_id,
+        report_round: data.report.report.round,
+        report_units: data.report.report.units,
+        adding_power: data.adding_power,
+        target_boid_id: data.target_boid_id
+      }
+      await addRow("reportSent", action, params)
+    } catch (error) {
+      log.error(error)
+    }
+  },
+  async finishReport(action:Action<any>) {
+    return basicInjest("finishReport", action)
+  },
+  async mergeReports(action:Action<any>) {
+    return basicInjest("mergeReports", action)
+  },
+  async pwrReport(action:Action<any>) {
+    try {
+      const data = action.act.data.data || action.act.data
+      log.info("pwrReport data: ", data)
+      const params = {
+        boid_id_scope: data.boid_id_scope,
+        oracle: data.oracle,
+        report_protocol_id: data.report.protocol_id,
+        report_round: data.report.round,
+        report_units: data.report.units
+      }
+      await addRow("pwrReport", action, params)
+    } catch (error) {
+      log.error(error)
+    }
+  },
+  async payOracle(action:Action<any>) {
+    try {
+      const data = action.act.data.data || action.act.data
+      log.info("payOracle data: ", data)
+      const params = {
+        oracle: data.oracle,
+        basePay: data.basePay,
+        bonusPay: data.bonusPay,
+        round: data.round,
+        reports_proposed: data.reports.proposed,
+        reports_reported_or_merged: data.reports.reported_or_merged,
+        reports_unreported_unmerged: data.reports.unreported_unmerged
+      }
+      await addRow("payOracle", action, params)
     } catch (error) {
       log.error(error)
     }
@@ -278,52 +343,59 @@ export async function addRow(table:keyof ActionMapType, action:Action<any>, para
 }
 
 
-let skip:any = {
+let skip:any = {}
 
-}
-export async function getRecentActions(action:string, table:string) {
-  //@ts-ignore
-  const existing = await db[table as Prisma.ModelName].findFirst({ orderBy: { timeStamp: "desc" } })
-    .catch(async err => {
-      log.error(err)
-      log.error("critical Error, stopping")
-      await db.$disconnect()
-      process.kill(process.pid, "SIGHUP")
-    })
-  // const existing = await db.logPwrAdd.findFirst({ orderBy: { timeStamp: "desc" } })
-  let after = new Date(Date.now() - ms("24h")).toISOString()
-  if (existing) {
-    after = existing.timeStamp.toISOString()
-    if (after == skip[table]) {
-      const milli = existing.timeStamp.getUTCMilliseconds()
-      existing.timeStamp.setUTCMilliseconds(milli + 1)
-      after = existing.timeStamp.toISOString()
+export async function getRecentActions(action:string, table:string, contract:string) {
+  try {
+    if (!sys[table]) {
+      throw new Error(`Function for table '${table}' not found in sys.`)
     }
-  }
-  // const afterSeq = existing?.timeStamp.toISOString()
-  const params:any = {
-    "act.name": action,
-    "act.account": sysContract,
-    limit: config.history?.injestChunkSize || 500,
-    sort: "asc"
-  }
-  if (after) params.after = after
-  // if (afterSeq) params.filter = "global_sequence=" + existing.sequence
-  // log.info(params)
-  const result = await getActions(params)
-  if (!result) return
-  log.info("results", result.actions.length)
-  log.info("query results total:", result.total.value)
-  log.info("actions returned:", result.actions.length)
-  if (result.actions.length > 0) {
-    log.info("first seq", result.actions[0].global_sequence, result.actions[0]["@timestamp"])
-    log.info("last seq", result.actions[result.actions.length - 1].global_sequence, result.actions[result.actions.length - 1]["@timestamp"])
-  }
 
-  for (const act of result.actions) {
-    await sys[table](act)
+    const existing = await db[table as Prisma.ModelName].findFirst({ orderBy: { timeStamp: "desc" } })
+    let after = new Date(Date.now() - ms("24h")).toISOString()
+
+    if (existing) {
+      after = existing.timeStamp.toISOString()
+      if (after === skip[table]) {
+        const milli = existing.timeStamp.getUTCMilliseconds()
+        existing.timeStamp.setUTCMilliseconds(milli + 1)
+        after = existing.timeStamp.toISOString()
+      }
+    }
+
+    const params:any = {
+      "act.name": action,
+      "act.account": contract,
+      limit: config.history?.injestChunkSize || 500,
+      sort: "asc"
+    }
+
+    if (after) params.after = after
+
+    const result = await getActions(params, contract)
+
+    if (!result || !result.actions) return
+
+    log.info("Results:", result.actions.length)
+    log.info("Query results total:", result.total.value)
+    log.info("Actions returned:", result.actions.length)
+
+    if (result.actions.length > 0) {
+      log.info("First seq:", result.actions[0].global_sequence, result.actions[0]["@timestamp"])
+      log.info("Last seq:", result.actions[result.actions.length - 1].global_sequence, result.actions[result.actions.length - 1]["@timestamp"])
+    }
+
+    for (const act of result.actions) {
+      await sys[table](act)
+    }
+
+    if (result.actions.length > 0 && result.actions.length < (config.history?.injestChunkSize || 500)) {
+      skip[table] = after
+    }
+  } catch (error) {
+    log.error("Error in getRecentActions:", error)
   }
-  if (result.actions.length > 0 && result.actions.length < (config.history?.injestChunkSize || 500)) skip[table] = after
 }
+
 
 export default { sys }

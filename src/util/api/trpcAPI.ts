@@ -1,20 +1,22 @@
 import * as dotenv from "dotenv"
+import getConfig from "lib/config"
 import t from "servers/trpc"
 import cors from "cors"
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import express from "express"
 import { z } from "zod"
-import { getAllAccountsDeltas, getBoidIDs, getLogPwrClaimData, getCombinedData, getGlobalDeltaData } from "./api4DeltasFunctions"
-import { RequestQueryParams } from "./api4DeltasTypes"
+import { getAllAccountsDeltas, getBoidIDs, getLogPwrClaimData, getCombinedData, getGlobalDeltaData, getReportSentData } from "./api4DeltasFunctions"
+import { RequestQueryParams, ReqQueryReport } from "./api4DeltasTypes"
 import { accountCalculator } from "lib/calculator/calculator"
 import { aggregateBoidData } from "lib/calculator/antelope"
 import { toObject } from "lib/utils"
 import { calculateAveragesAndTotal } from "lib/calculator/userAverage"
 
+const config = getConfig()
 process.env.TZ = "Etc/UTC"
 dotenv.config()
 
-const apiport = process.env.TRPC_API_PORT
+const apiport = config.historyDeltasAPI?.port
 const app = express()
 app.use(cors())
 app.use(express.json())
@@ -23,6 +25,14 @@ const publicProcedure = t.procedure
 const inputSchema = z.object({
   from: z.string(),
   to: z.string()
+})
+
+const inputReport = z.object({
+  from: z.string().optional(),
+  to: z.string().optional(),
+  protocol_id: z.number().optional(),
+  round: z.number().optional(),
+  boid_id: z.string().optional()
 })
 
 const extInputSchema = inputSchema.extend({
@@ -135,6 +145,22 @@ const appRouter = t.router({
       const tokenInfo = await aggregateBoidData()
       const avTotals = await calculateAveragesAndTotal()
       return { tokenInfo, avTotals }
+    }),
+  /* *** GetPowerReports provides data about finalizing power reports per protocol *** */
+  GetPowerReports: publicProcedure
+    .input(inputReport)
+    .query(async(input) => {
+    // Create queryParams object that matches ReqQueryReport interface
+      const queryParams:ReqQueryReport = {
+        from: input.input.from ? new Date(input.input.from) : undefined,
+        to: input.input.to ? new Date(input.input.to) : undefined,
+        protocol_id: input.input.protocol_id,
+        round: input.input.round,
+        boid_id: input.input.boid_id
+      }
+
+      const powerReports = await getReportSentData(queryParams)
+      return powerReports
     })
 })
 

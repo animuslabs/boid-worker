@@ -6,7 +6,6 @@ import { getDeltas } from "lib/hyp"
 import { parseISOString } from "lib/utils"
 const config = getConfig()
 const log = Logger.getLogger("deltas")
-const sysContract = config.contracts.system.toString()
 
 interface Delta<T> {
     timestamp:string;
@@ -86,7 +85,7 @@ export const deltas = {
 let skip:any = {
 
 }
-export async function loadDeltas(direction:"forwards"|"backwards", tableName:keyof typeof deltas, code = sysContract, scope = sysContract) {
+export async function loadDeltas(direction:"forwards"|"backwards", tableName:keyof typeof deltas, code:string, scope:string, contract:string) {
   const dbTable = tableName + "Delta"
   //@ts-ignore
   const existing = await db[dbTable as any].findFirst({ orderBy: { timeStamp: direction == "forwards" ? "desc" : "asc" } })
@@ -123,7 +122,7 @@ export async function loadDeltas(direction:"forwards"|"backwards", tableName:key
     before: before.toISOString()
   }
   log.info(params)
-  const result = await getDeltas(params)
+  const result = await getDeltas(params, contract)
   if (!result) return
   log.info("results", result.deltas.length)
   log.info("actions returned:", result.deltas.length)

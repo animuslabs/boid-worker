@@ -298,26 +298,26 @@ model OwnerRm {
   @@index([timeStamp])
 }
 
-model PwrModAdd {
+model BoosterAdd {
   sequence  BigInt   @unique
   trxId     String
   timeStamp DateTime
 
   boid_id String
-  mod_id  Int
+  booster_id  Int
 
-  @@index([mod_id])
+  @@index([booster_id])
   @@index([boid_id, timeStamp])
   @@index([timeStamp])
 }
 
-model PwrModRm {
+model BoosterRm {
   sequence  BigInt   @unique
   trxId     String
   timeStamp DateTime
 
   boid_id      String
-  pwrmod_index String
+  booster_index Int[]
 
   @@index([boid_id, timeStamp])
   @@index([timeStamp])
@@ -459,3 +459,87 @@ model AccountsTable {
   @@index([boid_id, timeStamp])
   @@index([timeStamp])
 }
+
+model ReportSent {
+  sequence                   BigInt   @id @unique
+  timeStamp DateTime
+  trxId     String
+  
+  report_proposer String
+  
+  report_protocol_id Int
+  report_round Int
+  report_units Int
+  
+  report_approvals       String[]
+  report_approval_weight Int
+
+  target_boid_id   String
+  adding_power     Int
+  
+  
+
+
+  @@index([report_proposer, timeStamp])
+  @@index([target_boid_id, timeStamp])
+  @@index([timeStamp])
+}
+
+model FinishReport {
+  sequence                   BigInt   @id @unique
+  timeStamp DateTime
+  trxId     String
+  
+  boid_id_scope String
+  pwrreport_id BigInt
+
+  @@index([boid_id_scope, timeStamp])
+  @@index([timeStamp])
+ }
+
+model MergeReports { 
+  sequence                   BigInt   @id @unique
+  timeStamp DateTime
+  trxId     String
+
+  boid_id_scope String
+  pwrreport_ids BigInt[]
+
+  @@index([boid_id_scope, timeStamp])
+  @@index([timeStamp])
+}
+
+model PwrReport { 
+  sequence                   BigInt   @id @unique
+  timeStamp DateTime
+  trxId     String
+
+  boid_id_scope String
+  oracle String
+  report_protocol_id Int
+  report_round Int
+  report_units Int
+
+  @@index([boid_id_scope, timeStamp])
+  @@index([oracle, timeStamp])
+  @@index([timeStamp])
+}
+
+model PayOracle {
+  sequence                    BigInt   @id @unique
+  timeStamp DateTime
+  trxId     String
+
+  oracle String
+  basePay Int
+  bonusPay Int
+  round Int
+  
+  reports_proposed Int
+  reports_reported_or_merged Int
+  reports_unreported_unmerged Int
+
+  @@index([round, timeStamp])
+  @@index([oracle, timeStamp])
+  @@index([timeStamp])
+ }

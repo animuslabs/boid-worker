@@ -31,12 +31,12 @@
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^2.0.19",
-    "prisma": "^5.9.1",
+    "prisma": "^5.12.1",
     "tsc-alias": "^1.7.0",
     "typescript": "*"
   },
   "dependencies": {
-    "@prisma/client": "^5.9.1",
+    "@prisma/client": "^5.12.1",
     "@proton/hyperion": "^3.4.0",
     "@proton/vert": "^0.3.24",
     "@trpc/client": "^10.42.0",
@@ -73,7 +73,6 @@
     "multiformats": "^11.0.0",
     "node-fetch": "^3.2.10",
     "node-mailjet": "^6.0.0",
-    "prisma-client": "^0.0.0",
     "swagger-ui-express": "^4.6.2",
     "tozod": "^3.0.0",
     "trpc-openapi": "^1.1.0",
