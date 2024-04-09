@@ -1,4 +1,3 @@
-import * as dotenv from "dotenv"
 import getConfig from "lib/config"
 import t from "servers/trpc"
 import cors from "cors"
@@ -14,7 +13,6 @@ import { calculateAveragesAndTotal } from "lib/calculator/userAverage"
 
 const config = getConfig()
 process.env.TZ = "Etc/UTC"
-dotenv.config()
 
 const apiport = config.historyDeltasAPI?.port
 const app = express()
