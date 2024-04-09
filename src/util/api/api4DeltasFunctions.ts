@@ -1,5 +1,9 @@
 import db from "lib/db"
-import { RequestQueryParams, ReqQueryReport, AccountsDeltaData, PwrClaimData, AccountResponse, RequestParams, GlobalDeltaResponse, FahDataResponse, FahDataResTimeStamp, CombinedResponse } from "./api4DeltasTypes"
+import { 
+  RequestQueryParams, ReqQueryReport,
+  ReqQueryOracle, AccountsDeltaData, PwrClaimData, AccountResponse, RequestParams, PowerReportResponse,
+  GlobalDeltaResponse, FahDataResponse, FahDataResTimeStamp, CombinedResponse, SentReportsResponse, OraclePayResponse 
+} from "./api4DeltasTypes"
 
 // get a list of boidids from the db
 export async function getBoidIDs():Promise<string[]> {
@@ -214,21 +218,7 @@ export async function getCombinedData(queryParams:RequestQueryParams):Promise<Co
 }
 
 // returns data from ReportSent table from the db | this shows entries for chosen boid_id
-export async function getReportSentData(queryParams:ReqQueryReport) {
-  // Initialize the where object with conditions that are always applied
-  const whereCondition:any = {
-    target_boid_id: queryParams.boid_id ? { equals: queryParams.boid_id } : undefined,
-    report_protocol_id: queryParams.protocol_id ? { equals: queryParams.protocol_id } : undefined,
-    report_round: queryParams.round ? { equals: queryParams.round } : undefined
-  }
-  
-  // Conditionally add the timeStamp condition if both from and to are provided
-  if (queryParams.from && queryParams.to) {
-    whereCondition.timeStamp = {
-      gte: queryParams.from,
-      lte: queryParams.to
-    }
-  }
+export async function getReportSentData(queryParams:ReqQueryReport):Promise<SentReportsResponse[]> {
   const sentReportsData = await db.reportSent.findMany({
     where: {
       target_boid_id: queryParams.boid_id ? { equals: queryParams.boid_id } : undefined,
@@ -261,27 +251,71 @@ export async function getReportSentData(queryParams:ReqQueryReport) {
   }))
 }
 
+// returns PayOracle table from the db | choose by oracle, round
+export async function getPayOracleData(queryParams:ReqQueryOracle):Promise<OraclePayResponse[]> {
+  const payOracleData = await db.payOracle.findMany({
+    where: {
+      timeStamp: {
+        gte: queryParams.from,
+        lte: queryParams.to
+      },
+      oracle: queryParams.oracle ? { equals: queryParams.oracle } : undefined,
+      round: queryParams.round ? { equals: queryParams.round } : undefined
+    },
+    select: {
+      timeStamp: true,
+      basePay: true,
+      bonusPay: true,
+      oracle: true,
+      reports_proposed: true,
+      reports_unreported_unmerged: true,
+      round: true,
+      sequence: false,
+      reports_reported_or_merged: true
+    }
+  })
 
-// const queryParams:RequestQueryParams = {
-//   boid_id: "seth.voice",
-//   from: new Date("2023-04-25T00:00:00.000Z"),
-//   to: new Date("2023-04-29T00:00:00.000Z")
-// }
+  return payOracleData.map((data) => ({
+    timeStamp: data.timeStamp,
+    basePay: Number(data.basePay),
+    bonusPay: Number(data.bonusPay),
+    oracle: data.oracle,
+    reports_proposed: Number(data.reports_proposed),
+    reports_unreported_unmerged: Number(data.reports_unreported_unmerged),
+    round: data.round,
+    reports_reported_or_merged: Number(data.reports_reported_or_merged)
+  }))
+}
 
-// console.log(await getCombinedData(queryParams))
-// console.log(await getBoidIDs())
-// console.log(await getAllAccountsDeltas(queryParams))
-// console.log(await getLogPwrClaimData(queryParams))
-// console.log(await getAccountData(queryParams))
-// console.log(await getGlobalDeltaData(queryParams))
-// console.log(await getFahData(queryParams))
+// returns an array of |timeStamp|boid_id|oracle|protocol_id|round|units| that is takes from PwrReport table from the db
+export async function getPowerReportData(queryParams:ReqQueryReport):Promise<PowerReportResponse[]> {
+  const powerReportData = await db.pwrReport.findMany({
+    where: {
+      boid_id_scope: queryParams.boid_id ? { equals: queryParams.boid_id } : undefined,
+      timeStamp: {
+        gte: queryParams.from,
+        lte: queryParams.to
+      },
+      oracle: queryParams.oracle ? { equals: queryParams.oracle } : undefined,
+      report_protocol_id: queryParams.protocol_id ? { equals: queryParams.protocol_id } : undefined,
+      report_round: queryParams.round ? { equals: queryParams.round } : undefined
+    },
+    select: {
+      timeStamp: true,
+      boid_id_scope: true,
+      oracle: true,
+      report_protocol_id: true,
+      report_round: true,
+      report_units: true
+    }
+  })
 
-
-// const queryParams:ReqQueryReport = {
-//   boid_id: "seth.voice",
-//   // from: new Date("2023-03-25T00:00:00.000Z"),
-//   // to: new Date("2025-04-06T00:00:00.000Z"),
-//   protocol_id: 1
-//   // round: 120
-// }
-// console.log(await getReportSentData(queryParams))
+  return powerReportData.map((data) => ({
+    timeStamp: data.timeStamp,
+    boid_id: data.boid_id_scope,
+    oracle: data.oracle,
+    protocol_id: data.report_protocol_id,
+    round: data.report_round,
+    units: data.report_units
+  }))
+}

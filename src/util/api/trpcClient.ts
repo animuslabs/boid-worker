@@ -1,5 +1,6 @@
 // TESTING TRPC CLIENT ONLY
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client"
+import { ReqQueryReport, ReqQueryOracle, RequestQueryParams } from "./api4DeltasTypes"
 import type { AppRouter } from "./trpcAPI"
 
 const trpc = createTRPCProxyClient<AppRouter>({
@@ -101,35 +102,55 @@ const trpc = createTRPCProxyClient<AppRouter>({
 //   }
 // }
 
-async function fetchPowerReports(round?:number, boid_id?:string, protocol_id?:number) {
-  try {
-    const queryParameters:any = { round }
-    if (boid_id) {
-      queryParameters.boid_id = boid_id
-    }
-    if (protocol_id) {
-      queryParameters.protocol_id = protocol_id
-    }
-    if (round) {
-      queryParameters.round = round
-    }
-    const data = await trpc.GetPowerReports.query(queryParameters)
-    console.log("Power Reports:", data)
-  } catch (error) {
-    console.error("Error fetching data:", error)
-  }
-}
 
+// interface PowerReportsQueryParams {
+//   round?:number;
+//   boid_id?:string;
+//   protocol_id?:number;
+// }
 
-const boid_id = "seth.voice"
-// fetchperBoidID(boid_id)
-// fetchperBoidID("")
-// fetchPwrClaim(boid_id)
-// fetchCombinedData(boid_id)
-// fetchGlobalDeltas()
-// await fetchCalculatorData()
+// async function fetchPowerReports(params:PowerReportsQueryParams) {
+//   try {
+//     // Directly pass params as they are already structured correctly
+//     const data = await trpc.GetPowerReports.query(params)
+//     console.log("Power Reports:", data)
+//   } catch (error) {
+//     console.error("Error fetching data:", error)
+//   }
+// }
+// await fetchPowerReports({ round: 130, boid_id: "seth.voice" })
 
+// // Update this to match the actual required parameters
+// interface PayOracleQueryParams {
+//   oracle?:string;
+//   round?:number;
+//   // Add from and to if required
+// }
 
-const protocol_id = 1
-const round = 130
-await fetchPowerReports(round)
+// async function fetchPayOracleData(params:PayOracleQueryParams) {
+//   try {
+//     // Again, pass params directly
+//     const data = await trpc.GetPayOracle.query(params)
+//     console.log("Oracle Payments:", data)
+//   } catch (error) {
+//     console.error("Error fetching data:", error)
+//   }
+// }
+// await fetchPayOracleData({ oracle: "progrediallc", round: 130 })
+
+// async function fetchOracleReport() {
+//   const fromDate = "2023-10-15T00:00:00.000Z"
+//   const toDate = "2025-10-31T23:59:59.000Z"
+//   const oracle = "progrediallc"
+//   const round = 130
+  
+//   try {
+//     const queryParameters:any = { from: new Date(fromDate), to: new Date(toDate), oracle }
+//     const data = await trpc.GetOraclePowerReport.query(queryParameters)
+//     console.log("Oracle Report:", data)
+//   } catch (error) {
+//     console.error("Error fetching data:", error)
+//   }
+// }
+
+// await fetchOracleReport()

@@ -5,8 +5,8 @@ import cors from "cors"
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import express from "express"
 import { z } from "zod"
-import { getAllAccountsDeltas, getBoidIDs, getLogPwrClaimData, getCombinedData, getGlobalDeltaData, getReportSentData } from "./api4DeltasFunctions"
-import { RequestQueryParams, ReqQueryReport } from "./api4DeltasTypes"
+import { getAllAccountsDeltas, getBoidIDs, getLogPwrClaimData, getCombinedData, getGlobalDeltaData, getReportSentData, getPayOracleData, getPowerReportData } from "./api4DeltasFunctions"
+import { RequestQueryParams, ReqQueryReport, ReqQueryOracle, ReqQueryReports } from "./api4DeltasTypes"
 import { accountCalculator } from "lib/calculator/calculator"
 import { aggregateBoidData } from "lib/calculator/antelope"
 import { toObject } from "lib/utils"
@@ -28,11 +28,27 @@ const inputSchema = z.object({
 })
 
 const inputReport = z.object({
-  from: z.string().optional(),
-  to: z.string().optional(),
+  from: z.string(),
+  to: z.string(),
   protocol_id: z.number().optional(),
   round: z.number().optional(),
   boid_id: z.string().optional()
+})
+
+const inputOracle = z.object({
+  from: z.string(),
+  to: z.string(),
+  oracle: z.string().optional(),
+  round: z.number().optional()
+})
+
+const inputOracleReport = z.object({
+  from: z.string(),
+  to: z.string(),
+  boid_id: z.string().optional(),
+  oracle: z.string().optional(),
+  round: z.number().optional(),
+  protocol_id: z.number().optional()
 })
 
 const extInputSchema = inputSchema.extend({
@@ -151,15 +167,46 @@ const appRouter = t.router({
     .input(inputReport)
     .query(async(input) => {
     // Create queryParams object that matches ReqQueryReport interface
-      const queryParams:ReqQueryReport = {
-        from: input.input.from ? new Date(input.input.from) : undefined,
-        to: input.input.to ? new Date(input.input.to) : undefined,
-        protocol_id: input.input.protocol_id,
-        round: input.input.round,
-        boid_id: input.input.boid_id
+      const queryParams:ReqQueryReports = {
+        from: new Date(input.input.from),
+        to: new Date(input.input.to),
+        protocol_id: input.input.protocol_id ? input.input.protocol_id : undefined,
+        round: input.input.round ? input.input.round : undefined,
+        boid_id: input.input.boid_id ? input.input.boid_id : undefined
       }
 
       const powerReports = await getReportSentData(queryParams)
+      return powerReports
+    }),
+  /* *** GetPayOracle provides data about finalizing oracle payments *** */
+  GetPayOracle: publicProcedure
+    .input(inputOracle)
+    .query(async(input) => {
+      const queryParams:ReqQueryOracle = {
+        from: new Date(input.input.from),
+        to: new Date(input.input.to),
+        oracle: input.input.oracle ? input.input.oracle : undefined,
+        round: input.input.round ? input.input.round : undefined
+      }
+
+      const oraclePayments = await getPayOracleData(queryParams)
+      return oraclePayments
+    }),
+  /* *** GetPowerReport provides data about single power reports for each oracle *** */
+  GetOraclePowerReport: publicProcedure
+    .input(inputOracleReport)
+    .query(async(input) => {
+    // Create queryParams object that matches ReqQueryReport interface
+      const queryParams:ReqQueryReport = {
+        from: new Date(input.input.from),
+        to: new Date(input.input.to),
+        oracle: input.input.oracle ? input.input.oracle : undefined,
+        protocol_id: input.input.protocol_id ? input.input.protocol_id : undefined,
+        round: input.input.round ? input.input.round : undefined,
+        boid_id: input.input.boid_id ? input.input.boid_id : undefined
+      }
+
+      const powerReports = await getPowerReportData(queryParams)
       return powerReports
     })
 })

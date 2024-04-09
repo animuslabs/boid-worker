@@ -26,9 +26,18 @@ export interface RequestQueryParams {
     to:Date;
     boid_id?:string;
   }
+export interface ReqQueryReports {
+    from:Date;
+    to:Date;
+    boid_id?:string;
+    protocol_id?:number;
+    round?:number;
+  }
+
 export interface ReqQueryReport {
-    from?:Date;
-    to?:Date;
+    from:Date;
+    to:Date;
+    oracle?:string;
     boid_id?:string;
     protocol_id?:number;
     round?:number;
@@ -37,7 +46,14 @@ export interface MintTotalByDate {
     date:string;
     total:number;
   }
-  
+
+export interface ReqQueryOracle {
+    from:Date;
+    to:Date;
+    oracle?:string;
+    round?:number;  
+}
+
 export interface PwrClaimData {
     timeStamp:Date;
     boid_id:string;
@@ -84,3 +100,32 @@ export type FahDataResTimeStamp = {
   } 
 
 export type CombinedResponse = AccountResponse & { score:string }
+
+export type SentReportsResponse = {
+    timeStamp:Date;
+    boid_id:string;
+    added_power:number;
+    approval_weight:number;
+    protocol_id:number;
+    round:number;
+  }
+
+export type OraclePayResponse = {
+    timeStamp:Date;
+    basePay:number;
+    bonusPay:number;
+    oracle:string;
+    reports_proposed:number;
+    reports_unreported_unmerged:number;
+    round:number;
+    reports_reported_or_merged:number;
+  }
+
+export type PowerReportResponse = {
+    timeStamp:Date;
+    boid_id:string;
+    oracle:string;
+    protocol_id:number;
+    round:number;
+    units:number;
+  }
