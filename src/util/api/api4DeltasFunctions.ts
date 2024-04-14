@@ -33,6 +33,9 @@ export async function getAllAccountsDeltas(queryParams:RequestQueryParams):Promi
       selfStaked: true,
       power: true,
       receivedDelegatedStake: true
+    },
+    orderBy: {
+      timeStamp: "asc"
     }
   })
 
@@ -69,6 +72,9 @@ export async function getLogPwrClaimData(queryParams:RequestQueryParams):Promise
       mint_powered_stake_mint: true,
       mint_team_cut: true,
       mint_team_owner_earned: true
+    },
+    orderBy: {
+      timeStamp: "asc"
     }
   })
   return logPwrClaim.map((data) => ({
@@ -238,6 +244,9 @@ export async function getReportSentData(queryParams:ReqQueryReport):Promise<Sent
       report_protocol_id: true,
       report_round: true,
       report_units: false
+    },
+    orderBy: {
+      timeStamp: "asc"
     }
   })
 
@@ -272,6 +281,9 @@ export async function getPayOracleData(queryParams:ReqQueryOracle):Promise<Oracl
       round: true,
       sequence: false,
       reports_reported_or_merged: true
+    },
+    orderBy: {
+      timeStamp: "asc"
     }
   })
 
@@ -307,6 +319,9 @@ export async function getPowerReportData(queryParams:ReqQueryReport):Promise<Pow
       report_protocol_id: true,
       report_round: true,
       report_units: true
+    },
+    orderBy: {
+      timeStamp: "asc"
     }
   })
 
