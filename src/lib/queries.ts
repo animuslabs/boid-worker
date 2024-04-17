@@ -62,6 +62,11 @@ export async function getOldestReport(scope:NameType):Promise<null|pwr.Types.Pwr
   if (!result || result.rows.length == 0) return null
   else return result.rows[0]
 }
+export async function getOldestReported(scope:NameType):Promise<null|pwr.Types.ReportedRow> {
+  const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "reported", scope, limit: 1, type: pwr.Types.ReportedRow, reverse: false }) as API.v1.GetTableRowsResponse
+  if (!result || result.rows.length == 0) return null
+  else return result.rows[0]
+}
 export async function getOldestOracleStat(scope:NameType):Promise<null|pwr.Types.OracleStat> {
   const result = await safeDo("get_table_rows", { code: env.contracts.power, table: "oraclestats", scope, limit: 1, reverse: false, type: pwr.Types.OracleStat }) as API.v1.GetTableRowsResponse
   if (!result || result.rows.length == 0) return null
@@ -98,6 +103,9 @@ export async function getRoundCommitFromID(scope:Name, id:string):Promise<null|p
 
 export function getReportScopes() {
   return getAllScopes({ code: env.contracts.power, table: "pwrreports" })
+}
+export function getReportedScopes() {
+  return getAllScopes({ code: env.contracts.power, table: "reported" })
 }
 export function getOracleStatsScopes() {
   return getAllScopes({ code: env.contracts.power, table: "oraclestats" })

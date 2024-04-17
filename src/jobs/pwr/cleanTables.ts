@@ -3,7 +3,7 @@ import { ActionPusher } from "lib/actionPusher"
 import { pwrActions } from "lib/actions"
 import { doAction, sendAction } from "lib/eosio"
 import logger from "lib/logger"
-import { getOldestOracleStat, getOldestReport, getOldestRoundCommit, getOracleStatsScopes, getReportScopes, getRoundCommitScopes, tables } from "lib/queries"
+import { getOldestOracleStat, getOldestReport, getOldestReported, getOldestRoundCommit, getOracleStatsScopes, getReportScopes, getReportedScopes, getRoundCommitScopes, tables } from "lib/queries"
 import * as pwr from "lib/types/power.boid.types"
 import { currentRound } from "lib/utils"
 const log = logger.getLogger("pwr-cleanTables")
@@ -24,6 +24,24 @@ async function cleanReports(config:pwr.Types.PwrConfig, round:number) {
     }
     log.info("cleaning reports for", scope.toString())
     await sendAction(pwrActions.reportsClean({ scope }))
+  }
+}
+async function cleanReported(config:pwr.Types.PwrConfig, round:number) {
+  log.info("checking for any reported rows to be cleared")
+  const scopes = await getReportedScopes()
+  const cleanupOlder = Math.max(round - 1, 0)
+  log.info("will cleanup reports older than round:", cleanupOlder)
+  for (const scope of scopes) {
+    const oldest = await getOldestReported(scope).catch(log.error)
+    if (!oldest) continue
+    const oldestRound = oldest.round.toNumber()
+    log.debug(scope.toString(), "oldest report round:", oldestRound)
+    if (!(oldestRound < cleanupOlder)) {
+      log.debug("oldest report is more recent than limit, skipping")
+      continue
+    }
+    log.info("cleaning reports for", scope.toString())
+    await sendAction(pwrActions.reportedClean({ scope }))
   }
 }
 async function cleanOracleStats(config:pwr.Types.PwrConfig, round:number) {
@@ -69,6 +87,7 @@ log.info("starting cleanTables, current round:", round)
 await cleanReports(config, round).catch(log.error)
 await cleanOracleStats(config, round).catch(log.error)
 await cleanRoundCommit(config, round).catch(log.error)
+await cleanReported(config, round).catch(log.error)
 
 process.exit(0)
 

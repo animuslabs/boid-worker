@@ -16,6 +16,7 @@ export const pwrActions = {
   finishReport: (data:{boid_id_scope:NameType, pwrreport_id:UInt64}) => createAct("finishreport", pwr.Types.finishreport.from(data)),
   mergeReports: (data:{boid_id_scope:NameType, pwrreport_ids:UInt64[]}) => createAct("mergereports", pwr.Types.mergereports.from(data)),
   reportsClean: (data:{scope:NameType}) => createAct("reportsclean", pwr.Types.reportsclean.from(data)),
+  reportedClean: (data:{scope:NameType}) => createAct("reprtedclean", pwr.Types.reprtedclean.from(data)),
   oracleStatsClean: (data:{ scope:NameType }) => createAct("ostatsclean", pwr.Types.ostatsclean.from(data)),
   roundCommitClean: (data:{ scope:NameType, round:UInt16Type }) => createAct("commitsclean", pwr.Types.commitsclean.from(data)),
   payoutround: (data:{ oracle:NameType, round:number }) => createAct("payoutround", pwr.Types.payoutround.from(data)),
