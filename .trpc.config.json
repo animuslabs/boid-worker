@@ -1,0 +1,14 @@
+[
+    {
+        "name": "EOS Endpoint",
+        "url": "https://eos.api.eosnation.io"
+    },
+    {
+        "name": "Telos Endpoint",
+        "url": "https://telos.api.animus.is"
+    },
+    {
+        "name": "Telos Testnet Endpoint",
+        "url": "https://telos.testnet.boid.animus.is"
+    }
+]

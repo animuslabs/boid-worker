@@ -7,11 +7,13 @@ const trpc = createTRPCProxyClient<AppRouter>({
   links: [
     httpBatchLink({
       url: "http://localhost:3000/api/"
+      // url: "http://192.168.0.44:3000/api/"
+      // url: "http://192.168.0.126:3000/api/"
     })
   ]
 })
 
-// async function fetchAllBoidIDs() {
+// async function fetchAllBoidIDs():Promise<void> {
 //   try {
 //     const data = await trpc.BoidIDlist.query(undefined)
 //     console.log("All Boid IDs:", data)
@@ -20,7 +22,7 @@ const trpc = createTRPCProxyClient<AppRouter>({
 //   }
 // }
 
-// fetchAllBoidIDs()
+// fetchAllBoidIDs().catch(error => console.error("Error in fetchAllBoidIDs:", error))
 
 
 // async function fetchperBoidID(boid_id) {
@@ -102,6 +104,8 @@ const trpc = createTRPCProxyClient<AppRouter>({
 //   }
 // }
 
+// fetchCalculatorData().catch(error => console.error("Error in fetchCalculatorData:", error))
+
 
 // interface PowerReportsQueryParams {
 //   round?:number;
@@ -154,3 +158,14 @@ const trpc = createTRPCProxyClient<AppRouter>({
 // }
 
 // await fetchOracleReport()
+
+// async function fetchBOIDtokenInfo() {
+//   try {
+//     const data = await trpc.GetBOIDtokenInfo.query(undefined)
+//     console.log("BOID Tokens Info:", data)
+//   } catch (error) {
+//     console.error("Error fetching data:", error)
+//   }
+// }
+
+// fetchBOIDtokenInfo().catch(error => console.error("Error in fetchBOIDtokenInfo:", error))

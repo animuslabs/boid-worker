@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && tsc-alias -f",
-    "dev": "tsc-watch --onSuccess 'tsc-alias -f'",
-    "dev-win": "concurrently \"tsc-watch --onSuccess \\\"tsc-alias -f\\\"\" \"tsc-alias -f\"",
+    "dev": "rimraf dist && tsc-watch --onSuccess 'tsc-alias -f'",
     "db:up": "prisma db push",
     "db:reset": "prisma db push --force-reset",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -32,6 +31,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^2.0.19",
     "prisma": "^5.12.1",
+    "rimraf": "^6.0.1",
     "tsc-alias": "^1.7.0",
     "typescript": "*"
   },

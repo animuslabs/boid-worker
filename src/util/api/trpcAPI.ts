@@ -1,5 +1,5 @@
 import getConfig from "lib/config"
-import t from "servers/trpc"
+import t from "../../servers/trpc"
 import cors from "cors"
 import { createExpressMiddleware } from "@trpc/server/adapters/express"
 import express from "express"

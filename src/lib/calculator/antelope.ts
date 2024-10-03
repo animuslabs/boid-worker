@@ -2,18 +2,33 @@ import { APIClient } from "@wharfkit/antelope"
 import { ContractKit } from "@wharfkit/contract"
 import { toObject } from "lib/utils"
 import { BoidData } from "lib/types/calc-types"
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
 
-const endpoints:string[][] = [
-  ["EOS Endpoint", "https://eos.api.animus.is"],
-  ["Telos Endpoint", "https://telos.api.animus.is"],
-  ["Telos Testnet Endpoint", "https://telos.testnet.boid.animus.is"]
-]
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const configPath = path.resolve(__dirname, "../../../.trpc.config.json")
+interface Endpoint {
+  name:string;
+  url:string;
+}
+let endpoints:Endpoint[] = []
 
-const eosClientAPI = new APIClient({ url: endpoints[0][1] })
+try {
+  const data = fs.readFileSync(configPath, "utf8")
+  endpoints = JSON.parse(data)
+} catch (error) {
+  console.error("Error reading .trpc.config.json:", error)
+  // Handle the error as needed
+  throw error
+}
+
+const eosClientAPI = new APIClient({ url: endpoints[0].url })
 const contractKitEOS = new ContractKit({ client: eosClientAPI })
 const contractBOIDonEOS = await contractKitEOS.load("boidcomtoken")
 
-const telosClientAPI = new APIClient({ url: endpoints[1][1] })
+const telosClientAPI = new APIClient({ url: endpoints[1].url })
 const contractKitTelos = new ContractKit({ client: telosClientAPI })
 const contractBOIDonTelos = await contractKitTelos.load("token.boid")
 

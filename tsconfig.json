@@ -17,10 +17,10 @@
     "strictFunctionTypes": true,
     "strict": true,
     "resolveJsonModule": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
       "lib/*": [
-        "lib/*"
+        "src/lib/*"
       ]
     },
     "types": [
@@ -33,6 +33,7 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "outDir": "dist",
+    "rootDir": "src",
     "sourceMap": true
   },
   "exclude": [
