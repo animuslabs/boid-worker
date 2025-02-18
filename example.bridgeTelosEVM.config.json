@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/pm2-ecosystem.json",
+  "apps": [
+    {
+      "name": "bridge-evm-telos",
+      "cwd": "./dist",
+      "script": "./jobs/telosEVMbridge/requests.ts",
+      "autorestart": true,
+      "cron_restart": "*/5 * * * *",
+      "env": {
+        "CHAIN": "telos",
+        "LOGLEVEL": "DEBUG",
+        "NODE_OPTIONS": "--enable-source-maps"
+      },
+      "args": [
+        "--color"
+      ]
+    }
+  ]
+}

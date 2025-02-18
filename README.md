@@ -214,3 +214,10 @@ This is an optional component to setup a simple https proxy in cases where you a
 cp ./example.proxy.config.json ./proxy.config.json
 cp ./example.proxyConfig.json ./proxyConfig.json
 ```
+
+## BOID token Telos EVM to Native Bridge
+Runs automatic processing of requests coming from the Telos EVM side to Native for BOID tokens release.
+Make sure to add permissions to your worker account for actions from evm.boid contract.
+```sh
+cp ./example.bridgeTelosEVM.config.json ./bridgeTelosEVM.config.json
+```

@@ -2,7 +2,6 @@ import dotenv from "dotenv"
 import fs from "fs-extra"
 import { Name, NameType, PrivateKey } from "@wharfkit/antelope"
 
-import { log } from "console"
 dotenv.config()
 const chains = ["eos", "kylin", "jungle", "wax", "waxTest", "telos", "telosTest"] as const
 export type ChainsType = typeof chains[number]
@@ -22,6 +21,7 @@ interface eosioConfig {
     power:NameType
     system:NameType
     token:NameType
+    evmBridge:NameType
   }
   ipfs?:any,
   proxy?:{
@@ -40,6 +40,11 @@ interface eosioConfig {
   },
   historyDeltasAPI?:{
     port:number
+  },
+  evm?:{
+    endpoint:string,
+    chainId:string,
+    evmTokenBridge:string
   }
 }
 type eosioConfigs = { [k in ChainsType]?:eosioConfig }
@@ -68,7 +73,8 @@ export default function getConfig(chain?:ChainsType):eosioConfig {
     contracts: {
       power: Name.from(untyped.contracts.power),
       system: Name.from(untyped.contracts.system),
-      token: Name.from(untyped.contracts.token)
+      token: Name.from(untyped.contracts.token),
+      evmBridge: Name.from(untyped.contracts.evmBridge)
     },
     ipfs: untyped.ipfs,
     proxy: untyped.proxy
@@ -95,6 +101,13 @@ export default function getConfig(chain?:ChainsType):eosioConfig {
     historyDeltasAPI: untyped.historyDeltasAPI
       ? {
           port: untyped.historyDeltasAPI.port
+        }
+      : undefined,
+    evm: untyped.evm
+      ? {
+          endpoint: untyped.evm.endpoint,
+          chainId: untyped.evm.chainId,
+          evmTokenBridge: untyped.evm.evmTokenBridge
         }
       : undefined
   }

@@ -1,6 +1,7 @@
-import { Action, AnyAction, Int32Type, Name, NameType, Signature, UInt16Type, UInt32, UInt64, UInt8Type } from "@wharfkit/antelope"
+import { Action, Int32Type, NameType, Signature, UInt16Type, UInt32, UInt64, UInt8Type } from "@wharfkit/antelope"
 import getConfig from "lib/config"
 import { Types } from "lib/types/boid-contract-structure"
+import { Types as EVMboidTypes } from "lib/types/evm.boid"
 import * as pwr from "lib/types/power.boid.types"
 const env = getConfig()
 const authorization = [{ actor: env.worker.account, permission: env.worker.permission }]
@@ -32,7 +33,13 @@ export const sysActions = {
   pwrAdd: (data:{ boid_id:NameType, power:UInt16Type }) => createAct("power.add", Types.poweradd.from(data), env.contracts.system)
 }
 
+export const evmActions = {
+  reqnotify: (data:{ req_id:UInt64 }) => createAct("reqnotify", EVMboidTypes.reqnotify.from(data), env.contracts.evmBridge),
+  verifytrx: (data:{ req_id:UInt64 }) => createAct("verifytrx", EVMboidTypes.verifytrx.from(data), env.contracts.evmBridge)
+}
+
 export const actions = {
   sys: sysActions,
-  pwr: pwrActions
+  pwr: pwrActions,
+  evm: evmActions
 }
