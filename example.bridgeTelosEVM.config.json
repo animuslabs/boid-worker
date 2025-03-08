@@ -4,8 +4,8 @@
     {
       "name": "bridge-evm-telos",
       "cwd": "./dist",
-      "script": "./jobs/telosEVMbridge/requests.ts",
-      "autorestart": true,
+      "script": "./jobs/telosEVMbridge/requests.js",
+      "autorestart": false,
       "cron_restart": "*/5 * * * *",
       "env": {
         "CHAIN": "telos",
